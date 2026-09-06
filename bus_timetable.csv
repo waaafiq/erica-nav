@@ -1,0 +1,1088 @@
+# ERICA Nav — Shuttle bus timetable data
+#
+# HOW TO EDIT: this file drives the "Shuttle" tab in the app. Edit rows below in Excel/Sheets
+# and re-upload/replace this file — changes show up next time the app loads.
+#
+# One row = one bus departure (a stop the bus leaves from, at a time, on a route).
+#
+# Column guide:
+#  period       semester | session | vacation   (which part of the academic calendar this applies to)
+#  day_type     weekday | holiday                (weekday = Mon-Fri class days; holiday = weekends + public holidays)
+#  stop         res | cock | hda | apt            (boarding stop code — see stop_name for the full name)
+#  stop_name    full name of the boarding stop (for reference only — editing this column does nothing; edit "stop")
+#  time         24-hour HH:MM departure time from that stop
+#  route_code   C | DH | DY | D | J               (which route this departure runs — see route_name)
+#  route_name   full name of the route (for reference only — editing this column does nothing; edit "route_code")
+#
+# Route codes: C = Cycle route, stops at every stop in order (Residence -> Shuttlecock -> Handaeap Stn -> Yesulin APT).
+#              DH = Direct to Handaeap Stn (skips stops in between). DY = Direct to Yesulin APT. D = generic direct route.
+#              J = Via Jungang Stn detour (only these runs stop at Jungang Stn).
+#
+# Stop codes:  res = ERICA Residence · cock = Shuttlecock stop (campus) · hda = Handaeap Stn (Line 4) · apt = Yesulin APT (Ansan terminal)
+#
+# To add a departure: add a new row with the same period/day_type/stop and a new time+route_code.
+# To remove one: delete its row. To change a time: edit the "time" cell.
+#
+period,day_type,stop,stop_name,time,route_code,route_name
+semester,weekday,res,ERICA Residence,07:45,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,09:55,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:00,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:05,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:10,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:15,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:15,DY,Direct - Yesulin APT
+semester,weekday,res,ERICA Residence,10:20,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:25,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:35,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:45,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,10:45,DY,Direct - Yesulin APT
+semester,weekday,res,ERICA Residence,10:55,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,11:10,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,11:15,DY,Direct - Yesulin APT
+semester,weekday,res,ERICA Residence,11:25,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,11:40,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,11:45,DY,Direct - Yesulin APT
+semester,weekday,res,ERICA Residence,11:55,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,12:05,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,12:15,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,12:20,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,12:25,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,12:35,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,12:45,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,12:55,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,13:10,J,Via Jungang Stn
+semester,weekday,res,ERICA Residence,13:15,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,13:25,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,13:40,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,13:45,D,Direct route
+semester,weekday,res,ERICA Residence,13:55,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,14:10,J,Via Jungang Stn
+semester,weekday,res,ERICA Residence,14:20,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,14:30,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,14:40,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,14:55,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,15:05,J,Via Jungang Stn
+semester,weekday,res,ERICA Residence,15:15,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,15:25,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,15:35,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,15:45,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,15:55,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,15:55,DY,Direct - Yesulin APT
+semester,weekday,res,ERICA Residence,16:01,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:07,J,Via Jungang Stn
+semester,weekday,res,ERICA Residence,16:13,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:19,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:25,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:25,DY,Direct - Yesulin APT
+semester,weekday,res,ERICA Residence,16:31,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:37,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:43,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:49,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:55,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,16:55,DY,Direct - Yesulin APT
+semester,weekday,res,ERICA Residence,17:01,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,17:07,J,Via Jungang Stn
+semester,weekday,res,ERICA Residence,17:13,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,17:19,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,17:25,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,17:25,DY,Direct - Yesulin APT
+semester,weekday,res,ERICA Residence,17:31,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,17:37,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,17:43,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,17:49,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,17:55,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,18:01,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,18:07,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,18:13,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,18:19,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,18:25,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,18:35,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,18:45,DH,Direct - Handaeap Stn
+semester,weekday,res,ERICA Residence,18:55,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,19:05,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,19:15,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,19:25,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,19:35,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,19:45,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,19:55,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,20:05,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,20:15,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,20:25,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,20:35,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,20:45,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,20:55,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,21:05,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,21:15,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,21:25,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,21:40,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,21:55,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,22:10,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,22:25,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,22:40,C,Cycle route (all stops)
+semester,weekday,res,ERICA Residence,22:55,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,07:50,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,08:00,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:05,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:10,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:15,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:20,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:20,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,08:23,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:26,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:29,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:32,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:35,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:38,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:41,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:45,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:50,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,08:50,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,08:55,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:00,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:05,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:10,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:15,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:20,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:20,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,09:23,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:26,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:29,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:32,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:35,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:38,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:41,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:45,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:50,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,09:50,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,09:55,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:00,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:05,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:10,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:15,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:20,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:20,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,10:25,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:30,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:40,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:50,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,10:50,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,11:00,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,11:15,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,11:20,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,11:30,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,11:45,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,11:50,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,12:00,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,12:10,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,12:20,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,12:25,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,12:30,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,12:40,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,12:50,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,13:00,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,13:15,J,Via Jungang Stn
+semester,weekday,cock,Shuttlecock stop,13:20,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,13:30,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,13:45,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,13:50,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,14:00,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,14:15,J,Via Jungang Stn
+semester,weekday,cock,Shuttlecock stop,14:25,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,14:35,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,14:45,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,15:00,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,15:10,J,Via Jungang Stn
+semester,weekday,cock,Shuttlecock stop,15:20,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,15:30,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,15:40,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,15:50,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:00,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:00,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,16:06,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:12,J,Via Jungang Stn
+semester,weekday,cock,Shuttlecock stop,16:18,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:24,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:30,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:30,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,16:36,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:42,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:48,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,16:54,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:00,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:00,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,17:06,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:12,J,Via Jungang Stn
+semester,weekday,cock,Shuttlecock stop,17:18,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:24,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:30,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:30,DY,Direct - Yesulin APT
+semester,weekday,cock,Shuttlecock stop,17:36,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:42,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:48,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,17:54,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,18:00,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,18:06,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,18:12,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,18:18,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,18:24,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,18:30,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,18:40,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,18:50,DH,Direct - Handaeap Stn
+semester,weekday,cock,Shuttlecock stop,19:00,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,19:10,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,19:20,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,19:30,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,19:40,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,19:50,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,20:00,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,20:10,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,20:20,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,20:30,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,20:40,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,20:50,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,21:00,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,21:10,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,21:20,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,21:30,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,21:45,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,22:00,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,22:15,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,22:30,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,22:45,C,Cycle route (all stops)
+semester,weekday,cock,Shuttlecock stop,23:00,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),08:00,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),08:10,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:15,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:20,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:25,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:30,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:33,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:36,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:39,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:42,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:45,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:48,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:51,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),08:55,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:00,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:05,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:10,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:15,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:20,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:25,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:30,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:33,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:36,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:39,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:42,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:45,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:48,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:51,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),09:55,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:00,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:05,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:10,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:15,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:20,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:25,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:30,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:35,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:40,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),10:50,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),11:00,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),11:10,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),11:25,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),11:40,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),11:55,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),12:10,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),12:20,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),12:30,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),12:35,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),12:40,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),12:50,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),13:00,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),13:10,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),13:25,J,Via Jungang Stn
+semester,weekday,hda,Handaeap Stn (Line 4),13:30,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),13:40,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),13:55,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),14:00,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),14:10,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),14:25,J,Via Jungang Stn
+semester,weekday,hda,Handaeap Stn (Line 4),14:35,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),14:45,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),14:55,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),15:10,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),15:20,J,Via Jungang Stn
+semester,weekday,hda,Handaeap Stn (Line 4),15:30,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),15:40,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),15:50,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:00,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:10,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:16,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:22,J,Via Jungang Stn
+semester,weekday,hda,Handaeap Stn (Line 4),16:28,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:34,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:40,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:46,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:52,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),16:58,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:04,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:10,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:16,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:22,J,Via Jungang Stn
+semester,weekday,hda,Handaeap Stn (Line 4),17:28,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:34,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:40,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:46,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:52,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),17:58,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),18:04,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),18:10,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),18:16,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),18:22,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),18:28,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),18:34,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),18:40,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),18:50,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),19:10,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),19:20,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),19:30,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),19:40,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),19:50,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),20:00,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),20:10,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),20:20,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),20:30,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),20:40,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),20:50,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),21:00,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),21:10,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),21:20,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),21:30,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),21:40,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),21:55,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),22:10,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),22:25,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),22:40,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),22:55,C,Cycle route (all stops)
+semester,weekday,hda,Handaeap Stn (Line 4),23:10,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),08:05,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),08:30,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),09:00,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),09:30,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),10:00,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),10:30,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),11:00,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),11:30,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),12:00,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),12:35,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),13:15,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),13:45,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),14:15,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),14:50,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),15:15,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),15:45,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),16:10,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),16:40,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),17:10,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),17:40,D,Direct route
+semester,weekday,apt,Yesulin APT (Ansan terminal),18:15,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),18:45,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),19:15,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),19:25,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),19:35,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),19:45,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),19:55,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),20:05,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),20:15,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),20:25,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),20:35,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),20:45,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),20:55,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),21:05,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),21:15,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),21:25,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),21:35,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),21:45,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),22:00,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),22:15,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),22:30,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),22:45,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),23:00,C,Cycle route (all stops)
+semester,weekday,apt,Yesulin APT (Ansan terminal),23:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,08:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,09:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,09:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,10:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,10:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,11:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,11:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,12:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,12:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,13:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,13:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,14:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,14:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,15:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,15:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,16:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,16:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,17:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,17:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,18:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,18:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,19:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,19:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,20:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,20:45,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,21:15,C,Cycle route (all stops)
+semester,holiday,res,ERICA Residence,21:45,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,08:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,09:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,09:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,10:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,10:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,11:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,11:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,12:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,12:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,13:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,13:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,14:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,14:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,15:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,15:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,16:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,16:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,17:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,17:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,18:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,18:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,19:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,19:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,20:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,20:50,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,21:20,C,Cycle route (all stops)
+semester,holiday,cock,Shuttlecock stop,21:50,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),09:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),09:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),10:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),10:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),11:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),11:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),12:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),12:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),13:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),13:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),14:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),14:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),15:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),15:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),16:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),16:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),17:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),17:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),18:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),18:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),19:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),19:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),20:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),20:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),21:00,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),21:30,C,Cycle route (all stops)
+semester,holiday,hda,Handaeap Stn (Line 4),22:00,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),09:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),09:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),10:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),10:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),11:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),11:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),12:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),12:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),13:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),13:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),14:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),14:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),15:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),15:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),16:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),16:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),17:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),17:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),18:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),18:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),19:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),19:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),20:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),20:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),21:05,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),21:35,C,Cycle route (all stops)
+semester,holiday,apt,Yesulin APT (Ansan terminal),22:05,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,07:55,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,09:55,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,10:05,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,10:15,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,10:15,DY,Direct - Yesulin APT
+session,weekday,res,ERICA Residence,10:25,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,10:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,10:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,10:45,DY,Direct - Yesulin APT
+session,weekday,res,ERICA Residence,10:55,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,11:05,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,11:15,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,11:15,DY,Direct - Yesulin APT
+session,weekday,res,ERICA Residence,11:25,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,11:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,11:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,11:45,DY,Direct - Yesulin APT
+session,weekday,res,ERICA Residence,11:55,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,12:05,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,12:15,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,12:25,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,12:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,12:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,12:55,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,13:05,J,Via Jungang Stn
+session,weekday,res,ERICA Residence,13:15,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,13:25,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,13:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,13:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,13:55,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,14:05,J,Via Jungang Stn
+session,weekday,res,ERICA Residence,14:15,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,14:25,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,14:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,14:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,14:55,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,15:05,J,Via Jungang Stn
+session,weekday,res,ERICA Residence,15:15,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,15:25,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,15:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,15:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,15:55,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,15:55,DY,Direct - Yesulin APT
+session,weekday,res,ERICA Residence,16:05,J,Via Jungang Stn
+session,weekday,res,ERICA Residence,16:15,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,16:25,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,16:25,DY,Direct - Yesulin APT
+session,weekday,res,ERICA Residence,16:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,16:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,16:55,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,16:55,DY,Direct - Yesulin APT
+session,weekday,res,ERICA Residence,17:05,J,Via Jungang Stn
+session,weekday,res,ERICA Residence,17:15,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,17:25,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,17:25,DY,Direct - Yesulin APT
+session,weekday,res,ERICA Residence,17:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,17:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,17:55,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,18:05,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,18:15,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,18:25,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,18:35,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,18:45,DH,Direct - Handaeap Stn
+session,weekday,res,ERICA Residence,18:55,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,19:10,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,19:25,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,19:40,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,19:55,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,20:10,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,20:25,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,20:40,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,20:55,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,21:10,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,21:25,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,21:40,C,Cycle route (all stops)
+session,weekday,res,ERICA Residence,21:55,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,08:00,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,08:10,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:15,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:20,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,08:25,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:30,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:35,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:45,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,08:50,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,08:55,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,09:00,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,09:10,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,09:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,09:20,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,09:30,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,09:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,09:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,09:50,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,10:00,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,10:10,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,10:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,10:20,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,10:30,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,10:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,10:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,10:50,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,11:00,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,11:10,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,11:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,11:20,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,11:30,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,11:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,11:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,11:50,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,12:00,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,12:10,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,12:20,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,12:30,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,12:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,12:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,13:00,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,13:10,J,Via Jungang Stn
+session,weekday,cock,Shuttlecock stop,13:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,13:30,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,13:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,13:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,14:00,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,14:10,J,Via Jungang Stn
+session,weekday,cock,Shuttlecock stop,14:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,14:30,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,14:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,14:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,15:00,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,15:10,J,Via Jungang Stn
+session,weekday,cock,Shuttlecock stop,15:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,15:30,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,15:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,15:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,16:00,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,16:00,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,16:10,J,Via Jungang Stn
+session,weekday,cock,Shuttlecock stop,16:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,16:30,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,16:30,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,16:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,16:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,17:00,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,17:00,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,17:10,J,Via Jungang Stn
+session,weekday,cock,Shuttlecock stop,17:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,17:30,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,17:30,DY,Direct - Yesulin APT
+session,weekday,cock,Shuttlecock stop,17:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,17:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,18:00,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,18:10,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,18:20,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,18:30,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,18:40,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,18:50,DH,Direct - Handaeap Stn
+session,weekday,cock,Shuttlecock stop,19:00,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,19:15,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,19:30,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,19:45,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,20:00,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,20:15,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,20:30,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,20:45,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,21:00,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,21:15,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,21:30,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,21:45,C,Cycle route (all stops)
+session,weekday,cock,Shuttlecock stop,22:00,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),08:10,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),08:20,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),08:25,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),08:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),08:35,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),08:40,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),08:45,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),08:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),08:55,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),09:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),09:05,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),09:10,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),09:20,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),09:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),09:40,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),09:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),10:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),10:10,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),10:20,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),10:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),10:40,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),10:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),11:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),11:10,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),11:20,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),11:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),11:40,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),11:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),12:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),12:10,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),12:20,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),12:30,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),12:40,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),12:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),13:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),13:10,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),13:20,J,Via Jungang Stn
+session,weekday,hda,Handaeap Stn (Line 4),13:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),13:40,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),13:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),14:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),14:10,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),14:20,J,Via Jungang Stn
+session,weekday,hda,Handaeap Stn (Line 4),14:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),14:40,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),14:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),15:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),15:10,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),15:20,J,Via Jungang Stn
+session,weekday,hda,Handaeap Stn (Line 4),15:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),15:40,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),15:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),16:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),16:10,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),16:20,J,Via Jungang Stn
+session,weekday,hda,Handaeap Stn (Line 4),16:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),16:40,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),16:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),17:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),17:10,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),17:20,J,Via Jungang Stn
+session,weekday,hda,Handaeap Stn (Line 4),17:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),17:40,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),17:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),18:00,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),18:10,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),18:20,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),18:30,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),18:40,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),18:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),19:10,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),19:25,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),19:40,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),19:55,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),20:10,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),20:25,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),20:40,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),20:55,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),21:10,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),21:25,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),21:40,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),21:55,C,Cycle route (all stops)
+session,weekday,hda,Handaeap Stn (Line 4),22:10,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),08:15,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),08:30,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),09:00,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),09:30,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),10:00,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),10:30,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),11:00,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),11:30,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),12:00,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),12:35,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),13:15,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),13:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),14:15,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),14:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),15:15,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),15:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),16:10,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),16:40,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),17:10,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),17:40,D,Direct route
+session,weekday,apt,Yesulin APT (Ansan terminal),18:15,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),18:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),19:15,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),19:30,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),19:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),20:15,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),20:30,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),20:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),21:15,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),21:30,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),21:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),22:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,08:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,09:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,09:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,10:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,10:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,11:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,11:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,12:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,12:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,13:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,13:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,14:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,14:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,15:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,15:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,16:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,16:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,17:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,17:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,18:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,18:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,19:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,19:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,20:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,20:45,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,21:15,C,Cycle route (all stops)
+session,holiday,res,ERICA Residence,21:45,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,08:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,09:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,09:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,10:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,10:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,11:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,11:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,12:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,12:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,13:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,13:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,14:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,14:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,15:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,15:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,16:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,16:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,17:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,17:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,18:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,18:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,19:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,19:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,20:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,20:50,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,21:20,C,Cycle route (all stops)
+session,holiday,cock,Shuttlecock stop,21:50,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),09:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),09:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),10:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),10:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),11:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),11:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),12:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),12:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),13:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),13:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),14:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),14:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),15:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),15:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),16:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),16:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),17:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),17:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),18:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),18:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),19:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),19:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),20:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),20:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),21:00,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),21:30,C,Cycle route (all stops)
+session,holiday,hda,Handaeap Stn (Line 4),22:00,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),09:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),09:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),10:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),10:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),11:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),11:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),12:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),12:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),13:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),13:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),14:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),14:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),15:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),15:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),16:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),16:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),17:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),17:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),18:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),18:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),19:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),19:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),20:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),20:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),21:05,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),21:35,C,Cycle route (all stops)
+session,holiday,apt,Yesulin APT (Ansan terminal),22:05,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,07:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,08:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,08:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,09:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,09:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,10:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,10:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,11:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,11:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,12:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,12:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,13:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,13:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,14:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,14:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,15:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,15:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,16:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,16:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,17:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,17:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,18:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,18:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,19:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,19:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,20:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,20:45,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,21:15,C,Cycle route (all stops)
+vacation,weekday,res,ERICA Residence,21:45,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,07:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,08:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,08:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,09:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,09:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,10:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,10:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,11:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,11:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,12:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,12:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,13:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,13:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,14:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,14:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,15:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,15:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,16:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,16:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,17:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,17:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,18:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,18:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,19:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,19:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,20:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,20:50,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,21:20,C,Cycle route (all stops)
+vacation,weekday,cock,Shuttlecock stop,21:50,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),08:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),08:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),09:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),09:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),10:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),10:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),11:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),11:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),12:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),12:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),13:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),13:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),14:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),14:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),15:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),15:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),16:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),16:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),17:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),17:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),18:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),18:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),19:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),19:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),20:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),20:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),21:00,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),21:30,C,Cycle route (all stops)
+vacation,weekday,hda,Handaeap Stn (Line 4),22:00,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),08:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),08:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),09:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),09:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),10:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),10:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),11:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),11:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),12:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),12:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),13:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),13:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),14:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),14:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),15:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),15:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),16:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),16:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),17:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),17:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),18:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),18:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),19:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),19:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),20:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),20:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),21:05,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),21:35,C,Cycle route (all stops)
+vacation,weekday,apt,Yesulin APT (Ansan terminal),22:05,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,08:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,09:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,10:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,11:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,12:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,13:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,14:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,15:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,16:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,17:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,18:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,19:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,20:45,C,Cycle route (all stops)
+vacation,holiday,res,ERICA Residence,21:45,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,08:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,09:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,10:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,11:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,12:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,13:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,14:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,15:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,16:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,17:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,18:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,19:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,20:50,C,Cycle route (all stops)
+vacation,holiday,cock,Shuttlecock stop,21:50,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),09:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),10:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),11:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),12:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),13:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),14:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),15:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),16:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),17:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),18:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),19:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),20:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),21:00,C,Cycle route (all stops)
+vacation,holiday,hda,Handaeap Stn (Line 4),22:00,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),09:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),10:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),11:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),12:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),13:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),14:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),15:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),16:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),17:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),18:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),19:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),20:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),21:05,C,Cycle route (all stops)
+vacation,holiday,apt,Yesulin APT (Ansan terminal),22:05,C,Cycle route (all stops)
