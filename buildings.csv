@@ -1,7 +1,7 @@
 zone,number,english_name,korean_name
 1,101,Administration Building & ERICA Convergence Center,본관 및 ERICA융합원
 1,102,Student Welfare Building,학생복지관
-1,103,Student Union/Uni Center,학생회관/유니센터
+1,103,Student Union(Uni Center),학생회관(유니센터)
 1,104,Engineering Building II,제2공학관
 1,105,Architectural Design Hall,건축디자인관
 1,106,Structural Experiment Laboratory,초대형구조실험동
@@ -12,9 +12,9 @@ zone,number,english_name,korean_name
 1,111,Design Research Hall,디자인연구관
 1,112,Smart Architecture Hall,스마트건축관
 2,201,Business and Economics Hall,경상관
-2,202,Solseong Hall/Global Culture & Commerce Hall,솔성관/글로벌문화통상관
+2,202,Solseong Hall,솔성관
 2,203,Social Education Building & R.O.T.C.,사회교육관 및 학군단
-2,204,Ilsin Hall/Media & Information Hall,일신재/언론정보관
+2,204,Ilsin Hall,일신재
 2,205,Sciences and Technology Building I,제1과학기술관
 2,206,Conference Hall,컨퍼런스홀
 2,207,Sciences and Technology Building II,제2과학기술관
@@ -29,27 +29,27 @@ zone,number,english_name,korean_name
 3,307,Hanyang ERICA Convention Center,ERICA컨벤션센터
 3,308,Hanyang Business Incubator,창업보육센터
 3,309,Pharmacy Building,약학관
-3,310,Animal Experiment Building,동물실험동
-3,311,Software Convergence University Cluster Support Center,학연산클러스터지원센터
-3,312,Industry-University Cooperation Building,산학연협력관
-3,313,Pavement Acceleration Lab,포장가속실험동
-3,314,Fusion Electric Technology Application Research Center,퓨전전기기술응용연구센터
+3,310,Animal Experiment Laboratory,동물실험동
+3,311,ERICA Support Center,학연산클러스터지원센터
+3,312,ERICC Building,산학연협력관
+3,313,Hanyang Accelerated Pavement Testing Building,포장가속실험동
+3,314,Applied Research Center for Electro-Fusion Technology,퓨전전기기술응용연구센터
 3,315,BMR Center,BMR센터
-3,316,Lion's Hall,Lion's Hall
-3,317,Advanced Convergence Education Building,첨단융합교육관
-3,318,SHARE Project Building,SHARE사업관
-4,401,ERICA Academic Information Center,ERICA 학술정보관
-4,402,Arts and Physical Education Building,예체능대학 체육관
-4,403,Applied Music Hall (Muse Hall),실용음악관
-4,404,Main Stadium,대운동장
+3,316,Lion's Hall,라이언즈홀
+3,317,Multidisciplinary Lecture Hall,융합교육관
+3,318,Hall of SHARE Business,SHARE사업관
+4,401,ERICA Library & Academic Information Center,ERICA 학술정보관
+4,402,Gymnasium,체육관
+4,403,Muse Hall,실용음악관
+4,404,Sports Stadium,대운동장
 4,405,Tennis Courts,테니스장
-5,501,Creativity Hall,창의관
-5,502,Talent Hall,인재관
-5,503,Happiness Hall,행복관
-5,504,Creative Talent Center Education Building,창의인재원 교육관
-C,C01,Gyeonggi Technopark,경기테크노파크
-C,C02,Korea Testing & Research Institute,한국산업기술시험원 KTL
-C,C03,Korea Institute of Industrial Technology,한국생산기술연구원(융합생산기술연구소) KITECH
-C,C04,Korea Electrotechnology Research Institute,한국전기연구원 KERI
-C,C05,LG Innotek Ansan R&D Institute,LG이노텍 안산 R&D연구소
-C,C06,Campus Innovation Park,캠퍼스 혁신파크
+5,501,Student Residence Hall IV,창의관
+5,502,Student Residence Hall III,인재관
+5,503,Student Residence Hall V,행복관
+5,504,Residential College,창의인재원 교육관
+C,C01,Gyeonggi Technology Park,경기테크노파크
+C,C02,Korea Testing Laboratory,한국산업기술시험원
+C,C03,Korea Institute of Industrial Technology,한국생산기술연구원 융합생산기술연구소
+C,C04,Korea Electrotechnology Research Institute,한국전기연구원
+C,C05,LG Innotek Ansan R&D Research Center,LG 이노텍 안산 R&D 연구소
+C,C06,Hanyang University ERICA Innovation Park,캠퍼스 혁신파크
