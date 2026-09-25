@@ -18,6 +18,13 @@
 #              DH = Direct to Handaeap Stn (skips stops in between). DY = Direct to Yesulin APT. D = generic direct route.
 #              J = Via Jungang Stn detour (only these runs stop at Jungang Stn).
 #
+# J run loop (identical on every J run; from the official shuttle app's "Via Stops" sheets for the 13:10, 15:05 and 16:07 runs).
+#   Minutes after the Residence departure:  Residence +0 -> Shuttlecock +5 -> Handaeap Stn +15 -> Jungang Stn +18
+#                                           -> Shuttlecock +25 -> Residence +30
+#   Jungang Stn has no rows of its own; only the boarding rows for res / cock / hda are listed below.
+#   Semester weekdays, Residence departures 13:10, 14:10, 15:05, 16:07, 17:07 reach Jungang Stn at 13:28, 14:28, 15:23, 16:25, 17:25.
+#   The 14:10 run repeats the 13:10 pattern and 17:07 repeats 16:07; the 15:05 run has no repeat.
+#
 # Stop codes:  res = ERICA Residence · cock = Shuttlecock stop (campus) · hda = Handaeap Stn (Line 4) · apt = Yesulin APT (Ansan terminal)
 #
 # To add a departure: add a new row with the same period/day_type/stop and a new time+route_code.
