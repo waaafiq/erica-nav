@@ -24,6 +24,7 @@
 #   Jungang Stn has no rows of its own; only the boarding rows for res / cock / hda are listed below.
 #   Semester weekdays, Residence departures 13:10, 14:10, 15:05, 16:07, 17:07 reach Jungang Stn at 13:28, 14:28, 15:23, 16:25, 17:25.
 #   The 14:10 run repeats the 13:10 pattern and 17:07 repeats 16:07; the 15:05 run has no repeat.
+#   Summer/winter session weekdays: one run every hour, Residence 13:05, 14:05, 15:05, 16:05, 17:05 (Jungang Stn 13:23 ... 17:23).
 #
 # Stop codes:  res = ERICA Residence · cock = Shuttlecock stop (campus) · hda = Handaeap Stn (Line 4) · apt = Yesulin APT (Ansan terminal)
 #
@@ -61,7 +62,7 @@ semester,weekday,res,ERICA Residence,13:10,J,Via Jungang Stn
 semester,weekday,res,ERICA Residence,13:15,DH,Direct - Handaeap Stn
 semester,weekday,res,ERICA Residence,13:25,C,Cycle route (all stops)
 semester,weekday,res,ERICA Residence,13:40,DH,Direct - Handaeap Stn
-semester,weekday,res,ERICA Residence,13:45,D,Direct route
+semester,weekday,res,ERICA Residence,13:45,DH,Direct - Handaeap Stn
 semester,weekday,res,ERICA Residence,13:55,C,Cycle route (all stops)
 semester,weekday,res,ERICA Residence,14:10,J,Via Jungang Stn
 semester,weekday,res,ERICA Residence,14:20,DH,Direct - Handaeap Stn
@@ -803,15 +804,19 @@ session,weekday,apt,Yesulin APT (Ansan terminal),17:10,D,Direct route
 session,weekday,apt,Yesulin APT (Ansan terminal),17:40,D,Direct route
 session,weekday,apt,Yesulin APT (Ansan terminal),18:15,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),18:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),19:00,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),19:15,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),19:30,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),19:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),20:00,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),20:15,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),20:30,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),20:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),21:00,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),21:15,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),21:30,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),21:45,C,Cycle route (all stops)
+session,weekday,apt,Yesulin APT (Ansan terminal),22:00,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),22:15,C,Cycle route (all stops)
 session,holiday,res,ERICA Residence,08:45,C,Cycle route (all stops)
 session,holiday,res,ERICA Residence,09:15,C,Cycle route (all stops)
