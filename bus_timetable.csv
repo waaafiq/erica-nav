@@ -26,6 +26,15 @@
 #   The 14:10 run repeats the 13:10 pattern and 17:07 repeats 16:07; the 15:05 run has no repeat.
 #   Summer/winter session weekdays: one run every hour, Residence 13:05, 14:05, 15:05, 16:05, 17:05 (Jungang Stn 13:23 ... 17:23).
 #
+# HOW THE OTHER RUNS ARE STRUCTURED (checked against every row; keep these offsets when adding times):
+#   C  = one-way loop, 30 min (hourly on vacation holidays): Residence +0 -> Shuttlecock +5 -> Handaeap Stn +15 -> Yesulin APT +20
+#        -> Residence again. A cycle run needs a row at all four stops.
+#   DH = Shuttlecock +0 -> Handaeap Stn +10 (a run may also start at the Residence 5 min earlier). Each DH from Shuttlecock needs a
+#        return row at Handaeap Stn (code D) 10 min after it.
+#   DY = Shuttlecock +0 -> Yesulin APT +10 (may start at the Residence 5 min earlier). Each DY from Shuttlecock needs a return row
+#        at Yesulin APT (code D) 10 min after it.
+#   D  = those return departures back to campus: Handaeap Stn -> Shuttlecock +10 -> Residence +15.
+#
 # Stop codes:  res = ERICA Residence · cock = Shuttlecock stop (campus) · hda = Handaeap Stn (Line 4) · apt = Yesulin APT (Ansan terminal)
 #
 # To add a departure: add a new row with the same period/day_type/stop and a new time+route_code.
@@ -353,6 +362,7 @@ semester,weekday,hda,Handaeap Stn (Line 4),18:28,D,Direct route
 semester,weekday,hda,Handaeap Stn (Line 4),18:34,D,Direct route
 semester,weekday,hda,Handaeap Stn (Line 4),18:40,C,Cycle route (all stops)
 semester,weekday,hda,Handaeap Stn (Line 4),18:50,D,Direct route
+semester,weekday,hda,Handaeap Stn (Line 4),19:00,D,Direct route
 semester,weekday,hda,Handaeap Stn (Line 4),19:10,C,Cycle route (all stops)
 semester,weekday,hda,Handaeap Stn (Line 4),19:20,C,Cycle route (all stops)
 semester,weekday,hda,Handaeap Stn (Line 4),19:30,C,Cycle route (all stops)
@@ -769,6 +779,7 @@ session,weekday,hda,Handaeap Stn (Line 4),18:20,D,Direct route
 session,weekday,hda,Handaeap Stn (Line 4),18:30,D,Direct route
 session,weekday,hda,Handaeap Stn (Line 4),18:40,C,Cycle route (all stops)
 session,weekday,hda,Handaeap Stn (Line 4),18:50,D,Direct route
+session,weekday,hda,Handaeap Stn (Line 4),19:00,D,Direct route
 session,weekday,hda,Handaeap Stn (Line 4),19:10,C,Cycle route (all stops)
 session,weekday,hda,Handaeap Stn (Line 4),19:25,C,Cycle route (all stops)
 session,weekday,hda,Handaeap Stn (Line 4),19:40,C,Cycle route (all stops)
@@ -804,7 +815,6 @@ session,weekday,apt,Yesulin APT (Ansan terminal),17:10,D,Direct route
 session,weekday,apt,Yesulin APT (Ansan terminal),17:40,D,Direct route
 session,weekday,apt,Yesulin APT (Ansan terminal),18:15,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),18:45,C,Cycle route (all stops)
-session,weekday,apt,Yesulin APT (Ansan terminal),19:00,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),19:15,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),19:30,C,Cycle route (all stops)
 session,weekday,apt,Yesulin APT (Ansan terminal),19:45,C,Cycle route (all stops)
