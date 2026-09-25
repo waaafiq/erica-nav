@@ -27,8 +27,9 @@
 #   Summer/winter session weekdays: one run every hour, Residence 13:05, 14:05, 15:05, 16:05, 17:05 (Jungang Stn 13:23 ... 17:23).
 #
 # HOW THE OTHER RUNS ARE STRUCTURED (checked against every row; keep these offsets when adding times):
-#   C  = Residence +0 -> Shuttlecock +5 -> Handaeap Stn +15 -> Yesulin APT +20, then back through Shuttlecock to the Residence.
-#        A cycle run needs a row at all four stops; the return pass through Shuttlecock has no boarding row.
+#   C  = official route table, 35 min loop: Residence +0 -> Shuttlecock +5 -> Handaeap Stn +15 -> Yesulin APT +20
+#        -> Shuttlecock +30 -> Residence +35. A cycle run needs a row at all four stops; the return pass through
+#        Shuttlecock has no boarding row.
 #   DH = Shuttlecock +0 -> Handaeap Stn +10 (a run may also start at the Residence 5 min earlier). Each DH from Shuttlecock needs a
 #        return row at Handaeap Stn (code D) 10 min after it.
 #   DY = Shuttlecock +0 -> Yesulin APT +10 (may start at the Residence 5 min earlier). Each DY from Shuttlecock needs a return row
