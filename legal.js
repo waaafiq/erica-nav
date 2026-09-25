@@ -28,3 +28,5 @@ try { saved = JSON.parse(localStorage.getItem('ericanav.v2') || 'null'); } catch
 const pref = (saved && saved.primary) || ((navigator.language || '').toLowerCase().startsWith('ko') ? 'ko' : 'en');
 setLang(pref === 'ko' ? 'ko' : 'en');
 document.querySelectorAll('.langs button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.l)));
+// the language switch changes the page height, so re-jump to a #section link (e.g. privacy.html#feedback)
+if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }

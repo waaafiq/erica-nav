@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Feedback export — ERICA Nav</title>
+<link rel="stylesheet" href="legal.css">
+<style>
+  form { display: grid; gap: 12px; max-width: 420px; margin-top: 16px; }
+  label { display: grid; gap: 4px; font-size: 0.9rem; color: var(--muted); }
+  input { font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--text); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  button { font: inherit; font-weight: 600; min-height: 44px; padding: 0 18px; border-radius: 9999px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--card); }
+  button.danger { color: oklch(0.5 0.16 25); }
+  @media (prefers-color-scheme: dark) { button.danger { color: oklch(0.75 0.13 25); } }
+  #msg { min-height: 1.5em; margin: 12px 0 0; }
+</style>
+</head>
+<body>
+<header class="top"><a class="back" href="index.html">← Back to the map</a></header>
+<main id="main">
+  <h1>Feedback export</h1>
+  <p class="meta">For the operator only. Enter the admin key you set as <code>FEEDBACK_ADMIN_KEY</code> in Vercel.</p>
+  <form id="f">
+    <label>Admin key <input id="key" type="password" autocomplete="current-password" required></label>
+    <div class="row">
+      <button class="primary" type="submit">Download CSV</button>
+      <button class="danger" type="button" id="del">Delete all messages</button>
+    </div>
+  </form>
+  <p id="msg" role="status"></p>
+</main>
+<script>
+  const $ = id => document.getElementById(id), say = t => { $('msg').textContent = t; };
+  const call = async (method) => {
+    const r = await fetch('/api/feedback', { method, headers: { Authorization: 'Bearer ' + $('key').value } });
+    if (r.status === 401) throw new Error('That key is not correct.');
+    if (r.status === 503) throw new Error('Not set up yet: connect the Upstash database and set FEEDBACK_ADMIN_KEY in Vercel, then redeploy.');
+    if (!r.ok) throw new Error('Something went wrong (' + r.status + ').');
+    return r;
+  };
+  $('f').addEventListener('submit', async e => {
+    e.preventDefault(); say('Downloading…');
+    try {
+      const blob = await (await call('GET')).blob();
+      const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'ericanav-feedback.csv' });
+      a.click(); URL.revokeObjectURL(a.href); say('Downloaded ericanav-feedback.csv');
+    } catch (err) { say(err.message); }
+  });
+  $('del').addEventListener('click', async () => {
+    if (!$('key').value) { say('Enter the admin key first.'); return; }
+    if (!confirm('Permanently delete ALL stored messages? Download the CSV first if you want a copy.')) return;
+    try { await call('DELETE'); say('All messages deleted.'); } catch (err) { say(err.message); }
+  });
+</script>
+</body>
+</html>
