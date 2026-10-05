@@ -6,6 +6,15 @@
 <title>ERICA Nav — unofficial ERICA campus map</title>
 <meta name="description" content="Unofficial campus map, shuttle timetable and class schedule for Hanyang University ERICA. Not affiliated with the university.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+// iOS zooms the page when a field under 16px gets focus. maximum-scale=1 stops that focus zoom,
+// and iOS still lets people pinch-zoom the page regardless, so every field can use the 13px body
+// size instead of a forced 16px. Android would honour it as a pinch-zoom lock, so iOS only.
+(function () {
+  var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (ios) document.querySelector('meta[name=viewport]').setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover');
+})();
+</script>
 <script src="vendor/dc-runtime.js"></script>
 </head>
 <body>
@@ -1761,12 +1770,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     :where([style*="padding:0 14px 4px"],[style*="padding: 0 14px 4px"]) { padding: 0 16px 4px !important; }
     :where([style*="padding:16px 18px"],[style*="padding: 16px 18px"]) { padding-left: 16px !important; padding-right: 16px !important; }
   }
-  /* iPhone zooms the whole page when a field under 16px is focused (the keyboard-zoom bug), so typed text there stays 16px; placeholders stay 13px. */
-  @supports (-webkit-touch-callout: none) { @media (pointer: coarse) { input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]), select, textarea { font-size: 16px !important; }
-    /* the shuttle fields keep the 16px that stops the zoom but are drawn at 13px, like the rest of the page */
-    .fld { height: 40px; }
-    .fld > select, .fld > input { flex: none !important; max-width: none !important; width: 123.077% !important; height: 123.077% !important; transform: scale(0.8125); transform-origin: 0 0; }
-  } }
   @media (max-width: 600px) { .pn { display: none; } }
   ::placeholder { color: oklch(0.5 0.02 250); opacity: 1; }
   .leaflet-container .leaflet-control-attribution { font-size: 10px; }
@@ -5852,8 +5855,7 @@ class Component extends DCLogic {
       const st = splitTime(sess.start, '09', '00'), et = splitTime(sess.end, '10', '00');
       const single = false;
       const bOpt = sess.bldg ? bldgOptions.find(o => o.value === String(sess.bldg)) : null;
-      // fields draw at 16px on iPhone (see the keyboard-zoom CSS rule), 13px elsewhere
-      const fieldFont = (CSS.supports('-webkit-touch-callout', 'none') && window.matchMedia('(pointer: coarse)').matches ? '16px' : '13px') + " 'Google Sans Flex', sans-serif";
+      const fieldFont = "13px 'Google Sans Flex', sans-serif";
       const bldgBad = !bOpt && !!(sess.bldgText || '').trim();
       return {
         day: sess.day, bldg: sess.bldg || '', room: sess.room || '',
