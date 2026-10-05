@@ -1701,9 +1701,28 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .erica-lbl { animation: ericaLblIn .16s ease-out; }
   /* the class building field is sized to its number; Chrome's datalist arrow would eat that width */
   .bnum::-webkit-calendar-picker-indicator { display: none !important; }
+  /* Shared UI pieces so the same kind of thing looks the same everywhere.
+     Type: 18 page title / 15 dialog + section title / 13 body + buttons / 12 secondary + compact buttons / 11 field labels + captions.
+     Radii: 18 dialogs / 14 cards + list rows / 12 nested tiles / 10 fields / pill buttons + chips. */
+  .dlg { background: oklch(1 0 0); border-radius: 18px; padding: 20px; box-shadow: 0 12px 40px oklch(0.2 0.03 250 / 0.3); }
+  .dlg-title { margin: 0; font-size: 15px; font-weight: 700; line-height: 1.35; }
+  .dlg-body { margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: oklch(0.45 0.02 250); }
+  .dlg-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .btn { flex: 1; height: 40px; padding: 0 16px; border-radius: 9999px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; transition: background-color .15s; }
+  .btn-primary { background: oklch(0.44 0.14 258); color: oklch(1 0 0); border: none; }
+  .btn-primary:hover { background: oklch(0.36 0.15 258); }
+  .btn-secondary { background: oklch(1 0 0); color: oklch(0.35 0.02 250); border: 1px solid oklch(0.88 0.012 250); }
+  .btn-secondary:hover { background: oklch(0.97 0.005 250); }
+  .btn-danger { background: oklch(0.55 0.2 25); color: oklch(1 0 0); border: none; }
+  .btn-danger:hover { background: oklch(0.48 0.2 25); }
+  .btn-sm { flex: none; height: 32px; padding: 0 12px; font-size: 12px; }
+  .icon-close { flex: none; width: 32px; height: 32px; padding: 0; border: none; border-radius: 9999px; background: transparent; color: oklch(0.45 0.02 250); font-size: 20px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  .icon-close:hover { background: oklch(0.95 0.008 250); }
   /* class/gym editor rows: every field the same height; iOS draws time inputs taller unless appearance is reset */
   .sfld { height: 40px !important; box-sizing: border-box; }
   input[type=time].sfld { -webkit-appearance: none; appearance: none; padding-top: 0 !important; padding-bottom: 0 !important; line-height: 38px; }
+  /* phones open the native picker on tap; Chrome's hidden clock slot would otherwise clip "AM" */
+  @media (pointer: coarse) { input[type=time].sfld::-webkit-calendar-picker-indicator { display: none; } }
   @keyframes ericaLblIn { from { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .erica-lbl { animation: none; } }
   a { color: oklch(0.44 0.14 258); text-decoration: none; }
@@ -1835,11 +1854,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <sc-if value="{{ selected }}" hint-placeholder-val="{{ false }}">
             <div style="{{ sheetStyle }}">
               <div style="display:flex;align-items:flex-start;gap:12px">
-                <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:15px;color:oklch(1 0 0);background:oklch(0.44 0.14 258);padding:5px 9px;border-radius:7px;flex:none">{{ selected.num }}</span>
+                <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:15px;color:oklch(1 0 0);background:oklch(0.44 0.14 258);padding:5px 9px;border-radius:8px;flex:none">{{ selected.num }}</span>
                 <div style="flex:1;min-width:0">
                   <div style="font-weight:700;font-size:15px;letter-spacing:-0.01em">{{ selected.primary }}</div>
                 </div>
-                <button sc-camel-on-click="{{ closeSheet }}" aria-label="Close building details" style="flex:none;width:26px;height:26px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;cursor:pointer;color:oklch(0.5 0.02 250);line-height:1">×</button>
+                <button type="button" sc-camel-on-click="{{ closeSheet }}" aria-label="Close building details" class="icon-close" style="margin:-6px -6px 0 0">×</button>
               </div>
 
               <div style="display:flex;gap:16px;margin-top:12px">
@@ -1872,8 +1891,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
               </div>
 
               <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">
-                <button sc-camel-on-click="{{ routeHere }}" style="padding:9px 14px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);border:none;border-radius:9999px;font-weight:600;font-size:13px;cursor:pointer" style-hover="background:oklch(0.36 0.15 258)">Directions</button>
-                <button sc-camel-on-click="{{ toggleSave }}" style="{{ saveBtnStyle }}">{{ saveLabel }}</button>
+                <button type="button" sc-camel-on-click="{{ routeHere }}" class="btn btn-primary" style="flex:none;padding:0 18px">Directions</button>
+                <button type="button" sc-camel-on-click="{{ toggleSave }}" class="btn" style="{{ saveBtnStyle }}">{{ saveLabel }}</button>
                 <sc-if value="{{ admin }}" hint-placeholder-val="{{ false }}">
                   <button sc-camel-on-click="{{ editSelected }}" style="padding:9px 14px;background:oklch(0.98 0.004 250);border:1px solid oklch(0.85 0.014 250);border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.35 0.02 250)">Edit building</button><button sc-camel-on-click="{{ deleteSelected }}" style="padding:9px 14px;background:oklch(0.97 0.03 25);border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.5 0.16 25)">Delete building</button>
                 </sc-if>
@@ -1883,7 +1902,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <div style="margin-top:16px;padding-top:14px;border-top:1px solid oklch(0.93 0.008 250)">
                   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
                     <span style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Starting from</span>
-                    <sc-raw-select aria-label="Starting point" value="{{ routeStart }}" sc-camel-on-change="{{ onStartChange }}" style="padding:6px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);max-width:230px">
+                    <sc-raw-select aria-label="Starting point" value="{{ routeStart }}" sc-camel-on-change="{{ onStartChange }}" style="padding:6px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);max-width:230px">
                       <option value="gate">Main Gate — 정문</option>
                       <sc-for list="{{ startOptions }}" as="o" hint-placeholder-count="4">
                         <option value="{{ o.value }}">{{ o.label }}</option>
@@ -1925,7 +1944,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           </div>
           <div style="flex:1;min-height:0;overflow:auto;padding:0 16px 16px;display:flex;flex-direction:column;gap:8px">
             <sc-for list="{{ searchList }}" as="r" hint-placeholder-count="6">
-              <button sc-camel-on-click="{{ r.go }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:18px;cursor:pointer;text-align:left;flex:none" style-hover="border-color:oklch(0.7 0.08 258)">
+              <button sc-camel-on-click="{{ r.go }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;cursor:pointer;text-align:left;flex:none" style-hover="border-color:oklch(0.7 0.08 258)">
                 <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ r.num }}</span>
                 <span style="display:flex;flex-direction:column;min-width:0;flex:1">
                   <span style="font-weight:600;font-size:13px">{{ r.primary }}</span>
@@ -1961,7 +1980,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             </div>
           </div>
 
-          <div style="margin-top:14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px">
+          <div style="margin-top:16px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px">
             <div style="display:flex;border-bottom:1px solid oklch(0.91 0.01 250);border-radius:13px 13px 0 0;overflow:hidden">
               <div style="flex:none;width:38px"></div>
               <sc-for list="{{ dayList }}" as="d" hint-placeholder-count="5">
@@ -2028,24 +2047,24 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
         <sc-if value="{{ delAsk }}" hint-placeholder-val="{{ false }}">
           <div sc-camel-on-click="{{ closeDelAsk }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
-            <div sc-camel-on-click="{{ stopClick }}" role="alertdialog" aria-modal="true" aria-label="{{ delTitle }}" style="background:oklch(1 0 0);border-radius:18px;max-width:340px;width:100%;padding:20px">
-              <div style="font-weight:700;font-size:15px">{{ delTitle }}</div>
-              <p style="margin:4px 0 16px;font-size:12px;line-height:1.5;color:oklch(0.5 0.02 250)">{{ delBody }}</p>
-              <div style="display:flex;gap:8px">
-                <button type="button" sc-camel-on-click="{{ closeDelAsk }}" style="flex:1;padding:10px;border:1px solid oklch(0.88 0.012 250);background:oklch(1 0 0);border-radius:9999px;font-weight:600;font-size:13px;color:oklch(0.35 0.02 250);cursor:pointer">{{ delCancel }}</button>
-                <button type="button" sc-camel-on-click="{{ confirmDelAsk }}" style="flex:1;padding:10px;border:none;background:oklch(0.55 0.2 25);border-radius:9999px;font-weight:600;font-size:13px;color:#fff;cursor:pointer" style-hover="background:oklch(0.48 0.2 25)">{{ delGo }}</button>
+            <div sc-camel-on-click="{{ stopClick }}" role="alertdialog" aria-modal="true" aria-label="{{ delTitle }}" class="dlg" style="max-width:340px;width:100%">
+              <div class="dlg-title">{{ delTitle }}</div>
+              <p class="dlg-body">{{ delBody }}</p>
+              <div class="dlg-actions">
+                <button type="button" sc-camel-on-click="{{ closeDelAsk }}" class="btn btn-secondary">{{ delCancel }}</button>
+                <button type="button" sc-camel-on-click="{{ confirmDelAsk }}" class="btn btn-danger">{{ delGo }}</button>
               </div>
             </div>
           </div>
         </sc-if>
         <sc-if value="{{ ttGuideOpen }}" hint-placeholder-val="{{ false }}">
           <div sc-camel-on-click="{{ closeTtGuide }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
-            <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="{{ ttGuideTitle }}" style="background:oklch(1 0 0);border-radius:18px;max-width:420px;width:100%;max-height:86vh;overflow:auto;padding:20px">
+            <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="{{ ttGuideTitle }}" class="dlg" style="max-width:420px;width:100%;max-height:86vh;overflow:auto">
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px">
-                <div style="font-weight:700;font-size:15px">{{ ttGuideTitle }}</div>
-                <button type="button" sc-camel-on-click="{{ closeTtGuide }}" aria-label="Close" style="flex:none;border:none;background:none;font-size:18px;color:oklch(0.5 0.02 250);cursor:pointer;padding:2px;line-height:1">×</button>
+                <div class="dlg-title">{{ ttGuideTitle }}</div>
+                <button type="button" sc-camel-on-click="{{ closeTtGuide }}" aria-label="Close" class="icon-close" style="margin:-6px -6px 0 0">×</button>
               </div>
-              <p style="margin:0 0 12px;font-size:12px;line-height:1.5;color:oklch(0.5 0.02 250)">{{ ttGuideIntro }}</p>
+              <p class="dlg-body" style="margin:0 0 12px">{{ ttGuideIntro }}</p>
               <div style="display:flex;flex-direction:column;gap:8px">
                 <div style="padding:12px;background:oklch(0.975 0.006 250);border-radius:12px">
                   <div style="font-size:13px;font-weight:600;color:oklch(0.4 0.02 250);font-family:'Noto Sans KR',sans-serif"><span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.88 0.07 15);color:oklch(0.35 0.08 15)">Y206</span>-<span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.9 0.04 280);color:oklch(0.35 0.06 280)">0301</span> 컨퍼런스홀 301 강의실</div>
@@ -2066,11 +2085,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
         <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
           <div sc-camel-on-click="{{ closeModal }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
-            <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="Timetable" style="background:oklch(1 0 0);border-radius:18px;max-width:420px;width:100%;max-height:86vh;overflow:auto;padding:20px">
+            <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="Timetable" class="dlg" style="max-width:420px;width:100%;max-height:86vh;overflow:auto">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-                <button sc-camel-on-click="{{ closeModal }}" aria-label="Close" style="border:none;background:none;font-size:18px;color:oklch(0.5 0.02 250);cursor:pointer;padding:2px;line-height:1">×</button>
-                <div style="font-weight:700;font-size:15px">{{ modalTitle }}</div>
-                <button sc-camel-on-click="{{ saveModal }}" style="border:none;background:none;font-weight:700;font-size:13px;color:oklch(0.44 0.14 258);cursor:pointer">Done</button>
+                <button type="button" sc-camel-on-click="{{ closeModal }}" aria-label="Close" class="icon-close" style="margin-left:-6px">×</button>
+                <div class="dlg-title">{{ modalTitle }}</div>
+                <button type="button" sc-camel-on-click="{{ saveModal }}" style="height:32px;margin-right:-8px;padding:0 8px;border:none;border-radius:9999px;background:none;font-weight:700;font-size:13px;color:oklch(0.44 0.14 258);cursor:pointer">Done</button>
               </div>
 
               <label style="display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: oklch(0.5 0.02 250); margin-bottom: 12px">Subject Name*
@@ -2082,19 +2101,19 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
               <div style="font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:6px">Times and Places</div>
               <sc-for list="{{ modalSessions }}" as="sess" hint-placeholder-count="1">
-                <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
+                <div style="border:1px solid oklch(0.9 0.012 250);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
                   <div style="display:flex;gap:8px">
                     <sc-raw-select class="sfld" aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:0 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                       <option value="Mon">Monday</option><option value="Tue">Tuesday</option><option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option><option value="Fri">Friday</option><option value="Sat">Saturday</option><option value="Sun">Sunday</option>
                     </sc-raw-select>
-                    <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" disabled="{{ sess.binDisabled }}" class="sfld" style="flex:none;width:40px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);opacity:{{ sess.binOpacity }};cursor:{{ sess.binCursor }}">🗑</button>
+                    <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" disabled="{{ sess.binDisabled }}" class="sfld" style="flex:none;width:40px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:10px;color:oklch(0.5 0.02 250);opacity:{{ sess.binOpacity }};cursor:{{ sess.binCursor }}">🗑</button>
                   </div>
                   <div style="display:flex;gap:6px;align-items:center">
-                    <input class="sfld" type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:0 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <input class="sfld" type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:0 7px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                     <span style="flex:none;color:oklch(0.5 0.02 250);font-size:13px">–</span>
-                    <input class="sfld" type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:0 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
-                    <input class="sfld" aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:72px;padding:0 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
+                    <input class="sfld" type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:0 7px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <input class="sfld" aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:64px;padding:0 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                   <div style="display:flex;gap:8px">
                     <label style="{{ sess.bldgStyle }}">
@@ -2113,7 +2132,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <div style="padding:10px 11px;background:oklch(0.96 0.006 250);border-radius:10px;font-size:12px;color:oklch(0.5 0.02 250);margin-bottom:8px">No fixed time or place — this will be listed below the timetable.</div>
               </sc-if>
               <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;flex-wrap:wrap">
-                <button sc-camel-on-click="{{ addSessionBlank }}" style="border:none;background:none;color:oklch(0.44 0.14 258);font-weight:600;font-size:13px;cursor:pointer;padding:0">+ New time and place</button>
+                <button type="button" sc-camel-on-click="{{ addSessionBlank }}" style="height:32px;border:none;background:none;color:oklch(0.44 0.14 258);font-weight:600;font-size:13px;cursor:pointer;padding:0">+ New time and place</button>
                 <sc-if value="{{ showQuickAdd }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex;gap:8px">
                     <button sc-camel-on-click="{{ addSessionSameTime }}" style="border:none;background:oklch(0.44 0.14 258);color:#fff;font-weight:600;font-size:12px;cursor:pointer;padding:7px 12px;border-radius:9999px" style-hover="background:oklch(0.36 0.15 258)">Same time</button>
@@ -2127,7 +2146,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
               </sc-if>
 
               <sc-if value="{{ modalIsEdit }}" hint-placeholder-val="{{ false }}">
-                <button sc-camel-on-click="{{ deleteModalCourse }}" style="margin-top:14px;width:100%;padding:10px;background:oklch(0.97 0.03 25);color:oklch(0.5 0.16 25);border:none;border-radius:12px;font-weight:600;font-size:13px;cursor:pointer">Delete subject</button>
+                <button type="button" sc-camel-on-click="{{ deleteModalCourse }}" class="btn" style="margin-top:16px;width:100%;background:oklch(0.97 0.03 25);color:oklch(0.5 0.16 25);border:none">Delete subject</button>
               </sc-if>
             </div>
           </div>
@@ -2135,27 +2154,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
         <sc-if value="{{ gymModalOpen }}" hint-placeholder-val="{{ false }}">
           <div sc-camel-on-click="{{ closeGymModalBtn }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
-            <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="Timetable" style="background:oklch(1 0 0);border-radius:18px;max-width:420px;width:100%;max-height:86vh;overflow:auto;padding:20px">
+            <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="Timetable" class="dlg" style="max-width:420px;width:100%;max-height:86vh;overflow:auto">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-                <button sc-camel-on-click="{{ closeGymModalBtn }}" aria-label="Close" style="border:none;background:none;font-size:18px;color:oklch(0.5 0.02 250);cursor:pointer;padding:2px;line-height:1">×</button>
-                <div style="font-weight:700;font-size:15px">Gym timetable</div>
-                <button sc-camel-on-click="{{ saveGymModalBtn }}" style="border:none;background:none;font-weight:700;font-size:13px;color:oklch(0.44 0.14 258);cursor:pointer">Done</button>
+                <button type="button" sc-camel-on-click="{{ closeGymModalBtn }}" aria-label="Close" class="icon-close" style="margin-left:-6px">×</button>
+                <div class="dlg-title">Gym timetable</div>
+                <button type="button" sc-camel-on-click="{{ saveGymModalBtn }}" style="height:32px;margin-right:-8px;padding:0 8px;border:none;border-radius:9999px;background:none;font-weight:700;font-size:13px;color:oklch(0.44 0.14 258);cursor:pointer">Done</button>
               </div>
               <p style="margin:0 0 12px;font-size:12px;color:oklch(0.5 0.02 250)">The gym's weekly class times, shown to everyone as a striped overlay on their own timetable.</p>
 
               <sc-for list="{{ gymModalSessions }}" as="sess" hint-placeholder-count="1">
-                <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
+                <div style="border:1px solid oklch(0.9 0.012 250);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
                   <div style="display:flex;gap:8px">
                     <sc-raw-select class="sfld" aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:0 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                       <option value="Mon">Monday</option><option value="Tue">Tuesday</option><option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option><option value="Fri">Friday</option><option value="Sat">Saturday</option><option value="Sun">Sunday</option>
                     </sc-raw-select>
-                    <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" class="sfld" style="flex:none;width:40px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);cursor:pointer">🗑</button>
+                    <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" class="sfld" style="flex:none;width:40px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:10px;color:oklch(0.5 0.02 250);cursor:pointer">🗑</button>
                   </div>
                   <div style="display:flex;gap:6px;align-items:center">
-                    <input class="sfld" type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:0 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <input class="sfld" type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:0 7px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                     <span style="flex:none;color:oklch(0.5 0.02 250);font-size:13px">–</span>
-                    <input class="sfld" type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:0 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <input class="sfld" type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:0 7px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                 </div>
               </sc-for>
@@ -2188,7 +2207,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </sc-if>
 
         <div style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px">
-          <div style="background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:12px;padding:16px">
+          <div style="background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;padding:16px">
             <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px">
               <button sc-camel-on-click="{{ onSeasonIconClick }}" style="{{ shSeasonPillStyle }}" aria-label="Term dates">
             <sc-if value="{{ shIsSpring }}" hint-placeholder-val="{{ true }}">
@@ -2292,13 +2311,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <div style="margin-top:12px;padding:12px 16px;background:oklch(0.48 0.15 340 / 0.07);border:1px solid oklch(0.48 0.15 340 / 0.25);border-radius:12px;font-size:12px;color:oklch(0.4 0.09 340);line-height:1.5">{{ trViaNote }}</div>
             </sc-if>
             <sc-if value="{{ trNone }}" hint-placeholder-val="{{ false }}">
-              <div style="margin-top:12px;padding:16px;background:oklch(1 0 0);border:1px dashed oklch(0.88 0.012 250);border-radius:12px;font-size:13px;color:oklch(0.5 0.02 250)">{{ trNoneText }}</div>
+              <div style="margin-top:12px;padding:16px;background:oklch(1 0 0);border:1px dashed oklch(0.88 0.012 250);border-radius:14px;font-size:13px;color:oklch(0.5 0.02 250)">{{ trNoneText }}</div>
             </sc-if>
 
           </div>
 
 
-          <div style="background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:12px;padding:16px">
+          <div style="background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;padding:16px">
             <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">{{ shRoutesHeading }}</div>
             <div style="margin-top:8px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px 20px">
               <sc-for list="{{ shLegend }}" as="r" hint-placeholder-count="4">
@@ -2324,16 +2343,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <h2 style="max-width:720px;margin:0 auto 16px;padding:2px 2px 0;font-size:18px;letter-spacing:-0.01em">{{ savedTitle }}</h2>
         <div style="display:flex;flex-direction:column;gap:8px;max-width:720px;margin:0 auto">
           <sc-for list="{{ savedList }}" as="r" hint-placeholder-count="2">
-            <div sc-camel-on-click="{{ r.go }}" role="button" sc-camel-tab-index="0" aria-label="{{ r.num }} {{ r.primary }}, show on map" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:18px;cursor:pointer" style-hover="background:oklch(0.985 0.004 250)">
+            <div sc-camel-on-click="{{ r.go }}" role="button" sc-camel-tab-index="0" aria-label="{{ r.num }} {{ r.primary }}, show on map" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;cursor:pointer" style-hover="background:oklch(0.985 0.004 250)">
               <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ r.num }}</span>
               <span style="flex:1;min-width:0;display:flex;flex-direction:column">
                 <span style="font-weight:600;font-size:13px">{{ r.primary }}</span>
               </span>
-              <button type="button" sc-camel-on-click="{{ r.go }}" tabindex="-1" style="flex:none;padding:7px 11px;background:oklch(0.95 0.04 258);color:oklch(0.4 0.14 258);border:none;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer">{{ savedOpen }}</button>
+              <button type="button" sc-camel-on-click="{{ r.go }}" tabindex="-1" class="btn btn-sm" style="background:oklch(0.95 0.04 258);color:oklch(0.4 0.14 258);border:none">{{ savedOpen }}</button>
             </div>
           </sc-for>
           <sc-if value="{{ noSaved }}" hint-placeholder-val="{{ true }}">
-            <div style="padding:22px;background:oklch(1 0 0);border:1px dashed oklch(0.88 0.012 250);border-radius:13px;font-size:13px;color:oklch(0.5 0.02 250)">{{ savedEmpty }}</div>
+            <div style="padding:16px;background:oklch(1 0 0);border:1px dashed oklch(0.88 0.012 250);border-radius:14px;font-size:13px;line-height:1.5;color:oklch(0.5 0.02 250)">{{ savedEmpty }}</div>
           </sc-if>
         </div>
       </section>
@@ -2342,9 +2361,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <!-- "Show on the map?" prompt, opened from the Timetable and Saved tabs -->
     <sc-if value="{{ placeAsk }}" hint-placeholder-val="{{ false }}">
       <div sc-camel-on-click="{{ closePlaceAsk }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
-        <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="{{ paTitle }}" style="background:oklch(1 0 0);border-radius:18px;max-width:340px;width:100%;padding:20px">
-          <div style="font-weight:700;font-size:15px">{{ paTitle }}</div>
-          <p style="margin:4px 0 14px;font-size:12px;line-height:1.5;color:oklch(0.5 0.02 250)">{{ paBody }}</p>
+        <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="{{ paTitle }}" class="dlg" style="max-width:340px;width:100%">
+          <div class="dlg-title">{{ paTitle }}</div>
+          <p class="dlg-body" style="margin-bottom:14px">{{ paBody }}</p>
           <sc-if value="{{ paHasBldg }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:oklch(0.975 0.006 250);border-radius:12px;margin-bottom:16px">
               <span style="flex:none;min-width:40px;padding:5px 8px;border-radius:8px;background:oklch(0.44 0.14 258);color:#fff;font-weight:700;font-size:13px;text-align:center">{{ paNum }}</span>
@@ -2354,9 +2373,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
               </span>
             </div>
           </sc-if>
-          <div style="display:flex;gap:8px">
-            <button type="button" sc-camel-on-click="{{ closePlaceAsk }}" style="flex:1;padding:10px;border:1px solid oklch(0.88 0.012 250);background:oklch(1 0 0);border-radius:9999px;font-weight:600;font-size:13px;color:oklch(0.35 0.02 250);cursor:pointer">{{ paCancel }}</button>
-            <button type="button" sc-camel-on-click="{{ confirmPlaceAsk }}" style="flex:1;padding:10px;border:none;background:oklch(0.44 0.14 258);border-radius:9999px;font-weight:600;font-size:13px;color:#fff;cursor:pointer" style-hover="background:oklch(0.36 0.15 258)">{{ paGo }}</button>
+          <div class="dlg-actions">
+            <button type="button" sc-camel-on-click="{{ closePlaceAsk }}" class="btn btn-secondary">{{ paCancel }}</button>
+            <button type="button" sc-camel-on-click="{{ confirmPlaceAsk }}" class="btn btn-primary">{{ paGo }}</button>
           </div>
         </div>
       </div>
@@ -2364,7 +2383,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <sc-if value="{{ onAbout }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="About" style="flex:1;min-height:0;overflow:auto;padding:16px 16px 12px;display:flex;flex-direction:column" ref="{{ screenRef }}">
         <div style="flex:none;width:100%;max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
-          <h2 style="margin:0;padding:2px 2px 0;font-size:18px;letter-spacing:-0.01em">{{ lg.aboutTitle }}</h2>
+          <h2 style="margin:0 0 4px;padding:2px 2px 0;font-size:18px;letter-spacing:-0.01em">{{ lg.aboutTitle }}</h2>
           <div style="background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:13px">
             <p style="margin:0;font-weight:700">{{ lg.hello }} <em lang="ms">Apa khabar?</em></p>
             <p style="margin:0;max-width:62ch"><sc-for list="{{ aboutP1 }}" as="x" hint-placeholder-count="3"><sc-if value="{{ x.em }}" hint-placeholder-val="{{ false }}"><strong style="font-weight:700">{{ x.t }}</strong></sc-if><sc-if value="{{ x.plain }}" hint-placeholder-val="{{ true }}">{{ x.t }}</sc-if></sc-for></p>
@@ -2417,16 +2436,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   <sc-if value="{{ pcOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;background:oklch(0.25 0.02 250 / 0.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50">
-      <div role="dialog" aria-modal="true" aria-labelledby="pc-title" style="width:100%;max-width:320px;background:oklch(1 0 0);border-radius:16px;padding:20px;box-shadow:0 12px 40px oklch(0.2 0.03 250 / 0.3)">
-        <div id="pc-title" style="font-weight:700;font-size:15px">Admin access</div>
-        <p style="margin:6px 0 14px;font-size:12px;color:oklch(0.5 0.02 250)">Enter the passcode to edit building data.</p>
-        <input aria-label="Admin passcode" sc-camel-auto-focus="true" value="{{ pcInput }}" sc-camel-on-change="{{ onPc }}" type="password" placeholder="Passcode" style="width:100%;padding:10px 12px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;outline:none">
+      <div role="dialog" aria-modal="true" aria-labelledby="pc-title" class="dlg" style="width:100%;max-width:340px">
+        <div id="pc-title" class="dlg-title">Admin access</div>
+        <p class="dlg-body" style="margin-bottom:14px">Enter the passcode to edit building data.</p>
+        <input aria-label="Admin passcode" sc-camel-auto-focus="true" value="{{ pcInput }}" sc-camel-on-change="{{ onPc }}" type="password" placeholder="Passcode" class="sfld" style="width:100%;padding:0 12px;border:1px solid oklch(0.88 0.012 250);border-radius:10px">
         <sc-if value="{{ pcError }}" hint-placeholder-val="{{ false }}">
           <div role="alert" style="margin-top:8px;font-size:12px;color:oklch(0.52 0.16 25)">That passcode does not match.</div>
         </sc-if>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button sc-camel-on-click="{{ submitPc }}" style="flex:1;padding:10px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);border:none;border-radius:9999px;font-weight:600;cursor:pointer">Unlock</button>
-          <button sc-camel-on-click="{{ closePc }}" style="flex:none;padding:10px 14px;background:oklch(0.97 0.005 250);border:1px solid oklch(0.9 0.012 250);border-radius:10px;font-weight:600;cursor:pointer;color:oklch(0.4 0.02 250)">Cancel</button>
+        <div class="dlg-actions">
+          <button type="button" sc-camel-on-click="{{ closePc }}" class="btn btn-secondary">Cancel</button>
+          <button type="button" sc-camel-on-click="{{ submitPc }}" class="btn btn-primary">Unlock</button>
         </div>
       </div>
     </div>
@@ -2434,12 +2453,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   <sc-if value="{{ locAsk }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;background:oklch(0.25 0.02 250 / 0.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:2000">
-      <div role="dialog" aria-modal="true" aria-labelledby="loc-title" aria-describedby="loc-body" style="width:100%;max-width:400px;background:oklch(1 0 0);border-radius:16px;padding:20px;box-shadow:0 12px 40px oklch(0.2 0.03 250 / 0.3)">
-        <h2 id="loc-title" style="margin:0;font-size:18px">{{ lg.locTitle }}</h2>
-        <p id="loc-body" style="margin:10px 0 0;font-size:13px">{{ lg.locBody }} <a href="privacy.html" target="_blank" rel="noopener">{{ lg.privacy }}</a></p>
-        <div style="display:flex;gap:8px;margin-top:16px">
-          <button type="button" sc-camel-auto-focus="true" sc-camel-on-click="{{ acceptLoc }}" style="flex:1;padding:10px 14px;border-radius:9999px;font-weight:600;font-size:13px;cursor:pointer;border:none;background:oklch(0.44 0.14 258);color:oklch(1 0 0)">{{ lg.locAllow }}</button>
-          <button type="button" sc-camel-on-click="{{ declineLoc }}" style="flex:none;padding:10px 14px;border-radius:9999px;font-weight:600;font-size:13px;cursor:pointer;background:oklch(0.97 0.005 250);border:1px solid oklch(0.9 0.012 250);color:oklch(0.4 0.02 250)">{{ lg.locDeny }}</button>
+      <div role="dialog" aria-modal="true" aria-labelledby="loc-title" aria-describedby="loc-body" class="dlg" style="width:100%;max-width:400px">
+        <h2 id="loc-title" class="dlg-title">{{ lg.locTitle }}</h2>
+        <p id="loc-body" class="dlg-body">{{ lg.locBody }} <a href="privacy.html" target="_blank" rel="noopener">{{ lg.privacy }}</a></p>
+        <div class="dlg-actions">
+          <button type="button" sc-camel-on-click="{{ declineLoc }}" class="btn btn-secondary">{{ lg.locDeny }}</button>
+          <button type="button" sc-camel-auto-focus="true" sc-camel-on-click="{{ acceptLoc }}" class="btn btn-primary">{{ lg.locAllow }}</button>
         </div>
       </div>
     </div>
@@ -2447,18 +2466,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   <sc-if value="{{ fbOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;background:oklch(0.25 0.02 250 / 0.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:2000">
-      <div role="dialog" aria-modal="true" aria-labelledby="fb-title" style="width:100%;max-width:440px;max-height:92vh;overflow:auto;background:oklch(1 0 0);border-radius:16px;padding:20px;box-shadow:0 12px 40px oklch(0.2 0.03 250 / 0.3)">
+      <div role="dialog" aria-modal="true" aria-labelledby="fb-title" class="dlg" style="width:100%;max-width:440px;max-height:92vh;overflow:auto">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-          <h2 id="fb-title" style="margin:0;font-size:18px">{{ lg.fbTitle }}</h2>
-          <button type="button" sc-camel-on-click="{{ closeFb }}" aria-label="{{ lg.close }}" style="flex:none;width:32px;height:32px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;cursor:pointer;color:oklch(0.4 0.02 250);line-height:1;font-size:18px">×</button>
+          <h2 id="fb-title" class="dlg-title">{{ lg.fbTitle }}</h2>
+          <button type="button" sc-camel-on-click="{{ closeFb }}" aria-label="{{ lg.close }}" class="icon-close" style="margin-right:-6px">×</button>
         </div>
         <sc-if value="{{ fbSent }}" hint-placeholder-val="{{ false }}">
           <p role="status" style="margin:14px 0 0;font-size:13px"><strong>{{ lg.fbThanks }}</strong> {{ lg.fbThanksBody }}</p>
-          <button type="button" sc-camel-auto-focus="true" sc-camel-on-click="{{ closeFb }}" style="width:100%;margin-top:16px;padding:11px 14px;border:none;border-radius:9999px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);font-weight:600;font-size:13px;cursor:pointer">{{ lg.close }}</button>
+          <button type="button" sc-camel-auto-focus="true" sc-camel-on-click="{{ closeFb }}" class="btn btn-primary" style="width:100%;margin-top:16px">{{ lg.close }}</button>
         </sc-if>
         <sc-if value="{{ fbForm }}" hint-placeholder-val="{{ true }}">
-          <p style="margin:10px 0 0;font-size:13px">{{ lg.fbIntro }}</p>
-          <label style="display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:12px;color:oklch(0.45 0.02 250)">{{ lg.fbMsgLabel }}
+          <p class="dlg-body">{{ lg.fbIntro }}</p>
+          <label style="display:flex;flex-direction:column;gap:4px;margin-top:12px;font-size:11px;color:oklch(0.5 0.02 250)">{{ lg.fbMsgLabel }}
             <textarea sc-camel-auto-focus="true" sc-camel-max-length="2000" rows="6" value="{{ fbMsg }}" sc-camel-on-change="{{ onFbMsg }}" style="padding:10px 12px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;resize:vertical;min-height:120px;font-family:inherit;color:oklch(0.22 0.015 250)"></textarea>
           </label>
           <input type="text" name="website" autocomplete="off" sc-camel-tab-index="-1" aria-hidden="true" value="{{ fbHp }}" sc-camel-on-change="{{ onFbHp }}" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
@@ -2468,9 +2487,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <sc-if value="{{ fbShowMail }}" hint-placeholder-val="{{ false }}"><a href="{{ fbMailto }}" style="color:inherit;text-decoration:underline">{{ lg.fbEmailInstead }}</a></sc-if>
             </div>
           </sc-if>
-          <div style="display:flex;gap:8px;margin-top:16px">
-            <button type="button" sc-camel-on-click="{{ closeFb }}" style="flex:none;padding:11px 16px;border-radius:9999px;background:oklch(0.97 0.005 250);border:1px solid oklch(0.9 0.012 250);color:oklch(0.4 0.02 250);font-weight:600;font-size:13px;cursor:pointer">{{ lg.fbCancel }}</button>
-            <button type="button" sc-camel-on-click="{{ sendFb }}" disabled="{{ fbSending }}" style="{{ fbSendStyle }}">{{ fbSendLabel }}</button>
+          <div class="dlg-actions">
+            <button type="button" sc-camel-on-click="{{ closeFb }}" class="btn btn-secondary">{{ lg.fbCancel }}</button>
+            <button type="button" sc-camel-on-click="{{ sendFb }}" disabled="{{ fbSending }}" class="btn btn-primary" style="{{ fbSendStyle }}">{{ fbSendLabel }}</button>
           </div>
         </sc-if>
       </div>
@@ -4963,8 +4982,8 @@ class Component extends DCLogic {
     const boxStyle = (kind) => ({
       display: 'flex', flexDirection: 'column', width: '100%', minWidth: 0,
       alignItems: 'flex-start',
-      padding: kind === 'mid' ? '20px 20px' : '16px 20px',
-      borderRadius: '12px',
+      padding: '16px',
+      borderRadius: '14px',
       border: '1px solid ' + (kind === 'mid' ? 'oklch(0.44 0.14 258)' : 'oklch(0.9 0.012 250)'),
       background: kind === 'mid' ? 'oklch(1 0 0)' : 'oklch(0.985 0.004 250)',
       boxShadow: kind === 'mid' ? '0 4px 12px oklch(0.44 0.14 258 / 0.12)' : 'none'
@@ -5011,7 +5030,7 @@ class Component extends DCLogic {
 
     const splitName = n => { const m = /^(.*?)(\s*\(.*\))$/.exec(n || ''); return m ? [m[1], m[2]] : [n || '', '']; };
     const selStyle = {
-      padding: '8px 8px', border: '1px solid oklch(0.88 0.012 250)', borderRadius: '8px', height: '40px',
+      padding: '8px 10px', border: '1px solid oklch(0.88 0.012 250)', borderRadius: '10px', height: '40px',
       background: 'oklch(1 0 0)', color: 'oklch(0.22 0.015 250)', width: '100%', boxSizing: 'border-box', minWidth: 0, fontSize: '13px'
     };
     const dtStyle = Object.assign({}, selStyle, {
@@ -6268,8 +6287,7 @@ class Component extends DCLogic {
       fbError: s.fbError, fbShowMail: s.fbShowMail,
       fbMailto: 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent('ERICA Nav feedback') + '&body=' + encodeURIComponent(s.fbMsg),
       fbSendLabel: (s.primary === 'ko' ? LG_KO : LG_EN)[s.fbStatus === 'sending' ? 'fbSending' : 'fbSend'],
-      fbSendStyle: { flex: '1', padding: '11px 14px', border: 'none', borderRadius: '9999px', background: 'oklch(0.44 0.14 258)', color: 'oklch(1 0 0)',
-        fontWeight: 600, fontSize: '13px', cursor: s.fbStatus === 'sending' ? 'default' : 'pointer', opacity: s.fbStatus === 'sending' ? 0.6 : 1 },
+      fbSendStyle: { cursor: s.fbStatus === 'sending' ? 'default' : 'pointer', opacity: s.fbStatus === 'sending' ? 0.6 : 1 },
       openFb: () => this.setState({ fbOpen: true, fbStatus: 'idle', fbError: '', fbShowMail: false }),
       closeFb: () => this.closeFeedback(), sendFb: () => this.sendFeedback(),
       enOn: s.primary === 'en', koOn: s.primary === 'ko',
@@ -6307,7 +6325,7 @@ class Component extends DCLogic {
       noPhoto: !!(sel && !sel.photo),
       sheetStyle: Object.assign({
         position: 'absolute', zIndex: 1000, background: 'oklch(1 0 0)', border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px',
-        boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)', padding: '14px', overflow: 'auto', animation: 'sheetUp 0.18s ease-out'
+        boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)', padding: '16px', overflow: 'auto', animation: 'sheetUp 0.18s ease-out'
       }, s.isDesktop
         ? { right: '8px', top: '8px', bottom: '8px', width: '340px', maxWidth: 'calc(100% - 16px)' }
         : { left: '8px', right: '8px', bottom: '8px', maxHeight: g ? '44%' : '72%' }),
@@ -6323,9 +6341,9 @@ class Component extends DCLogic {
       },
       saveLabel: sel && s.saved.indexOf(sel.id) >= 0 ? 'Saved' : 'Save',
       saveBtnStyle: {
-        padding: '9px 14px', borderRadius: '10px', fontWeight: 600, fontSize: '13px', cursor: 'pointer',
+        flex: 'none', padding: '0 18px',
         border: '1px solid ' + (sel && s.saved.indexOf(sel.id) >= 0 ? 'oklch(0.44 0.14 258)' : 'oklch(0.85 0.014 250)'),
-        background: sel && s.saved.indexOf(sel.id) >= 0 ? 'oklch(0.95 0.045 258)' : 'oklch(0.98 0.004 250)',
+        background: sel && s.saved.indexOf(sel.id) >= 0 ? 'oklch(0.95 0.045 258)' : 'oklch(1 0 0)',
         color: sel && s.saved.indexOf(sel.id) >= 0 ? 'oklch(0.38 0.15 258)' : 'oklch(0.35 0.02 250)'
       },
       editSelected: () => this.openForm(sel ? sel.num : null),
