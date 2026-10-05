@@ -2056,53 +2056,28 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <sc-for list="{{ modalSessions }}" as="sess" hint-placeholder-count="1">
                 <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
                   <div style="display:flex;gap:8px">
-                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:7px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
+                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                       <option value="Mon">Monday</option><option value="Tue">Tuesday</option><option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option><option value="Fri">Friday</option><option value="Sat">Saturday</option><option value="Sun">Sunday</option>
                     </sc-raw-select>
                     <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" disabled="{{ sess.binDisabled }}" style="flex:none;width:30px;height:30px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);opacity:{{ sess.binOpacity }};cursor:{{ sess.binCursor }}">🗑</button>
                   </div>
-                  <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap">
-                    <sc-raw-select aria-label="Start hour" value="{{ sess.startHour }}" sc-camel-on-change="{{ sess.onStartHour }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ hourOptions }}" as="o" hint-placeholder-count="12">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="Start minute" value="{{ sess.startMin }}" sc-camel-on-change="{{ sess.onStartMin }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ minOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="Start AM or PM" value="{{ sess.startAmPm }}" sc-camel-on-change="{{ sess.onStartAmPm }}" style="flex:none;width:52px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ ampmOptions }}" as="o" hint-placeholder-count="2">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <span style="color:oklch(0.5 0.02 250);font-size:12px">–</span>
-                    <sc-raw-select aria-label="End hour" value="{{ sess.endHour }}" sc-camel-on-change="{{ sess.onEndHour }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ hourOptions }}" as="o" hint-placeholder-count="12">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="End minute" value="{{ sess.endMin }}" sc-camel-on-change="{{ sess.onEndMin }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ minOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="End AM or PM" value="{{ sess.endAmPm }}" sc-camel-on-change="{{ sess.onEndAmPm }}" style="flex:none;width:52px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ ampmOptions }}" as="o" hint-placeholder-count="2">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <input type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <span style="color:oklch(0.5 0.02 250);font-size:13px">–</span>
+                    <input type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                   <div style="display:flex;gap:8px">
-                    <input aria-label="Building" list="bldg-list" value="{{ sess.bldgText }}" sc-camel-on-change="{{ sess.onBldgText }}" sc-camel-on-blur="{{ sess.onBldgBlur }}" placeholder="Building no. e.g. 317" style="{{ sess.bldgStyle }}">
+                    <label style="{{ sess.bldgStyle }}">
+                      <input aria-label="Building number" list="bldg-list" autocomplete="off" value="{{ sess.bldgText }}" sc-camel-on-change="{{ sess.onBldgText }}" sc-camel-on-blur="{{ sess.onBldgBlur }}" placeholder="Building" style="{{ sess.bldgInputStyle }}">
+                      <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:oklch(0.5 0.02 250)">{{ sess.bldgName }}</span>
+                    </label>
                     <datalist id="bldg-list">
                       <sc-for list="{{ bldgOptions }}" as="o" hint-placeholder-count="6">
-                        <option value="{{ o.label }}"></option>
+                        <option value="{{ o.num }}">{{ o.name }}</option>
                       </sc-for>
                     </datalist>
-                    <input aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:84px;padding:7px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;font-size:12px;color:oklch(0.22 0.015 250)">
+                    <input aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:84px;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                 </div>
               </sc-for>
@@ -2143,44 +2118,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <sc-for list="{{ gymModalSessions }}" as="sess" hint-placeholder-count="1">
                 <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
                   <div style="display:flex;gap:8px">
-                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:7px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
+                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                       <option value="Mon">Monday</option><option value="Tue">Tuesday</option><option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option><option value="Fri">Friday</option><option value="Sat">Saturday</option><option value="Sun">Sunday</option>
                     </sc-raw-select>
                     <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" style="flex:none;width:30px;height:30px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);cursor:pointer">🗑</button>
                   </div>
-                  <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap">
-                    <sc-raw-select aria-label="Start hour" value="{{ sess.startHour }}" sc-camel-on-change="{{ sess.onStartHour }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ hourOptions }}" as="o" hint-placeholder-count="12">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="Start minute" value="{{ sess.startMin }}" sc-camel-on-change="{{ sess.onStartMin }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ minOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="Start AM or PM" value="{{ sess.startAmPm }}" sc-camel-on-change="{{ sess.onStartAmPm }}" style="flex:none;width:52px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ ampmOptions }}" as="o" hint-placeholder-count="2">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <span style="color:oklch(0.5 0.02 250);font-size:12px">–</span>
-                    <sc-raw-select aria-label="End hour" value="{{ sess.endHour }}" sc-camel-on-change="{{ sess.onEndHour }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ hourOptions }}" as="o" hint-placeholder-count="12">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="End minute" value="{{ sess.endMin }}" sc-camel-on-change="{{ sess.onEndMin }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ minOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="End AM or PM" value="{{ sess.endAmPm }}" sc-camel-on-change="{{ sess.onEndAmPm }}" style="flex:none;width:52px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ ampmOptions }}" as="o" hint-placeholder-count="2">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <input type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <span style="color:oklch(0.5 0.02 250);font-size:13px">–</span>
+                    <input type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                 </div>
               </sc-for>
@@ -3154,7 +3101,6 @@ const GYM_TIMETABLE = [
   { day: 'Fri', start: '09:00', end: '11:00' }
 ];
 const HOUR12_OPTIONS = Array.from({ length: 12 }, (_, i) => pad(i + 1));
-const MIN_OPTIONS = ['00', '15', '30', '45'];
 const MIN5_OPTIONS = Array.from({ length: 12 }, (_, i) => pad(i * 5));
 const AMPM_OPTIONS = ['AM', 'PM'];
 const to12 = h24 => { const h = Number(h24); const ampm = h < 12 ? 'AM' : 'PM'; let h12 = h % 12; if (h12 === 0) h12 = 12; return { h12: pad(h12), ampm: ampm }; };
@@ -5292,15 +5238,12 @@ class Component extends DCLogic {
 
   updateModal(patch) { this.setState(s => ({ courseModal: Object.assign({}, s.courseModal, patch) })); }
 
-  // "317", "Y-317", "Y206" or a picked "317 · Name" suggestion -> building id; else a unique name match.
-  findBldgId(text, opts) {
-    const q = String(text || '').trim().toLowerCase();
+  // Exact building-number match ("317", "c01", "y-317"), for the number-only class place field.
+  findBldgNum(text, opts) {
+    const q = String(text || '').trim().toLowerCase().replace(/^y-?/, '');
     if (!q) return null;
-    const num = q.split(' · ')[0].replace(/^y-?/, '');
-    const hit = opts.find(o => o.label.toLowerCase() === q) || opts.find(o => { const n = o.label.split(' · ')[0].toLowerCase(); return n === num || (/^\d+$/.test(num) && Number(n) === Number(num)); });
-    if (hit) return hit.value;
-    const byName = opts.filter(o => o.label.toLowerCase().indexOf(q) >= 0);
-    return byName.length === 1 ? byName[0].value : null;
+    const hit = opts.find(o => String(o.num).toLowerCase() === q || (/^\d+$/.test(q) && Number(o.num) === Number(q)));
+    return hit ? hit.value : null;
   }
 
   updateSession(i, patch) {
@@ -5313,7 +5256,7 @@ class Component extends DCLogic {
 
   addModalSession() {
     this.setState(s => {
-      const base = { day: 'Mon', start: '09:00', end: '10:00', bldg: String(s.buildings[0].id), room: '' };
+      const base = { day: 'Mon', start: '09:00', end: '10:00', bldg: '', room: '' };
       return { courseModal: Object.assign({}, s.courseModal, { sessions: s.courseModal.sessions.concat([base]) }) };
     });
   }
@@ -5329,7 +5272,7 @@ class Component extends DCLogic {
   applySamePlace() {
     this.setState(s => {
       const sessions = s.courseModal.sessions.slice(), src = sessions[0];
-      sessions[sessions.length - 1] = Object.assign({}, sessions[sessions.length - 1], { bldg: src.bldg, room: src.room });
+      sessions[sessions.length - 1] = Object.assign({}, sessions[sessions.length - 1], { bldg: src.bldg, bldgText: null, room: src.room });
       return { courseModal: Object.assign({}, s.courseModal, { sessions: sessions }) };
     });
   }
@@ -5381,7 +5324,7 @@ class Component extends DCLogic {
     const s = this.state;
     let m = s.courseModal;
     if (!m) return;
-    if (m.sessions.some(x => x.bldgText != null && x.bldgText.trim())) { this.flashModalError(s.primary === 'ko' ? '건물을 찾을 수 없어요. 건물 번호를 확인하세요.' : 'Building not found. Check the building number.'); return; }
+    if (m.sessions.some(x => !x.bldg && x.bldgText != null && x.bldgText.trim())) { this.flashModalError(s.primary === 'ko' ? '건물을 찾을 수 없어요. 건물 번호를 확인하세요.' : 'Building not found. Check the building number.'); return; }
     m = Object.assign({}, m, { sessions: m.sessions.map(x => { const c = Object.assign({}, x); delete c.bldgText; return c; }) });
     const err = this.validateModal(m);
     if (err) { this.flashModalError(err); return; }
@@ -5657,7 +5600,7 @@ class Component extends DCLogic {
       hourLabels.push({ top: top, dy: 3, label: ((h % 12) || 12) + (h % 24 < 12 ? ' AM' : ' PM') });
     }
 
-    const bldgOptions = s.buildings.filter(b => !HIDDEN_NUMS.has(b.num)).map(b => ({ value: String(b.id), label: b.num + ' · ' + this.names(b).primary }));
+    const bldgOptions = s.buildings.filter(b => !HIDDEN_NUMS.has(b.num)).map(b => ({ value: String(b.id), num: b.num, name: this.names(b).primary, label: b.num + ' · ' + this.names(b).primary }));
 
     const DOW_KEYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const todayKey = DOW_KEYS[new Date(s.now || Date.now()).getDay()];
@@ -5712,28 +5655,26 @@ class Component extends DCLogic {
     const splitTime = (t, defH, defM) => { const p = (t || '').split(':'); return { h: p[0] || defH, m: p[1] || defM }; };
     const modalSessions = modal ? modal.sessions.map((sess, i) => {
       const st = splitTime(sess.start, '09', '00'), et = splitTime(sess.end, '10', '00');
-      const st12 = to12(st.h), et12 = to12(et.h);
       const single = false;
+      const bOpt = sess.bldg ? bldgOptions.find(o => o.value === String(sess.bldg)) : null;
+      const bldgBad = !bOpt && !!(sess.bldgText || '').trim();
       return {
-        day: sess.day, bldg: sess.bldg || String(s.buildings[0].id), room: sess.room || '',
+        day: sess.day, bldg: sess.bldg || '', room: sess.room || '',
         binDisabled: single, binOpacity: single ? 0.35 : 1, binCursor: single ? 'not-allowed' : 'pointer',
-        startHour: st12.h12, startMin: st.m, startAmPm: st12.ampm,
-        endHour: et12.h12, endMin: et.m, endAmPm: et12.ampm,
+        start: st.h + ':' + st.m, end: et.h + ':' + et.m,
         onDay: e => this.updateSession(i, { day: e.target.value }),
-        onStartHour: e => this.updateSession(i, { start: to24(e.target.value, st12.ampm) + ':' + st.m }),
-        onStartMin: e => this.updateSession(i, { start: st.h + ':' + e.target.value }),
-        onStartAmPm: e => this.updateSession(i, { start: to24(st12.h12, e.target.value) + ':' + st.m }),
-        onEndHour: e => this.updateSession(i, { end: to24(e.target.value, et12.ampm) + ':' + et.m }),
-        onEndMin: e => this.updateSession(i, { end: et.h + ':' + e.target.value }),
-        onEndAmPm: e => this.updateSession(i, { end: to24(et12.h12, e.target.value) + ':' + et.m }),
-        bldgText: sess.bldgText != null ? sess.bldgText : ((bldgOptions.find(o => o.value === String(sess.bldg || s.buildings[0].id)) || {}).label || ''),
-        bldgStyle: 'flex:1;min-width:0;padding:7px 8px;border:1px solid ' + (sess.bldgText != null && sess.bldgText.trim() ? 'oklch(0.6 0.2 25)' : 'oklch(0.88 0.012 250)') + ';border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)',
-        onBldgText: e => this.updateSession(i, { bldgText: e.target.value }),
-        onBldgBlur: e => {
-          const id = this.findBldgId(e.target.value, bldgOptions);
-          if (id) this.updateSession(i, { bldg: id, bldgText: null });
-          else if (!e.target.value.trim()) this.updateSession(i, { bldgText: null });
-        },
+        // a cleared time field reports '' -- keep the last valid time instead
+        onStart: e => { if (e.target.value) this.updateSession(i, { start: e.target.value.slice(0, 5) }); },
+        onEnd: e => { if (e.target.value) this.updateSession(i, { end: e.target.value.slice(0, 5) }); },
+        // Only the number is typed; the building's name sits beside it as
+        // plain text, so backspace edits the number digit by digit.
+        bldgText: sess.bldgText != null ? sess.bldgText : (bOpt ? bOpt.num : ''),
+        bldgName: bOpt ? bOpt.name : '',
+        bldgStyle: 'flex:1;min-width:0;display:flex;align-items:center;gap:6px;cursor:text;padding:9px 10px;border:1px solid ' + (bldgBad ? 'oklch(0.6 0.2 25)' : 'oklch(0.88 0.012 250)') + ';border-radius:10px;background:oklch(1 0 0)',
+        // em, not px, so the slot still fits "Building" when iOS draws fields at 16px
+        bldgInputStyle: 'flex:none;width:4.6em;min-width:0;padding:0;border:none;outline:none;background:transparent;font-size:13px;color:oklch(0.22 0.015 250)',
+        onBldgText: e => { const v = e.target.value; this.updateSession(i, { bldgText: v, bldg: this.findBldgNum(v, bldgOptions) || '' }); },
+        onBldgBlur: () => { if (sess.bldg || !(sess.bldgText || '').trim()) this.updateSession(i, { bldgText: null }); },
         onRoom: e => this.updateSession(i, { room: e.target.value }),
         onRemove: () => this.removeModalSession(i)
       };
@@ -5743,18 +5684,13 @@ class Component extends DCLogic {
     const gymModal = s.gymModal;
     const gymModalSessions = gymModal ? gymModal.sessions.map((sess, i) => {
       const st = splitTime(sess.start, '07', '00'), et = splitTime(sess.end, '08', '00');
-      const st12 = to12(st.h), et12 = to12(et.h);
       return {
         day: sess.day,
-        startHour: st12.h12, startMin: st.m, startAmPm: st12.ampm,
-        endHour: et12.h12, endMin: et.m, endAmPm: et12.ampm,
+        start: st.h + ':' + st.m, end: et.h + ':' + et.m,
         onDay: e => this.updateGymSession(i, { day: e.target.value }),
-        onStartHour: e => this.updateGymSession(i, { start: to24(e.target.value, st12.ampm) + ':' + st.m }),
-        onStartMin: e => this.updateGymSession(i, { start: st.h + ':' + e.target.value }),
-        onStartAmPm: e => this.updateGymSession(i, { start: to24(st12.h12, e.target.value) + ':' + st.m }),
-        onEndHour: e => this.updateGymSession(i, { end: to24(e.target.value, et12.ampm) + ':' + et.m }),
-        onEndMin: e => this.updateGymSession(i, { end: et.h + ':' + e.target.value }),
-        onEndAmPm: e => this.updateGymSession(i, { end: to24(et12.h12, e.target.value) + ':' + et.m }),
+        // a cleared time field reports '' -- keep the last valid time instead
+        onStart: e => { if (e.target.value) this.updateGymSession(i, { start: e.target.value.slice(0, 5) }); },
+        onEnd: e => { if (e.target.value) this.updateGymSession(i, { end: e.target.value.slice(0, 5) }); },
         onRemove: () => this.removeGymSession(i)
       };
     }) : [];
@@ -5784,7 +5720,7 @@ class Component extends DCLogic {
       modalProfessor: modal ? modal.professor : '', onModalProfessor: e => this.updateModal({ professor: e.target.value }),
       modalError: modal ? modal.error : null, hasModalError: !!(modal && modal.error),
       showQuickAdd: !!(modal && modal.sessions.length > 1),
-      modalSessions: modalSessions, bldgOptions: bldgOptions, hourOptions: HOUR12_OPTIONS, minOptions: MIN_OPTIONS, ampmOptions: AMPM_OPTIONS,
+      modalSessions: modalSessions, bldgOptions: bldgOptions,
       addSessionBlank: () => this.addModalSession(),
       addSessionSameTime: () => this.applySameTime(),
       addSessionSamePlace: () => this.applySamePlace(),
