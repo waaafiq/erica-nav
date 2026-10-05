@@ -1727,6 +1727,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .btn-sm { flex: none; height: 32px; padding: 0 12px; font-size: 12px; }
   .icon-close { flex: none; width: 32px; height: 32px; padding: 0; border: none; border-radius: 9999px; background: transparent; color: oklch(0.45 0.02 250); font-size: 20px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
   .icon-close:hover { background: oklch(0.95 0.008 250); }
+  .mapfab { width: 40px; height: 40px; padding: 0; border-radius: 9999px; border: 1px solid oklch(0.88 0.012 250); background: oklch(1 0 0); color: oklch(0.4 0.02 250); box-shadow: 0 1px 6px oklch(0.2 0.02 250 / 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .mapfab:hover { background: oklch(0.97 0.005 250); }
   /* class/gym editor rows: every field the same height; iOS draws time inputs taller unless appearance is reset */
   .sfld { height: 40px !important; box-sizing: border-box; }
   input[type=time].sfld { -webkit-appearance: none; appearance: none; padding-top: 0 !important; padding-bottom: 0 !important; line-height: 38px; }
@@ -1820,7 +1822,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div style="flex:1;display:flex;align-items:center;gap:8px;pointer-events:auto;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
             <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" sc-camel-on-focus="{{ openSearchPanel }}" sc-camel-on-click="{{ openSearchPanel }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0">
-            <button type="button" sc-camel-on-click="{{ openDirectionsBlank }}" aria-label="{{ navOpenLabel }}" title="{{ navOpenLabel }}" style="flex:none;width:32px;height:32px;margin:-6px -6px -6px 0;padding:0;border:none;border-radius:9999px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);display:flex;align-items:center;justify-content:center;cursor:pointer"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.6 13.4a2 2 0 0 1 0-2.8l8-8a2 2 0 0 1 2.8 0l8 8a2 2 0 0 1 0 2.8l-8 8a2 2 0 0 1-2.8 0z"></path><path d="M9 14v-2a2 2 0 0 1 2-2h4"></path><path d="m13 8 2 2-2 2"></path></svg></button>
+            <button type="button" sc-camel-on-click="{{ openDirectionsBlank }}" aria-label="{{ navOpenLabel }}" title="{{ navOpenLabel }}" style="flex:none;width:32px;height:32px;margin:-6px -6px -6px 0;padding:0;border:none;border-radius:9999px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);display:flex;align-items:center;justify-content:center;cursor:pointer"><svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M360-120v-567l-64 63-56-56 160-160 160 160-56 57-64-64v261q35-31 79-44.5t88-13.5q11 0 21 1t19 3l-63-64 56-56 160 160-160 160-56-56 63-64q-11-2-22-3.5t-22-1.5q-54 0-99.5 30.5T440-280v160h-80Z"></path></svg></button>
           </div>
         </div>
 
@@ -1842,7 +1844,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <button type="button" sc-camel-on-click="{{ pickFrom }}" aria-label="{{ navFromAria }}" style="{{ navFromStyle }}"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ navFromLabel }}</span></button>
                 <button type="button" sc-camel-on-click="{{ pickTo }}" aria-label="{{ navToAria }}" style="{{ navToStyle }}"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ navToLabel }}</span></button>
               </div>
-              <button type="button" sc-camel-on-click="{{ swapNav }}" aria-label="{{ navSwapLabel }}" title="{{ navSwapLabel }}" class="icon-close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 16-4 4-4-4"></path><path d="M17 20V4"></path><path d="m3 8 4-4 4 4"></path><path d="M7 4v16"></path></svg></button>
+              <button type="button" sc-camel-on-click="{{ swapNav }}" aria-label="{{ navSwapLabel }}" title="{{ navSwapLabel }}" class="icon-close"><svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z"></path></svg></button>
             </div>
           </sc-if>
         </div>
@@ -1850,12 +1852,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div style="flex:1;min-height:0;position:relative;z-index:0;isolation:isolate;background:oklch(0.965 0.006 250);overflow:hidden">
           <sc-if value="{{ realMode }}" hint-placeholder-val="{{ true }}">
             <div ref="{{ mapRef }}" style="position:absolute;inset:0;background:oklch(0.955 0.012 145)"></div>
-            <div style="position:absolute;right:12px;bottom:{{ rotCtlBottom }};z-index:640;display:flex;flex-direction:column;align-items:center;transition:bottom .2s ease;background:oklch(1 0 0 / 0.94);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:4px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.2)">
-              <button type="button" sc-camel-on-click="{{ rotateMapCCW }}" aria-label="Rotate map left" title="Rotate map left" style="width:32px;height:32px;border:none;background:transparent;cursor:pointer;font-size:15px;color:oklch(0.4 0.02 250);line-height:1">⟲</button>
-              <sc-if value="{{ mapRotated }}" hint-placeholder-val="{{ false }}">
-                <button type="button" sc-camel-on-click="{{ resetMapBearing }}" aria-label="Reset map to north" title="Reset to north" style="width:32px;height:24px;border:none;background:transparent;cursor:pointer;font-size:10px;font-weight:700;color:oklch(0.44 0.14 258);line-height:1">N</button>
-              </sc-if>
-              <button type="button" sc-camel-on-click="{{ rotateMapCW }}" aria-label="Rotate map right" title="Rotate map right" style="width:32px;height:32px;border:none;background:transparent;cursor:pointer;font-size:15px;color:oklch(0.4 0.02 250);line-height:1">⟳</button>
+            <div style="position:absolute;right:12px;bottom:{{ rotCtlBottom }};z-index:640;display:flex;flex-direction:column;gap:8px;transition:bottom .2s ease">
+              <!-- needle always points north (turns with the map); tap to face north again -->
+              <button type="button" sc-camel-on-click="{{ resetMapBearing }}" aria-label="{{ compassLabel }}" title="{{ compassLabel }}" class="mapfab"><svg ref="{{ compassRef }}" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:rotate(-45deg);transition:transform .08s linear"><circle cx="12" cy="12" r="10"></circle><path d="M16.24 7.76 14.44 13.17 9.56 10.83Z" fill="oklch(0.55 0.2 25)" stroke="none"></path><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg></button>
+              <button type="button" sc-camel-on-click="{{ centreOnMe }}" aria-label="{{ locateLabel }}" title="{{ locateLabel }}" class="mapfab" style="{{ locateStyle }}"><svg viewBox="0 -960 960 960" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M440-42v-80q-125-14-214.5-103.5T122-440H42v-80h80q14-125 103.5-214.5T440-838v-80h80v80q125 14 214.5 103.5T838-520h80v80h-80q-14 125-103.5 214.5T520-122v80h-80Zm238-240q82-82 82-198t-82-198q-82-82-198-82t-198 82q-82 82-82 198t82 198q82 82 198 82t198-82Zm-311-85q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm169.5-56.5Q560-447 560-480t-23.5-56.5Q513-560 480-560t-56.5 23.5Q400-513 400-480t23.5 56.5Q447-400 480-400t56.5-23.5ZM480-480Z"></path></svg></button>
             </div>
           </sc-if>
 
@@ -1915,7 +1915,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
               </div>
 
               <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">
-                <button type="button" sc-camel-on-click="{{ routeHere }}" class="btn btn-primary" style="flex:none;padding:0 18px">Directions</button>
+                <button type="button" sc-camel-on-click="{{ routeHere }}" class="btn btn-primary" style="flex:none;padding:0 18px 0 14px"><svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M360-120v-567l-64 63-56-56 160-160 160 160-56 57-64-64v261q35-31 79-44.5t88-13.5q11 0 21 1t19 3l-63-64 56-56 160 160-160 160-56-56 63-64q-11-2-22-3.5t-22-1.5q-54 0-99.5 30.5T440-280v160h-80Z"></path></svg>Directions</button>
                 <button type="button" sc-camel-on-click="{{ toggleSave }}" class="btn" style="{{ saveBtnStyle }}">{{ saveLabel }}</button>
                 <sc-if value="{{ admin }}" hint-placeholder-val="{{ false }}">
                   <button sc-camel-on-click="{{ editSelected }}" style="padding:9px 14px;background:oklch(0.98 0.004 250);border:1px solid oklch(0.85 0.014 250);border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.35 0.02 250)">Edit building</button><button sc-camel-on-click="{{ deleteSelected }}" style="padding:9px 14px;background:oklch(0.97 0.03 25);border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.5 0.16 25)">Delete building</button>
@@ -1973,7 +1973,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 </sc-if>
                 <sc-if value="{{ o.isItem }}" hint-placeholder-val="{{ true }}">
                   <button type="button" sc-camel-on-click="{{ o.go }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;cursor:pointer;text-align:left;flex:none" style-hover="border-color:oklch(0.7 0.08 258)">
-                    <sc-if value="{{ o.isMe }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:28px;height:28px;border-radius:9999px;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3"></path><path d="M12 19v3"></path><path d="M2 12h3"></path><path d="M19 12h3"></path><circle cx="12" cy="12" r="7"></circle></svg></span></sc-if>
+                    <sc-if value="{{ o.isMe }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:28px;height:28px;border-radius:9999px;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);display:flex;align-items:center;justify-content:center"><svg viewBox="0 -960 960 960" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M440-42v-80q-125-14-214.5-103.5T122-440H42v-80h80q14-125 103.5-214.5T440-838v-80h80v80q125 14 214.5 103.5T838-520h80v80h-80q-14 125-103.5 214.5T520-122v80h-80Zm238-240q82-82 82-198t-82-198q-82-82-198-82t-198 82q-82 82-82 198t82 198q82 82 198 82t198-82Zm-311-85q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm169.5-56.5Q560-447 560-480t-23.5-56.5Q513-560 480-560t-56.5 23.5Q400-513 400-480t23.5 56.5Q447-400 480-400t56.5-23.5ZM480-480Z"></path></svg></span></sc-if>
                     <sc-if value="{{ o.isGate }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:28px;height:28px;border-radius:9999px;background:oklch(0.95 0.012 250);color:oklch(0.4 0.02 250);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v18"></path><path d="M2 22h20"></path><path d="M12 3v19"></path></svg></span></sc-if>
                     <sc-if value="{{ o.isBldg }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ o.num }}</span></sc-if>
                     <span style="display:flex;flex-direction:column;min-width:0;flex:1">
@@ -3351,7 +3351,7 @@ class Component extends DCLogic {
       trFrom: 'cock', trTo: 'hda', trDate: null, trTime: null, trFullOpen: false,
       mapMode: 'real', baseLabels: !!(stored && stored.baseLabels), gymTipSeen: !!(stored && stored.gymTipSeen), gymTip: false,
       osmStatus: '', osmBusy: false, placing: false,
-      exportOpen: false, exportCopied: false, mapRotated: false,
+      exportOpen: false, exportCopied: false,
       realRoute: null, routeBusy: false
     });
   }
@@ -4086,11 +4086,9 @@ class Component extends DCLogic {
     // the rotation came from our +/- buttons or a two-finger touch gesture.
     // Only re-render React when the button actually needs to appear/disappear,
     // not on every frame of a rotate gesture.
-    this.map.on('rotate', () => {
-      const b = ((this.map.getBearing() % 360) + 360) % 360;
-      const rotated = Math.min(b, 360 - b) > 0.5;
-      if (rotated !== this.state.mapRotated) this.setState({ mapRotated: rotated });
-    });
+    // leaflet-rotate turns the map clockwise by the bearing, so north sits at
+    // +bearing on screen; the lucide compass needle is drawn 45 deg off north.
+    this.map.on('rotate', () => this.syncCompass());
     // Two-finger trackpad *twist* has no cross-browser event at all — only
     // Safari exposes it, via its own non-standard Gesture Events (rotation in
     // degrees). Chrome/Firefox never fire anything distinguishable for a
@@ -4242,12 +4240,21 @@ class Component extends DCLogic {
     return pts.length ? window.L.latLngBounds(pts) : null;
   }
 
-  rotateMapBy(deltaDeg) {
-    if (!this.map || !this.map.getBearing) return;
-    this.animateBearing((this._bearingRaf ? this._bearingTarget : this.map.getBearing()) + deltaDeg);
-  }
 
   resetMapBearing() { this.animateBearing(0); }
+
+  syncCompass() {
+    if (this.compassNode && this.map && this.map.getBearing) this.compassNode.style.transform = 'rotate(' + (this.map.getBearing() - 45) + 'deg)';
+  }
+
+  // Centre on the device location; asks for it first if needed (watchGps
+  // centres on the first fix when this.centred is cleared).
+  centreOnMe() {
+    const g = this.state.gps;
+    if (g && this.map) { this.map.setView([g.lat, g.lng], Math.max(this.map.getZoom(), 17.5)); return; }
+    this.centred = false;
+    this.startGps();
+  }
 
   syncTiles() {
     if (!this.map || !window.L) return;
@@ -5962,8 +5969,9 @@ class Component extends DCLogic {
         : { left: '8px', right: '8px', bottom: '8px', padding: '12px 14px', maxHeight: '50%' }),
       navHasRoute: !!rr && !msg,
       navSheetRef: node => { this.navSheetNode = node; },
-      // sit above the collapsed route card on phones (66px card + 8px inset + gap)
-      rotCtlBottom: s.navOpen && !s.navPick && !s.isDesktop ? '90px' : '16px',
+      // sit above whatever is pinned to the bottom of the map: the collapsed
+      // route card on phones (66px + inset + gap) or the live-location note
+      rotCtlBottom: s.navOpen && !s.navPick && !s.isDesktop ? '90px' : (!s.navOpen && s.mapMode === 'real' && (s.gpsErr || s.gps || s.gpsAsked)) ? '72px' : '16px',
       showHeader: !(s.navOpen && s.tab === 'map' && !s.isDesktop),
       navStepsOpen: !!s.navStepsOpen,
       toggleSteps: () => this.setState({ navStepsOpen: !this.state.navStepsOpen }),
@@ -6470,7 +6478,7 @@ class Component extends DCLogic {
       },
       showGps: s.mapMode !== 'real' && !!gp,
       gpsStyle: gp ? { position: 'absolute', left: gp.x + '%', top: gp.y + '%', width: '12px', height: '12px', marginLeft: '-6px', marginTop: '-6px', pointerEvents: 'none' } : {},
-      gpsNote: s.gpsErr ? s.gpsErr
+      gpsNote: s.navOpen ? '' : s.gpsErr ? s.gpsErr
         : s.mapMode === 'real'
           ? (s.gps ? 'Live position from your device, accurate to about ' + Math.round(s.gps.acc || 0) + ' m.' : s.gpsAsked ? 'Waiting for a location fix…' : '')
           : gp && gp.off ? 'You are outside the campus bounds — the dot is pinned to the nearest edge. Off campus.'
@@ -6509,10 +6517,12 @@ class Component extends DCLogic {
       photoRole: sel && sel.photo ? 'img' : 'presentation',
       photoAlt: sel && sel.photo ? 'Photo of ' + selN.primary : undefined,
 
-      rotateMapCCW: () => this.rotateMapBy(-15),
-      rotateMapCW: () => this.rotateMapBy(15),
       resetMapBearing: () => this.resetMapBearing(),
-      mapRotated: s.mapRotated,
+      compassRef: node => { this.compassNode = node; this.syncCompass(); },
+      compassLabel: s.primary === 'ko' ? '북쪽으로 맞추기' : 'Face north',
+      centreOnMe: () => this.centreOnMe(),
+      locateLabel: s.primary === 'ko' ? '내 위치로 이동' : 'Show my location',
+      locateStyle: s.gps ? 'color:oklch(0.44 0.14 258)' : '',
 
       selected: sel ? { num: sel.num, primary: selN.primary } : null,
       closeSheet: () => this.setState({ selected: null }),
