@@ -4073,11 +4073,12 @@ class Component extends DCLogic {
     this.syncMap();
     this.mergeEstimatedShapes();
     const withCoords = this.state.buildings.filter(b => b.lat && b.lng);
-    if (this.refreshPaths(), withCoords.some(b => b.poly) && !this._focusId) {
+    if (this.refreshPaths(), withCoords.some(b => b.poly)) {
       const all = withCoords.filter(b => b.poly).reduce((a, b) => a.concat(b.poly), []);
-      if (all.length) this.map.fitBounds(L.latLngBounds(all).pad(1.4));
+      // instant: an animated fit still running would override a timetable focus set right after
+      if (all.length) this.map.fitBounds(L.latLngBounds(all).pad(1.4), { animate: false });
     }
-    if (this._focusId) this.applyFocus(false);
+    if (this._focusId) this.applyFocus();
   }
 
   // Eases the bearing to `target` along the shortest way round. Repeated
@@ -5272,17 +5273,31 @@ class Component extends DCLogic {
   // picks the pending focus up at the end of initMap instead.
   focusBuilding(id) {
     this._focusId = id;
-    this.setState({ tab: 'map', mapMode: 'real', selected: id, placeAsk: null, ttEdit: false }, () => this.applyFocus(true));
+    this.setState({ tab: 'map', mapMode: 'real', selected: id, placeAsk: null, ttEdit: false }, () => this.applyFocus());
   }
 
-  applyFocus(animate) {
-    const b = this.byId(this._focusId), L = window.L;
-    if (!this.map || !L || !b) return;
+  // Opens 1.5 zoom levels out (the neighbouring buildings, not the whole
+  // campus) with the building in frame, holds a
+  // beat so the surroundings register, then glides in. Touching the map
+  // during the hold cancels the glide.
+  applyFocus() {
+    const b = this.byId(this._focusId), L = window.L, map = this.map;
+    if (!map || !L || !b) return;
     this._focusId = null;
+    const target = b.poly && b.poly.length > 2 ? L.latLngBounds(b.poly) : (b.lat && b.lng ? L.latLngBounds([[b.lat, b.lng], [b.lat, b.lng]]) : null);
+    if (!target) return;
     // leave room for the search bar on top and the building card at the bottom
-    const opts = { paddingTopLeft: [40, 150], paddingBottomRight: [40, 260], maxZoom: 18.5, animate: animate, duration: 0.6 };
-    if (b.poly && b.poly.length > 2) this.map[animate ? 'flyToBounds' : 'fitBounds'](L.latLngBounds(b.poly), opts);
-    else if (b.lat && b.lng) this.map[animate ? 'flyToBounds' : 'fitBounds'](L.latLngBounds([[b.lat, b.lng], [b.lat, b.lng]]), opts);
+    const pad = { paddingTopLeft: [40, 150], paddingBottomRight: [40, 260] };
+    const closeZ = Math.min(18.5, map.getBoundsZoom(target, false, L.point(80, 410)));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { map.fitBounds(target, Object.assign({ maxZoom: closeZ, animate: false }, pad)); return; }
+    map.fitBounds(target, Object.assign({ maxZoom: Math.max(map.getMinZoom() + 0.5, closeZ - 1.5), animate: false }, pad));
+    window.clearTimeout(this._glimpseTimer);
+    const cancel = () => { window.clearTimeout(this._glimpseTimer); this.mapNode && this.mapNode.removeEventListener('pointerdown', cancel); this.mapNode && this.mapNode.removeEventListener('wheel', cancel); };
+    if (this.mapNode) { this.mapNode.addEventListener('pointerdown', cancel); this.mapNode.addEventListener('wheel', cancel); }
+    this._glimpseTimer = window.setTimeout(() => {
+      cancel();
+      if (this.map === map) map.flyToBounds(target, Object.assign({ maxZoom: closeZ, duration: 1.2 }, pad));
+    }, 650);
   }
 
   openCourseModal(key) {
