@@ -1987,7 +1987,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                         <sc-if value="{{ ttEdit }}" hint-placeholder-val="{{ false }}">
                           <!-- sits on the block's top-right corner, iOS-style; 32px tap area around a 20px badge -->
                           <button type="button" sc-camel-on-click="{{ blk.onDelete }}" aria-label="{{ blk.delLabel }}" style="position:absolute;top:-16px;right:-16px;z-index:3;width:32px;height:32px;padding:0;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center">
-                            <span style="width:20px;height:20px;border-radius:9999px;background:oklch(0.25 0.02 250);border:1.5px solid oklch(1 0 0);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px oklch(0 0 0 / 0.3)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:12px;height:12px" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></span>
+                            <span style="width:20px;height:20px;border-radius:9999px;background:oklch(0.3 0.01 250 / 0.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:12px;height:12px" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></span>
                           </button>
                         </sc-if>
                         <div style="height:100%;overflow:hidden;border-radius:inherit;padding:5px 6px">
@@ -3940,6 +3940,24 @@ class Component extends DCLogic {
       return;
     }
     const L = window.L;
+    // leaflet-rotate redraws vector layers on 'rotate' by only re-reading the
+    // map's centre/zoom (Renderer._update), without re-projecting the paths.
+    // A real pinch always twists a little, so the first rotate mid-pinch made
+    // the renderer think the new zoom was already drawn: building shapes and
+    // roads stopped scaling (while still rotating) until the fingers lifted.
+    // If the zoom moved since the last draw, do the full redraw instead.
+    if (!L.Renderer.prototype._ericaRotateFix) {
+      L.Renderer.prototype._ericaRotateFix = true;
+      const baseEvents = L.Renderer.prototype.getEvents;
+      L.Renderer.prototype.getEvents = function () {
+        const ev = baseEvents.apply(this, arguments);
+        ev.rotate = function () {
+          if (this._map && this._zoom != null && Math.abs(this._map.getZoom() - this._zoom) > 1e-6) this._reset();
+          else this._update();
+        };
+        return ev;
+      };
+    }
     this.map = L.map(this.mapNode, {
       zoomControl: false, maxZoom: 23,
       // Fractional zoom: pinch and trackpad zoom stop where the fingers stop
