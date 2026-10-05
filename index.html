@@ -1812,10 +1812,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <sc-if value="{{ onMap }}" hint-placeholder-val="{{ true }}">
       <section data-screen-label="Map" style="flex:1;min-height:0;display:flex;flex-direction:column;position:relative" ref="{{ screenRef }}">
         <div style="position:absolute;top:0;left:0;right:0;z-index:20;pointer-events:none;padding:12px 14px 8px">
+          <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex;gap:10px;align-items:center">
           <div style="flex:1;display:flex;align-items:center;gap:8px;pointer-events:auto;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
             <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" sc-camel-on-focus="{{ openSearchPanel }}" sc-camel-on-click="{{ openSearchPanel }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0">
+            <button type="button" sc-camel-on-click="{{ openDirectionsBlank }}" aria-label="{{ navOpenLabel }}" title="{{ navOpenLabel }}" style="flex:none;width:32px;height:32px;margin:-6px -6px -6px 0;padding:0;border:none;border-radius:9999px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);display:flex;align-items:center;justify-content:center;cursor:pointer"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.6 13.4a2 2 0 0 1 0-2.8l8-8a2 2 0 0 1 2.8 0l8 8a2 2 0 0 1 0 2.8l-8 8a2 2 0 0 1-2.8 0z"></path><path d="M9 14v-2a2 2 0 0 1 2-2h4"></path><path d="m13 8 2 2-2 2"></path></svg></button>
           </div>
         </div>
 
@@ -1824,6 +1826,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <button sc-camel-on-click="{{ f.toggle }}" aria-pressed="{{ f.pressed }}" style="{{ f.style }}"><sc-if value="{{ f.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ f.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ f.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ f.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ f.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ f.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ f.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ f.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if>{{ f.label }}</button>
           </sc-for>
           </div>
+          </sc-if>
+          <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="pointer-events:auto;max-width:520px;display:flex;align-items:center;gap:4px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:14px;padding:8px 6px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
+              <button type="button" sc-camel-on-click="{{ closeNav }}" aria-label="{{ navCloseLabel }}" class="icon-close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+                <button type="button" sc-camel-on-click="{{ pickFrom }}" aria-label="{{ navFromAria }}" style="{{ navFromStyle }}"><span style="flex:none;width:10px;height:10px;border-radius:9999px;border:2.5px solid oklch(0.44 0.14 258);background:oklch(1 0 0)"></span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ navFromLabel }}</span></button>
+                <button type="button" sc-camel-on-click="{{ pickTo }}" aria-label="{{ navToAria }}" style="{{ navToStyle }}"><svg viewBox="0 0 24 24" width="14" height="14" fill="oklch(0.55 0.2 25)" stroke="oklch(1 0 0)" stroke-width="1.5" aria-hidden="true" style="flex:none"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5" fill="oklch(1 0 0)"></circle></svg><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ navToLabel }}</span></button>
+              </div>
+              <button type="button" sc-camel-on-click="{{ swapNav }}" aria-label="{{ navSwapLabel }}" title="{{ navSwapLabel }}" class="icon-close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 16-4 4-4-4"></path><path d="M17 20V4"></path><path d="m3 8 4-4 4 4"></path><path d="M7 4v16"></path></svg></button>
+            </div>
+          </sc-if>
         </div>
 
         <div style="flex:1;min-height:0;position:relative;z-index:0;isolation:isolate;background:oklch(0.965 0.006 250);overflow:hidden">
@@ -1854,7 +1867,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <div role="status" style="position:absolute;left:10px;bottom:10px;right:10px;z-index:1000;padding:8px 10px;background:oklch(1 0 0 / 0.94);border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:11px;color:oklch(0.45 0.02 250);display:flex;align-items:center;gap:10px"><span style="flex:1">{{ gpsNote }}</span><sc-if value="{{ gpsActive }}" hint-placeholder-val="{{ false }}"><button type="button" sc-camel-on-click="{{ stopGps }}" style="flex:none;padding:5px 9px;background:oklch(0.97 0.005 250);border:1px solid oklch(0.85 0.014 250);border-radius:9999px;font-size:11px;font-weight:600;color:oklch(0.35 0.02 250);cursor:pointer">{{ lg.locStop }}</button></sc-if></div>
           </sc-if>
 
-          <sc-if value="{{ selected }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ showCard }}" hint-placeholder-val="{{ false }}">
             <div style="{{ sheetStyle }}">
               <div style="display:flex;align-items:flex-start;gap:12px">
                 <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:15px;color:oklch(1 0 0);background:oklch(0.44 0.14 258);padding:5px 9px;border-radius:8px;flex:none">{{ selected.num }}</span>
@@ -1901,33 +1914,70 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 </sc-if>
               </div>
 
-              <sc-if value="{{ hasRoute }}" hint-placeholder-val="{{ false }}">
-                <div style="margin-top:16px;padding-top:14px;border-top:1px solid oklch(0.93 0.008 250)">
-                  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
-                    <span style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Starting from</span>
-                    <sc-raw-select aria-label="Starting point" value="{{ routeStart }}" sc-camel-on-change="{{ onStartChange }}" style="padding:6px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);max-width:230px">
-                      <option value="gate">Main Gate — 정문</option>
-                      <sc-for list="{{ startOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o.value }}">{{ o.label }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <span style="font-size:12px;color:oklch(0.5 0.02 250)">{{ routeMeta }}</span>
-                    <button sc-camel-on-click="{{ cancelRoute }}" style="margin-left:auto;flex:none;padding:6px 10px;background:oklch(0.97 0.005 250);border:1px solid oklch(0.88 0.012 250);border-radius:9999px;font-size:11px;font-weight:600;color:oklch(0.45 0.02 250);cursor:pointer" style-hover="background:oklch(0.93 0.008 250)">Cancel</button>
+            </div>
+          </sc-if>
+
+          <!-- walking directions: route summary + steps -->
+          <sc-if value="{{ navSheet }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ navSheetStyle }}" role="region" aria-label="{{ navRegionLabel }}">
+              <sc-if value="{{ navHasRoute }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="flex:none;width:32px;height:32px;border-radius:9999px;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4" r="2"></circle><path d="m9 20 3-6 3 3v4"></path><path d="m6 8 3-2 4 1 2 4 3 1"></path><path d="m12 14-2-4"></path></svg></span>
+                  <div style="flex:1;min-width:0">
+                    <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:18px;font-weight:700">{{ navMins }}</span><span style="font-size:13px;color:oklch(0.5 0.02 250)">{{ navDist }}</span></div>
+                    <div style="font-size:12px;color:oklch(0.5 0.02 250)">{{ navSub }}</div>
                   </div>
-                  <ol style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px">
-                    <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
-                      <li style="display:flex;gap:10px;align-items:flex-start">
-                        <span style="flex:none;width:20px;height:20px;border-radius:50%;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ s.n }}</span>
-                        <span style="flex:1;font-size:13px">{{ s.text }}</span>
-                      </li>
-                    </sc-for>
-                  </ol>
                 </div>
+                <ol style="margin:14px 0 0;padding:14px 0 0;border-top:1px solid oklch(0.93 0.008 250);list-style:none;display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ navSteps }}" as="st" hint-placeholder-count="3">
+                    <li style="display:flex;gap:10px;align-items:flex-start">
+                      <span style="flex:none;width:20px;height:20px;border-radius:50%;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ st.n }}</span>
+                      <span style="flex:1;font-size:13px;line-height:1.45">{{ st.text }}</span>
+                    </li>
+                  </sc-for>
+                </ol>
+              </sc-if>
+              <sc-if value="{{ navMsg }}" hint-placeholder-val="{{ false }}">
+                <div role="status" style="font-size:13px;color:oklch(0.45 0.02 250)">{{ navMsg }}</div>
               </sc-if>
             </div>
           </sc-if>
 
         </div><sc-if value="{{ shapeEditorOpen }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;right:16px;top:80px;z-index:1000;width:260px;max-width:calc(100vw - 32px);background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:14px;padding:14px;box-shadow:0 8px 24px oklch(0.2 0.02 250 / 0.18)"><div style="font-weight:700;font-size:13px">Draw new building</div><p style="margin:4px 0 10px;font-size:11px;color:oklch(0.5 0.02 250)">Pan the map for reference, lock it, then drop an SVG and shape it right over the real location.</p><input type="file" accept=".svg,image/svg+xml" sc-camel-on-change="{{ onShapeFile }}" style="width:100%;font-size:12px;margin-bottom:10px"><label style="display:flex;flex-direction:column;gap:3px;font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:8px">Building or custom shape<sc-raw-select value="{{ shapePickValue }}" sc-camel-on-change="{{ onShapePick }}" style="padding:8px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0)"><option value="">Choose a building…</option><sc-for list="{{ shapeBuildingOptions }}" as="o" hint-placeholder-count="24"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></sc-raw-select></label><sc-if value="{{ shapeIsBuilding }}" hint-placeholder-val="{{ false }}"><sc-if value="{{ shapePickValue }}" hint-placeholder-val="{{ false }}"><div style="margin-bottom:10px;font-size:11px;color:oklch(0.45 0.02 250)">{{ shapeEnValue }}<sc-if value="{{ shapeKoValue }}" hint-placeholder-val="{{ false }}"> · {{ shapeKoValue }}</sc-if></div></sc-if><sc-if value="{{ hasSharedNumOptions }}" hint-placeholder-val="{{ false }}"><div style="font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:4px">Also applies to (optional) — shares this exact shape with other building numbers</div><div style="max-height:120px;overflow-y:auto;border:1px solid oklch(0.9 0.012 250);border-radius:9px;padding:6px;margin-bottom:10px"><sc-for list="{{ sharedNumOptions }}" as="o" hint-placeholder-count="6"><label style="display:flex;align-items:center;gap:6px;font-size:11px;color:oklch(0.35 0.02 250);padding:3px 2px;cursor:pointer"><input type="checkbox" checked="{{ o.checked }}" sc-camel-on-change="{{ o.onToggle }}">{{ o.label }}</label></sc-for></div></sc-if></sc-if><sc-if value="{{ shapeIsCustom }}" hint-placeholder-val="{{ false }}"><label style="display:flex;flex-direction:column;gap:3px;font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:8px">Tag (optional)<input value="{{ customNameValue }}" sc-camel-on-change="{{ onCustomName }}" placeholder="Leave blank for a plain shape, no marker" style="padding:8px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:9px"></label><p style="margin:-4px 0 8px;font-size:11px;color:oklch(0.5 0.02 250)">If set, shows as a marker for your own reference — but only while you're in Admin. Visitors never see it, tagged or not.</p></sc-if><sc-if value="{{ shapePickValue }}" hint-placeholder-val="{{ false }}"><label style="display:flex;align-items:center;gap:8px;font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:8px">Color<input type="color" value="{{ customColorPickerValue }}" sc-camel-on-change="{{ onCustomColorPicker }}" style="width:32px;height:28px;padding:0;border:1px solid oklch(0.88 0.012 250);border-radius:6px;background:none;cursor:pointer"><input value="{{ customColorValue }}" sc-camel-on-change="{{ onCustomColor }}" placeholder="default" style="flex:1;min-width:0;padding:8px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;font-family:'Google Sans Flex',sans-serif;font-size:12px"></label><label style="display:flex;align-items:center;gap:8px;font-size:11px;color:oklch(0.4 0.02 250);margin-bottom:8px;cursor:pointer"><input type="checkbox" checked="{{ customClickableValue }}" sc-camel-on-change="{{ onCustomClickable }}">Clickable (tappable on the map)</label></sc-if><sc-if value="{{ shapeIsCustom }}" hint-placeholder-val="{{ false }}"><label style="display:flex;align-items:center;gap:8px;font-size:11px;color:oklch(0.4 0.02 250);margin-bottom:8px;cursor:pointer"><input type="checkbox" checked="{{ customUnderBuildingsValue }}" sc-camel-on-change="{{ onCustomUnderBuildings }}">Send to back (underneath buildings, above roads)</label><label style="display:flex;align-items:center;gap:8px;font-size:11px;color:oklch(0.4 0.02 250);margin-bottom:8px;cursor:pointer"><input type="checkbox" checked="{{ customUnderRoadsValue }}" sc-camel-on-change="{{ onCustomUnderRoads }}">Send to back (under roads)</label></sc-if><sc-if value="{{ shapeOutlineFailed }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 10px;font-size:11px;color:oklch(0.5 0.16 25)">Couldn't read a traceable outline (polygon/path) from this file — it'll save as a plain rectangle sized to fit it instead.</p></sc-if><button type="button" sc-camel-on-click="{{ toggleShapeLock }}" style="width:100%;padding:9px;background:oklch(0.98 0.004 250);border:1px solid oklch(0.88 0.012 250);border-radius:9999px;font-weight:600;font-size:12px;cursor:pointer;margin-bottom:8px">{{ shapeLockLabel }}</button><button type="button" sc-camel-on-click="{{ saveLocalShape }}" style="width:100%;padding:10px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);border:none;border-radius:9999px;font-weight:600;cursor:pointer;margin-bottom:8px">Save building</button><button type="button" sc-camel-on-click="{{ closeShapeEditor }}" style="width:100%;padding:9px;background:transparent;border:none;color:oklch(0.5 0.02 250);font-size:12px;cursor:pointer">Cancel</button></div><sc-if value="{{ shapeEditorHasSvg }}" hint-placeholder-val="{{ false }}"><div ref="{{ shapeBodyRef }}" style="{{ shapeWrapperStyle }}"><div ref="{{ shapeContentRef }}" style="width:100%;height:100%;pointer-events:none"></div><div ref="{{ shapeResizeHandleRef }}" style="position:absolute;right:-17px;bottom:-17px;width:34px;height:34px;border-radius:50%;background:oklch(0.44 0.14 258);border:3px solid oklch(1 0 0);cursor:nwse-resize;box-shadow:0 1px 5px oklch(0.2 0.02 250 / 0.35);touch-action:none"></div><div ref="{{ shapeRotateHandleRef }}" style="position:absolute;left:50%;top:-46px;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;background:oklch(0.5 0.13 60);border:3px solid oklch(1 0 0);cursor:grab;box-shadow:0 1px 5px oklch(0.2 0.02 250 / 0.35);touch-action:none"></div></div></sc-if></sc-if><sc-if value="{{ photoRefOpen }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;left:16px;top:80px;z-index:999;width:240px;max-width:calc(100vw - 32px);background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:14px;padding:14px;box-shadow:0 8px 24px oklch(0.2 0.02 250 / 0.18)"><div style="font-weight:700;font-size:13px">Reference photo</div><p style="margin:4px 0 10px;font-size:11px;color:oklch(0.5 0.02 250)">Drop a photo, drag/resize/rotate it into place over the map, lock it, then trace a polygon on top. It's only a tracing guide — never saved.</p><input type="file" accept="image/*" sc-camel-on-change="{{ onPhotoFile }}" style="width:100%;font-size:12px;margin-bottom:10px"><sc-if value="{{ photoRefHasImg }}" hint-placeholder-val="{{ false }}"><label style="display:flex;flex-direction:column;gap:3px;font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:10px">Opacity<input type="range" min="0.15" max="1" step="0.05" value="{{ photoOpacityValue }}" sc-camel-on-change="{{ onPhotoOpacity }}"></label><button type="button" sc-camel-on-click="{{ togglePhotoLock }}" style="width:100%;padding:9px;background:oklch(0.98 0.004 250);border:1px solid oklch(0.88 0.012 250);border-radius:9999px;font-weight:600;font-size:12px;cursor:pointer;margin-bottom:8px">{{ photoLockLabel }}</button></sc-if><button type="button" sc-camel-on-click="{{ closePhotoRef }}" style="width:100%;padding:9px;background:transparent;border:none;color:oklch(0.5 0.02 250);font-size:12px;cursor:pointer">Remove photo</button></div><sc-if value="{{ photoRefHasImg }}" hint-placeholder-val="{{ false }}"><div ref="{{ photoBodyRef }}" style="{{ photoWrapperStyle }}"><img alt="Reference photo overlay (admin tool)" sc-camel-src="{{ photoImgSrc }}" style="{{ photoImgStyle }}"><sc-if value="{{ photoUnlocked }}" hint-placeholder-val="{{ false }}"><div ref="{{ photoResizeHandleRef }}" style="position:absolute;right:-17px;bottom:-17px;width:34px;height:34px;border-radius:50%;background:oklch(0.44 0.14 258);border:3px solid oklch(1 0 0);cursor:nwse-resize;box-shadow:0 1px 5px oklch(0.2 0.02 250 / 0.35);touch-action:none"></div><div ref="{{ photoRotateHandleRef }}" style="position:absolute;left:50%;top:-46px;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;background:oklch(0.5 0.13 60);border:3px solid oklch(1 0 0);cursor:grab;box-shadow:0 1px 5px oklch(0.2 0.02 250 / 0.35);touch-action:none"></div></sc-if></div></sc-if></sc-if>
+
+        <!-- place picker for the From / To fields -->
+        <sc-if value="{{ navPicking }}" hint-placeholder-val="{{ false }}">
+          <div role="dialog" aria-modal="true" aria-label="{{ navPickTitle }}" style="position:absolute;inset:0;z-index:1100;background:oklch(1 0 0);display:flex;flex-direction:column">
+            <div style="flex:none;display:flex;align-items:center;gap:6px;padding:12px 14px 10px">
+              <button type="button" sc-camel-on-click="{{ closePick }}" aria-label="{{ navBackLabel }}" class="icon-close" style="margin-left:-6px"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+              <div style="flex:1;display:flex;align-items:center;gap:8px;height:40px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:0 12px">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                <input aria-label="{{ navPickTitle }}" sc-camel-auto-focus="true" value="{{ navQuery }}" sc-camel-on-change="{{ onNavQuery }}" placeholder="{{ navPickTitle }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0;font-size:13px">
+              </div>
+            </div>
+            <div style="flex:1;min-height:0;overflow:auto;padding:4px 14px 16px;display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ navPickList }}" as="o" hint-placeholder-count="6">
+                <sc-if value="{{ o.isHeader }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin:8px 2px 0;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:oklch(0.5 0.02 250)">{{ o.label }}</div>
+                </sc-if>
+                <sc-if value="{{ o.isItem }}" hint-placeholder-val="{{ true }}">
+                  <button type="button" sc-camel-on-click="{{ o.go }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;cursor:pointer;text-align:left;flex:none" style-hover="border-color:oklch(0.7 0.08 258)">
+                    <sc-if value="{{ o.isMe }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:28px;height:28px;border-radius:9999px;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3"></path><path d="M12 19v3"></path><path d="M2 12h3"></path><path d="M19 12h3"></path><circle cx="12" cy="12" r="7"></circle></svg></span></sc-if>
+                    <sc-if value="{{ o.isGate }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:28px;height:28px;border-radius:9999px;background:oklch(0.95 0.012 250);color:oklch(0.4 0.02 250);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v18"></path><path d="M2 22h20"></path><path d="M12 3v19"></path></svg></span></sc-if>
+                    <sc-if value="{{ o.isBldg }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ o.num }}</span></sc-if>
+                    <span style="display:flex;flex-direction:column;min-width:0;flex:1">
+                      <span style="font-weight:600;font-size:13px">{{ o.name }}</span>
+                      <sc-if value="{{ o.sub }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:oklch(0.5 0.02 250)">{{ o.sub }}</span></sc-if>
+                    </span>
+                  </button>
+                </sc-if>
+              </sc-for>
+              <sc-if value="{{ navPickEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:16px;border:1px dashed oklch(0.88 0.012 250);border-radius:14px;font-size:13px;color:oklch(0.5 0.02 250)">{{ navPickEmpty }}</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
       <div sc-camel-on-click="{{ closeSearchPanel }}" style="{{ searchBackdropStyle }}"></div>
         <div style="{{ searchPanelStyle }}" role="region" aria-label="Search buildings">
           <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px">
@@ -3279,6 +3329,7 @@ class Component extends DCLogic {
     }
     return Object.assign(base, {
       tab: 'map', selected: null, query: '', facFilter: [], routeTarget: null, routeStart: 'gate',
+      navOpen: false, routeTo: '', navPick: null, navQuery: '',
       admin: false, adminOpen: false, pcOpen: false, pcInput: '', pcError: false, savedFlash: false,
       gps: null, gpsErr: null, gpsAsked: false, isDesktop: false, locAsk: false,
       fbOpen: false, fbMsg: '', fbHp: '', fbStatus: 'idle', fbError: '', fbShowMail: false,
@@ -4344,9 +4395,12 @@ class Component extends DCLogic {
       if (s.gps.acc) L.circle([s.gps.lat, s.gps.lng], { radius: s.gps.acc, color: 'oklch(0.5 0.18 258)', weight: 1, fillOpacity: 0.08 }).addTo(this.markerLayer);
     }
     const rr = s.realRoute;
-    if (rr && rr.coords && rr.coords.length > 1) {
-      L.polyline(rr.coords, { color: 'oklch(0.44 0.14 258)', weight: 5, opacity: 0.9, dashArray: rr.approx ? '8 8' : null }).addTo(this.routeLayer);
-      this.map.fitBounds(L.latLngBounds(rr.coords).pad(0.3));
+    if (s.navOpen && rr && rr.coords && rr.coords.length > 1) {
+      L.polyline(rr.coords, { color: 'oklch(1 0 0)', weight: 9, opacity: 0.9, dashArray: rr.approx ? '8 8' : null, interactive: false }).addTo(this.routeLayer);
+      L.polyline(rr.coords, { color: 'oklch(0.5 0.17 258)', weight: 5, opacity: 1, dashArray: rr.approx ? '8 8' : null, interactive: false }).addTo(this.routeLayer);
+      const a = rr.coords[0], z = rr.coords[rr.coords.length - 1];
+      L.circleMarker(a, { radius: 6, color: 'oklch(0.44 0.14 258)', weight: 3, fillColor: 'oklch(1 0 0)', fillOpacity: 1, interactive: false }).addTo(this.routeLayer);
+      L.circleMarker(z, { radius: 7, color: 'oklch(1 0 0)', weight: 3, fillColor: 'oklch(0.55 0.2 25)', fillOpacity: 1, interactive: false }).addTo(this.routeLayer);
     }
   }
 
@@ -4407,6 +4461,8 @@ class Component extends DCLogic {
   }
 
   async fetchRoute(from, to) {
+    const tok = this._routeTok = (this._routeTok || 0) + 1;
+    const stale = () => tok !== this._routeTok || !this.state.navOpen;
     this.setState({ routeBusy: true });
     const url = p => 'https://router.project-osrm.org/route/v1/' + p + '/' + from.lng + ',' + from.lat + ';' + to.lng + ',' + to.lat + '?overview=full&geometries=geojson&steps=true';
     for (const profile of ['foot', 'walking', 'driving']) {
@@ -4416,30 +4472,50 @@ class Component extends DCLogic {
         if (json.code !== 'Ok' || !json.routes || !json.routes.length) continue;
         const r = json.routes[0];
         const coords = r.geometry.coordinates.map(c => [c[1], c[0]]);
-        const steps = (r.legs[0].steps || []).map(st => this.osrmStep(st)).filter(Boolean);
-        if (!this.state.routeTarget) { this.setState({ routeBusy: false }); return; }
-        this.setState({ realRoute: { coords: coords, dist: Math.round(r.distance), mins: Math.max(1, Math.round(r.duration / 60)), steps: steps, approx: false }, routeBusy: false }, () => this.syncMap());
+        // keep the raw manoeuvres; they're worded at render time so the language toggle applies
+        const steps = (r.legs[0].steps || []).map(st => { const m = st.maneuver || {}; return { type: m.type, mod: m.modifier || '', bearing: m.bearing_after, name: st.name || '', dist: Math.round(st.distance) }; }).filter(st => st.type !== 'arrive');
+        if (stale()) return;
+        this.setState({ realRoute: { coords: coords, dist: Math.round(r.distance), mins: Math.max(1, Math.round(r.duration / 60)), steps: steps, approx: false }, routeBusy: false }, () => this.fitRoute());
         return;
       } catch (e) { /* try next profile */ }
     }
-    if (!this.state.routeTarget) { this.setState({ routeBusy: false }); return; }
+    if (stale()) return;
     const d = this.haversine(from, to);
     this.setState({
       realRoute: { coords: [[from.lat, from.lng], [to.lat, to.lng]], dist: Math.round(d), mins: Math.max(1, Math.round(d / 75)), steps: null, approx: true },
       routeBusy: false
-    }, () => this.syncMap());
+    }, () => this.fitRoute());
   }
 
-  osrmStep(st) {
-    const m = st.maneuver || {}, name = st.name || '';
-    const dist = Math.round(st.distance);
-    if (m.type === 'depart') return 'Head ' + this.compass(m.bearing_after) + (name ? ' along ' + name : '') + ' for about ' + dist + ' m';
-    if (m.type === 'arrive') return null;
-    const turn = m.modifier ? m.modifier.replace('slight ', 'slightly ').replace('sharp ', 'sharply ') : 'straight';
-    if (m.type === 'roundabout' || m.type === 'rotary') return 'Take the roundabout' + (name ? ' towards ' + name : '') + ', then continue about ' + dist + ' m';
+  // Frame the whole route between the From/To panel on top and the route
+  // sheet (bottom on phones, right-hand column on desktop).
+  fitRoute() {
+    const rr = this.state.realRoute, L = window.L;
+    if (!this.map || !L || !rr || !rr.coords || rr.coords.length < 2) return;
+    const h = this.map.getSize().y;
+    this.map.fitBounds(L.latLngBounds(rr.coords), this.state.isDesktop
+      ? { paddingTopLeft: [40, 130], paddingBottomRight: [380, 40], maxZoom: 18.5 }
+      : { paddingTopLeft: [32, 130], paddingBottomRight: [32, Math.round(h * 0.42) + 24], maxZoom: 18.5 });
+  }
+
+  stepText(st, ko) {
+    const name = st.name, dist = st.dist;
+    if (ko) {
+      const DIR = ['북', '북동', '동', '남동', '남', '남서', '서', '북서'];
+      const TURN = { left: '좌회전', right: '우회전', 'slight left': '약간 왼쪽으로', 'slight right': '약간 오른쪽으로', 'sharp left': '크게 좌회전', 'sharp right': '크게 우회전', uturn: '유턴' };
+      if (st.type === 'depart') return (name ? name + '을(를) 따라 ' : '') + DIR[Math.round(((st.bearing || 0) % 360) / 45) % 8] + '쪽으로 약 ' + dist + ' m 이동';
+      if (st.type === 'roundabout' || st.type === 'rotary') return '회전교차로를 지나 약 ' + dist + ' m 이동';
+      if (!st.mod || st.mod === 'straight') return (name ? name + '을(를) 따라 ' : '') + '직진, 약 ' + dist + ' m';
+      return (TURN[st.mod] || st.mod) + (name ? ' 후 ' + name + '(으)로' : ' 후') + ' 약 ' + dist + ' m 이동';
+    }
+    if (st.type === 'depart') return 'Head ' + this.compass(st.bearing) + (name ? ' along ' + name : '') + ' for about ' + dist + ' m';
+    const turn = st.mod ? st.mod.replace('slight ', 'slightly ').replace('sharp ', 'sharply ') : 'straight';
+    if (st.type === 'roundabout' || st.type === 'rotary') return 'Take the roundabout' + (name ? ' towards ' + name : '') + ', then continue about ' + dist + ' m';
     if (turn === 'straight') return 'Continue straight' + (name ? ' on ' + name : '') + ' for about ' + dist + ' m';
+    if (turn === 'uturn') return 'Make a U-turn' + (name ? ' onto ' + name : '') + ' and continue about ' + dist + ' m';
     return 'Turn ' + turn + (name ? ' onto ' + name : '') + ' and continue about ' + dist + ' m';
   }
+
 
   compass(deg) {
     const dirs = ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'];
@@ -4453,30 +4529,68 @@ class Component extends DCLogic {
     return 2 * R * Math.asin(Math.sqrt(h));
   }
 
-  realStart() {
+  // A route end is a key: 'me' (device location), 'gate' (Main Gate) or a building id.
+  placeOf(key) {
+    const s = this.state, ko = s.primary === 'ko';
+    if (!key) return null;
+    if (key === 'me') return s.gps ? { lat: s.gps.lat, lng: s.gps.lng, label: ko ? '내 위치' : 'Your location' } : { pending: true, label: ko ? '내 위치' : 'Your location' };
+    if (key === 'gate') return { lat: 37.29655, lng: 126.83565, label: ko ? '정문' : 'Main Gate' };
+    const b = this.byId(Number(key));
+    return b && b.lat ? { lat: b.lat, lng: b.lng, label: b.num + ' ' + this.names(b).primary, bldg: b } : null;
+  }
+
+  keyBldg(key) { return key && /^\d+$/.test(key) ? Number(key) : null; }
+
+  // Opens walking directions to `toKey` (or with an empty destination, which
+  // goes straight to picking one), starting from your location when location
+  // access was already granted, otherwise the Main Gate.
+  openDirections(toKey) {
     const s = this.state;
-    if (s.routeStart === 'me' && s.gps) return { lat: s.gps.lat, lng: s.gps.lng, label: 'your current position' };
-    if (s.routeStart === 'gate') return { lat: 37.29655, lng: 126.83565, label: 'the Main Gate' };
-    const b = this.byId(Number(s.routeStart));
-    if (b && b.lat) return { lat: b.lat, lng: b.lng, label: this.names(b).primary };
-    return { lat: 37.29655, lng: 126.83565, label: 'the Main Gate' };
+    let from = s.gps || s.locOk ? 'me' : 'gate';
+    if (from === toKey) from = 'gate';
+    this.setState({ navOpen: true, routeStart: from, routeTo: toKey || '', routeTarget: this.keyBldg(toKey), selected: null,
+      searchPanelOpen: false, navPick: toKey ? null : 'to', navQuery: '', realRoute: null }, () => {
+      if (from === 'me' && !this.state.gps) this.startGps();
+    });
+  }
+
+  setNavPlace(which, key) {
+    const patch = which === 'from' ? { routeStart: key } : { routeTo: key, routeTarget: this.keyBldg(key) };
+    this.setState(Object.assign(patch, { navPick: null, navQuery: '' }), () => { if (key === 'me' && !this.state.gps) this.startGps(); });
+  }
+
+  swapNav() {
+    const s = this.state;
+    this.setState({ routeStart: s.routeTo, routeTo: s.routeStart, routeTarget: this.keyBldg(s.routeStart) });
+  }
+
+  closeNav() {
+    this._routeTok = (this._routeTok || 0) + 1;
+    this.setState({ navOpen: false, navPick: null, navQuery: '', routeTo: '', routeTarget: null, realRoute: null, routeBusy: false });
   }
 
   maybeRoute() {
     const s = this.state;
-    if (s.mapMode !== 'real' || !s.routeTarget) return;
-    const t = this.byId(s.routeTarget);
-    if (!t || !t.lat) { this.setState({ realRoute: null }); return; }
-    this.fetchRoute(this.realStart(), { lat: t.lat, lng: t.lng });
+    if (!s.navOpen) return;
+    const a = this.placeOf(s.routeStart), b = this.placeOf(s.routeTo);
+    if (!a || !b || a.pending || b.pending || s.routeStart === s.routeTo) {
+      this._routeTok = (this._routeTok || 0) + 1;
+      if (s.realRoute || s.routeBusy) this.setState({ realRoute: null, routeBusy: false });
+      return;
+    }
+    if (s.routeStart === 'me' || s.routeTo === 'me') this._routeMe = { lat: s.gps.lat, lng: s.gps.lng };
+    this.fetchRoute(a, b);
   }
+
 
   componentDidUpdate(prevProps, prevState) {
     const s = this.state;
     const prev = prevState || this.__prevState || {};
     this.__prevState = s;
     if (s.mapMode === 'real' && (prev.selected !== s.selected || prev.buildings !== s.buildings || prev.gps !== s.gps || prev.routeTarget !== s.routeTarget || prev.repositioning !== s.repositioning || prev.editId !== s.editId)) this.syncMap();
-    if (s.routeTarget && (prev.routeTarget !== s.routeTarget || prev.routeStart !== s.routeStart || prev.mapMode !== s.mapMode)) this.maybeRoute();
-    if (!s.routeTarget && prev.routeTarget) this.setState({ realRoute: null });
+    if (s.navOpen && (prev.navOpen !== s.navOpen || prev.routeStart !== s.routeStart || prev.routeTo !== s.routeTo)) this.maybeRoute();
+    else if (s.navOpen && s.gps && prev.gps !== s.gps && (s.routeStart === 'me' || s.routeTo === 'me') && (!this._routeMe || this.haversine(this._routeMe, s.gps) > 25)) this.maybeRoute();
+    if (s.mapMode === 'real' && prev.realRoute !== s.realRoute) this.syncMap();
     if (prev.baseLabels !== s.baseLabels) this.syncTiles();
     if (prev.primary !== s.primary) document.documentElement.lang = s.primary;
     if (prev.tab !== s.tab || prev.isDesktop !== s.isDesktop) this.measureNavIndicator();
@@ -4540,7 +4654,9 @@ class Component extends DCLogic {
         else if (st.placeAsk) this.setState({ placeAsk: null });
         else if (st.ttEdit) this.setState({ ttEdit: false });
         else if (st.gymModal) this.closeGymModal();
+        else if (st.navPick) this.setState({ navPick: null, navQuery: '' });
         else if (st.searchPanelOpen) this.setState({ searchPanelOpen: false });
+        else if (st.navOpen) this.closeNav();
         return;
       }
       const el = e.target;
@@ -5754,6 +5870,91 @@ class Component extends DCLogic {
     }, 'image/jpeg', 0.92);
   }
 
+  navVals(s) {
+    const ko = s.primary === 'ko';
+    const from = this.placeOf(s.routeStart), to = this.placeOf(s.routeTo), rr = s.realRoute;
+    const field = filled => 'width:100%;height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border:none;border-radius:10px;background:oklch(0.965 0.006 250);font-size:13px;text-align:left;cursor:pointer;color:' + (filled ? 'oklch(0.22 0.015 250)' : 'oklch(0.5 0.02 250)');
+    // the place picker: your location and the Main Gate, then saved places, then every building
+    const q = (s.navQuery || '').trim().toLowerCase();
+    const pick = key => () => this.setNavPlace(s.navPick, key);
+    const list = [];
+    const specials = [
+      { key: 'me', isMe: true, name: ko ? '내 위치' : 'Your location', sub: s.gps ? (ko ? '현재 위치 사용' : 'Using your device location') : (ko ? '위치 권한을 요청해요' : 'Asks to use your location') },
+      { key: 'gate', isGate: true, name: ko ? '정문' : 'Main Gate', sub: ko ? 'ERICA 캠퍼스 정문' : 'ERICA campus main entrance' }
+    ].filter(o => !q || o.name.toLowerCase().indexOf(q) >= 0 || (o.key === 'gate' && ('main gate 정문').indexOf(q) >= 0));
+    specials.forEach(o => list.push(Object.assign(o, { isItem: true, go: pick(o.key) })));
+    const bldgs = s.buildings.filter(b => b.lat && !HIDDEN_NUMS.has(b.num)).slice().sort((x, y) => String(x.num).localeCompare(String(y.num), undefined, { numeric: true }));
+    const hit = b => !q || String(b.num).toLowerCase().indexOf(q) === 0 || (b.en || '').toLowerCase().indexOf(q) >= 0 || (b.ko || '').indexOf(q) >= 0;
+    const row = b => ({ isItem: true, isBldg: true, key: String(b.id), num: b.num, name: this.names(b).primary, sub: '', go: pick(String(b.id)) });
+    const saved = q ? [] : s.saved.map(id => this.byId(id)).filter(b => b && b.lat && !HIDDEN_NUMS.has(b.num));
+    if (saved.length) { list.push({ isHeader: true, label: ko ? '저장한 장소' : 'Saved' }); saved.forEach(b => list.push(row(b))); }
+    const all = bldgs.filter(hit);
+    if (all.length) { if (!q) list.push({ isHeader: true, label: ko ? '건물' : 'Buildings' }); all.forEach(b => list.push(row(b))); }
+    // route sheet text
+    const fmtDist = d => d >= 1000 ? (d / 1000).toFixed(1) + ' km' : d + ' m';
+    let msg = '';
+    if (!s.routeTo) msg = ko ? '도착지를 선택하세요.' : 'Choose where you are going.';
+    else if (!s.routeStart) msg = ko ? '출발지를 선택하세요.' : 'Choose where you are starting from.';
+    else if (s.routeStart === s.routeTo) msg = ko ? '출발지와 도착지가 같아요.' : 'Start and destination are the same place.';
+    else if ((from && from.pending) || (to && to.pending)) msg = s.gpsErr || (ko ? '현재 위치를 찾는 중…' : 'Finding your location…');
+    else if (!rr) msg = s.routeBusy ? (ko ? '도보 경로를 찾는 중…' : 'Finding a walking route…') : '';
+    const steps = [];
+    if (rr) {
+      if (rr.steps && rr.steps.length) rr.steps.forEach(st => steps.push(this.stepText(st, ko)));
+      else steps.push(ko ? '목적지 방향으로 약 ' + rr.dist + ' m 직선 거리예요. 캠퍼스 길을 따라가세요.' : 'Head towards the destination, about ' + rr.dist + ' m in a straight line. Follow the campus paths.');
+      const tb = to && to.bldg;
+      if (tb && ko) {
+        const bits = [];
+        if (tb.entrance) bits.push('주 출입구는 ' + { N: '북', S: '남', E: '동', W: '서' }[tb.entrance] + '쪽에 있어요');
+        if (tb.floors) bits.push(tb.floors + '층 건물이에요');
+        steps.push(tb.num + '번 건물에 도착했어요. ' + (bits.length ? bits.join('. ') + '.' : '표지판의 번호를 확인하세요.'));
+      } else if (tb) {
+        const bits = [];
+        if (tb.entrance) bits.push('the main entrance is on the ' + { N: 'north', S: 'south', E: 'east', W: 'west' }[tb.entrance] + ' side');
+        if (tb.floors) bits.push('the building has ' + tb.floors + ' floors');
+        steps.push('You have arrived at Building ' + tb.num + (bits.length ? '. Once there, ' + bits.join(' and ') : '. Check the number on the sign to confirm') + '.');
+      } else if (to) steps.push(ko ? to.label + '에 도착' : 'Arrive at ' + (s.routeTo === 'me' ? 'your location' : 'the ' + to.label) + '.');
+    }
+    const sheetBase = { position: 'absolute', zIndex: 1000, background: 'oklch(1 0 0)', border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px',
+      boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)', padding: '16px', overflow: 'auto', animation: 'sheetUp 0.18s ease-out' };
+    return {
+      navOpen: !!s.navOpen, navClosed: !s.navOpen,
+      showCard: !!s.selected && !s.navOpen,
+      openDirectionsBlank: () => this.openDirections(''),
+      navOpenLabel: ko ? '길찾기' : 'Directions',
+      closeNav: () => this.closeNav(),
+      navCloseLabel: ko ? '길찾기 닫기' : 'Close directions',
+      swapNav: () => this.swapNav(),
+      navSwapLabel: ko ? '출발지와 도착지 바꾸기' : 'Swap start and destination',
+      pickFrom: () => this.setState({ navPick: 'from', navQuery: '' }),
+      pickTo: () => this.setState({ navPick: 'to', navQuery: '' }),
+      navFromLabel: from ? from.label : (ko ? '출발지 선택' : 'Choose start'),
+      navToLabel: to ? to.label : (ko ? '도착지 선택' : 'Choose destination'),
+      navFromAria: (ko ? '출발지: ' : 'Start: ') + (from ? from.label : (ko ? '선택 안 됨' : 'not set')),
+      navToAria: (ko ? '도착지: ' : 'Destination: ') + (to ? to.label : (ko ? '선택 안 됨' : 'not set')),
+      navFromStyle: field(!!from), navToStyle: field(!!to),
+      navPicking: !!(s.navOpen && s.navPick),
+      navPickTitle: s.navPick === 'from' ? (ko ? '출발지 검색' : 'Search for a start') : (ko ? '도착지 검색' : 'Search for a destination'),
+      navBackLabel: ko ? '뒤로' : 'Back',
+      closePick: () => this.setState({ navPick: null, navQuery: '' }),
+      navQuery: s.navQuery || '',
+      onNavQuery: e => this.setState({ navQuery: e.target.value }),
+      navPickList: list,
+      navPickEmpty: list.length ? '' : (ko ? '일치하는 장소가 없어요.' : 'No matching places.'),
+      navSheet: !!(s.navOpen && !s.navPick),
+      navRegionLabel: ko ? '도보 경로' : 'Walking route',
+      navSheetStyle: Object.assign(sheetBase, s.isDesktop
+        ? { right: '8px', top: '8px', width: '340px', maxWidth: 'calc(100% - 16px)', maxHeight: 'calc(100% - 16px)' }
+        : { left: '8px', right: '8px', bottom: '8px', maxHeight: '42%' }),
+      navHasRoute: !!rr && !msg,
+      navMsg: msg,
+      navMins: rr ? rr.mins + (ko ? '분' : ' min') : '',
+      navDist: rr ? '(' + fmtDist(rr.dist) + ')' : '',
+      navSub: rr ? (rr.approx ? (ko ? '직선 거리 추정 · 캠퍼스 길을 따라가세요' : 'Straight-line estimate · follow the campus paths') : (ko ? '도보 · 가장 빠른 경로' : 'Walking · fastest route')) : '',
+      navSteps: steps.map((t, i) => ({ n: i + 1, text: t }))
+    };
+  }
+
   timetableVals(s) {
     const isKo = s.primary === 'ko';
     const ttEdit = !!s.ttEdit;
@@ -6144,37 +6345,8 @@ class Component extends DCLogic {
       osmRetry: s.mapMode === 'real' && s.osmStatus.indexOf('Could not reach') === 0,
       importOsm: () => this.importOsm(),
 
-      hasRoute: s.mapMode === 'real' ? !!s.realRoute || s.routeBusy : !!g,
       routePoints: g ? g.pts.map(p => p.x + ',' + p.y).join(' ') : '',
-      routeMeta: (() => {
-        if (!(this.props.showRouteDistance ?? true)) return '';
-        if (s.mapMode === 'real') {
-          if (s.routeBusy) return 'Finding a walking route…';
-          if (!s.realRoute) return '';
-          return (s.realRoute.approx ? 'direct line · ' : '') + s.realRoute.dist + ' m · ' + s.realRoute.mins + ' min walk';
-        }
-        return g ? '≈ ' + g.dist + ' m · ' + Math.max(1, Math.round(g.dist / 75)) + ' min walk' : '';
-      })(),
-      steps: (() => {
-        if (s.mapMode === 'real') {
-          const rr = s.realRoute;
-          if (!rr) return s.routeBusy ? [{ n: 1, text: 'Working out the walking route from OpenStreetMap paths…' }] : [];
-          const st = rr.steps && rr.steps.length ? rr.steps.slice() : ['Head towards ' + (sel ? selN.primary : 'the building') + ' — about ' + rr.dist + ' m in a direct line. Follow the campus paths.'];
-          const t = this.byId(s.routeTarget);
-          if (t) {
-            const bits = [];
-            if (t.entrance) bits.push('the main entrance is on the ' + { N: 'north', S: 'south', E: 'east', W: 'west' }[t.entrance] + ' side');
-            if (t.floors) bits.push('the building has ' + t.floors + ' floors');
-            st.push('You have arrived at Building ' + t.num + (bits.length ? '. Once there, ' + bits.join(' and ') : '. Check the number on the sign to confirm') + '.');
-          }
-          return st.map((text, i) => ({ n: i + 1, text: text }));
-        }
-        return g ? this.buildSteps(g) : [];
-      })(),
-      routeStart: s.routeStart,
-      onStartChange: e => this.setState({ routeStart: e.target.value }),
-      startOptions: (s.mapMode === 'real' && s.gps ? [{ value: 'me', label: 'My current position' }] : [])
-        .concat(s.buildings.filter(b => !HIDDEN_NUMS.has(b.num)).map(b => { const n = this.names(b); return { value: String(b.id), label: b.num + ' · ' + n.primary }; })),
+      ...this.navVals(s),
       allOptions: LISTED_DIRECTORY
         .filter(d => d.num === s.editId || !s.buildings.some(b => b.num === d.num && b.lat != null))
         .map(d => ({ value: d.num, label: d.num + ' · ' + ((s.primary === 'ko' ? d.ko : d.en) || 'unlabelled') }))
@@ -6335,8 +6507,7 @@ class Component extends DCLogic {
       selectedEntrance: sel ? ({ N: 'North side', S: 'South side', E: 'East side', W: 'West side' }[sel.entrance] || 'Not set') : '',
       selectedTags: sel ? (sel.tags || []).map(t => { const f = FACS.filter(x => x.id === t)[0]; return { label: f ? f.en + ' · ' + f.ko : t }; }) : [],
       noTags: !!(sel && (!sel.tags || !sel.tags.length)),
-      routeHere: () => this.setState({ routeTarget: s.selected }),
-      cancelRoute: () => this.setState({ routeTarget: null, routeBusy: false, realRoute: null }),
+      routeHere: () => this.openDirections(String(s.selected)),
       toggleSave: () => {
         const has = s.saved.indexOf(s.selected) >= 0;
         this.persist({ saved: has ? s.saved.filter(i => i !== s.selected) : s.saved.concat([s.selected]) });
@@ -6610,7 +6781,7 @@ class Component extends DCLogic {
         this.persist({ anchor: { n: s.gps.lat + dLat, s: s.gps.lat - dLat, w: s.gps.lng - dLng, e: s.gps.lng + dLng } });
       },
       resetAnchor: () => this.persist({ anchor: Object.assign({}, DEFAULT_ANCHOR) }),
-      resetParticipant: () => this.persist({ saved: [], courses: [], routeTarget: null, routeStart: 'gate', selected: null, query: '', facFilter: [], tab: 'map', adminOpen: false, courseModal: null })
+      resetParticipant: () => this.persist({ saved: [], courses: [], routeTarget: null, routeStart: 'gate', navOpen: false, routeTo: '', navPick: null, selected: null, query: '', facFilter: [], tab: 'map', adminOpen: false, courseModal: null })
     };
   }
 }
