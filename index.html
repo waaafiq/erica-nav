@@ -1697,6 +1697,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     html, body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   body { background: oklch(0.97 0.005 250); font-family: 'Google Sans Flex', "Noto Sans KR", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   * { box-sizing: border-box; }
+  /* map tags fade in when they appear or swap between full tag and number circle */
+  .erica-lbl { animation: ericaLblIn .16s ease-out; }
+  @keyframes ericaLblIn { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .erica-lbl { animation: none; } }
   a { color: oklch(0.44 0.14 258); text-decoration: none; }
   a:hover { color: oklch(0.34 0.15 258); text-decoration: underline; }
   input, select, button, textarea { font-family: inherit; font-size: inherit; }
@@ -1931,15 +1935,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <sc-if value="{{ onTimetable }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="Timetable" style="flex:1;min-height:0;overflow:auto;padding:16px 16px 24px" ref="{{ screenRef }}">
         <div style="max-width:720px;margin:0 auto">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:2px 2px 0">
             <div>
-              <h2 style="margin:0;font-size:18px;letter-spacing:-0.01em">{{ ttTitle }}</h2>
+              <div style="display:flex;align-items:center;gap:2px">
+                <h2 style="margin:0;font-size:18px;letter-spacing:-0.01em">{{ ttTitle }}</h2>
+                <button type="button" sc-camel-on-click="{{ openTtGuide }}" aria-label="{{ ttGuideTitle }}" style="flex:none;width:32px;height:32px;margin:-4px 0;padding:0;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:oklch(0.5 0.02 250);border-radius:9999px" style-hover="background:oklch(0.94 0.01 250)">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                </button>
+              </div>
               <p style="margin:2px 0 0;font-family:'Noto Sans KR',sans-serif;font-size:12px;color:oklch(0.5 0.02 250)">{{ ttSubtitle }}</p>
             </div>
             <div style="flex:none;display:flex;align-items:center;gap:8px;position:relative">
               <button type="button" sc-camel-on-click="{{ gymClick }}" sc-camel-on-pointer-down="{{ gymPress }}" sc-camel-on-pointer-up="{{ gymRelease }}" sc-camel-on-pointer-leave="{{ gymRelease }}" sc-camel-on-pointer-cancel="{{ gymRelease }}" sc-camel-on-context-menu="{{ gymNoMenu }}" aria-pressed="{{ gymOn }}" aria-label="{{ gymPillLabel }}" title="{{ gymTipText }}" style="{{ gymBtnStyle }}"><svg viewBox="0 0 24 24" style="width:16px;height:16px;flex:none" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></button>
               <sc-if value="{{ gymTip }}" hint-placeholder-val="{{ false }}"><div ref="{{ gymTipRef }}" role="status" style="position:absolute;top:calc(100% + 8px);right:0;z-index:30;width:min(250px, calc(100vw - 32px));padding:10px 12px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;box-shadow:0 6px 24px oklch(0.2 0.03 250 / 0.18);font-size:12px;line-height:1.45;color:oklch(0.3 0.02 250)">{{ gymTipText }}</div></sc-if>
-              <button sc-camel-on-click="{{ downloadTimetable }}" style="flex:none;width:36px;height:36px;border-radius:9999px;border:none;background:oklch(0.44 0.14 258);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:oklch(0.36 0.15 258)" aria-label="Download timetable"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></button>
+              <button sc-camel-on-click="{{ downloadTimetable }}" style="flex:none;width:36px;height:36px;border-radius:9999px;border:1.5px solid oklch(0.85 0.014 250);background:oklch(1 0 0);color:oklch(0.4 0.02 250);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:oklch(0.96 0.008 250)" aria-label="Download timetable"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></button>
               <button sc-camel-on-click="{{ openNewCourse }}" style="flex:none;width:36px;height:36px;border-radius:9999px;border:none;background:oklch(0.44 0.14 258);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:oklch(0.36 0.15 258)" aria-label="Add subject"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
             </div>
           </div>
@@ -1958,7 +1967,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <div style="display:flex;position:relative;height:100%">
                 <div style="flex:none;width:38px;position:relative">
                   <sc-for list="{{ hourLabels }}" as="h" hint-placeholder-count="10">
-                    <div style="position:absolute;left:0;right:5px;top:{{ h.top }}px;text-align:right;font-size:11px;color:oklch(0.5 0.02 250);transform:translateY({{ h.dy }}px)">{{ h.label }}</div>
+                    <div style="position:absolute;left:0;right:5px;top:{{ h.top }}px;text-align:right;white-space:nowrap;font-size:11px;color:oklch(0.5 0.02 250);transform:translateY({{ h.dy }}px)">{{ h.label }}</div>
                   </sc-for>
                 </div>
                 <div style="flex:1;display:flex;position:relative">
@@ -1999,6 +2008,32 @@ svg.leaflet-image-layer.leaflet-interactive path {
           </sc-if>
           </div>
         </div>
+
+        <sc-if value="{{ ttGuideOpen }}" hint-placeholder-val="{{ false }}">
+          <div sc-camel-on-click="{{ closeTtGuide }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
+            <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="{{ ttGuideTitle }}" style="background:oklch(1 0 0);border-radius:18px;max-width:420px;width:100%;max-height:86vh;overflow:auto;padding:20px">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px">
+                <div style="font-weight:700;font-size:15px">{{ ttGuideTitle }}</div>
+                <button type="button" sc-camel-on-click="{{ closeTtGuide }}" aria-label="Close" style="flex:none;border:none;background:none;font-size:18px;color:oklch(0.5 0.02 250);cursor:pointer;padding:2px;line-height:1">×</button>
+              </div>
+              <p style="margin:0 0 12px;font-size:12px;line-height:1.5;color:oklch(0.5 0.02 250)">{{ ttGuideIntro }}</p>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="padding:12px;background:oklch(0.975 0.006 250);border-radius:12px">
+                  <div style="font-size:13px;font-weight:600;color:oklch(0.4 0.02 250);font-family:'Noto Sans KR',sans-serif"><span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.88 0.07 15);color:oklch(0.35 0.08 15)">Y206</span>-<span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.9 0.04 280);color:oklch(0.35 0.06 280)">0301</span> 컨퍼런스홀 301 강의실</div>
+                  <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:600">
+                    <span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.88 0.07 15);color:oklch(0.35 0.08 15);padding:3px 10px">{{ ttGuideB206 }}</span><span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.9 0.04 280);color:oklch(0.35 0.06 280);padding:3px 10px">{{ ttGuideR301 }}</span>
+                  </div>
+                </div>
+                <div style="padding:12px;background:oklch(0.975 0.006 250);border-radius:12px">
+                  <div style="font-size:13px;font-weight:600;color:oklch(0.4 0.02 250);font-family:'Noto Sans KR',sans-serif"><span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.88 0.07 15);color:oklch(0.35 0.08 15)">Y-317</span>-<span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.9 0.04 280);color:oklch(0.35 0.06 280)">F-02-08</span> 융합교육관 208호 PC실</div>
+                  <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:600">
+                    <span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.88 0.07 15);color:oklch(0.35 0.08 15);padding:3px 10px">{{ ttGuideB317 }}</span><span style="display:inline-block;padding:1px 6px;border-radius:9999px;background:oklch(0.9 0.04 280);color:oklch(0.35 0.06 280);padding:3px 10px">{{ ttGuideR208 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
 
         <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
           <div sc-camel-on-click="{{ closeModal }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
@@ -2061,11 +2096,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     </sc-raw-select>
                   </div>
                   <div style="display:flex;gap:8px">
-                    <sc-raw-select aria-label="Building" value="{{ sess.bldg }}" sc-camel-on-change="{{ sess.onBldg }}" style="flex:1;min-width:0;padding:7px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
+                    <input aria-label="Building" list="bldg-list" value="{{ sess.bldgText }}" sc-camel-on-change="{{ sess.onBldgText }}" sc-camel-on-blur="{{ sess.onBldgBlur }}" placeholder="Building no. e.g. 317" style="{{ sess.bldgStyle }}">
+                    <datalist id="bldg-list">
                       <sc-for list="{{ bldgOptions }}" as="o" hint-placeholder-count="6">
-                        <option value="{{ o.value }}">{{ o.label }}</option>
+                        <option value="{{ o.label }}"></option>
                       </sc-for>
-                    </sc-raw-select>
+                    </datalist>
                     <input aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:84px;padding:7px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;font-size:12px;color:oklch(0.22 0.015 250)">
                   </div>
                 </div>
@@ -2162,8 +2198,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     <sc-if value="{{ onShuttle }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="Shuttle" style="flex:1;min-height:0;overflow:auto;padding:16px 16px 24px" ref="{{ screenRef }}">
-        <div style="max-width:720px;margin:0 auto 16px">
+        <div style="max-width:720px;margin:0 auto 16px;padding:2px 2px 0;display:flex;align-items:center;gap:2px">
           <h2 style="margin:0;font-size:18px;letter-spacing:-0.01em">{{ shTitle }}</h2>
+          <button type="button" sc-camel-on-click="{{ onRouteInfoClick }}" aria-label="Service note" style="flex:none;width:32px;height:32px;margin:-4px 0;padding:0;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:oklch(0.5 0.02 250);border-radius:9999px" style-hover="background:oklch(0.94 0.01 250)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+          </button>
         </div>
 
         <sc-if value="{{ shSeasonCardOpen }}" hint-placeholder-val="{{ false }}">
@@ -2238,15 +2277,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
             </div>
 
           <div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-4px 0 12px;padding:0 3px 0 10px">
               <div style="flex:1;min-width:0">
                 <div style="display:flex;align-items:center;gap:6px;min-width:0;font-weight:700;font-size:13px;white-space:nowrap">
-                  <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ trFromName }}<span class="pn">{{ trFromExtra }}</span></span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;color:oklch(0.5 0.02 250)"><path d="m9 18 6-6-6-6"></path></svg><sc-if value="{{ trHasMidStops }}" hint-placeholder-val="{{ false }}"><button type="button" sc-camel-on-click="{{ onTripStopsClick }}" aria-label="{{ trStopsAria }}" style="flex:none;min-width:24px;min-height:24px;padding:2px 8px;display:inline-flex;align-items:center;justify-content:center;background:oklch(0.95 0.045 258);color:oklch(0.38 0.13 258);border:none;border-radius:9999px;font-size:11px;font-weight:700;font-family:'Google Sans Flex',sans-serif;white-space:nowrap;cursor:pointer" style-hover="background:oklch(0.9 0.06 258)">{{ trStopsPillLabel }}</button><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;color:oklch(0.5 0.02 250)"><path d="m9 18 6-6-6-6"></path></svg></sc-if><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ trToName }}<span class="pn">{{ trToExtra }}</span></span><sc-if value="{{ trHasRide }}" hint-placeholder-val="{{ true }}"><span style="flex:none;font-family:'Google Sans Flex',sans-serif;font-size:12px;font-weight:600;padding:4px 8px;border-radius:24px;background:oklch(0.44 0.14 258 / 0.1);color:oklch(0.38 0.13 258)">{{ trRideLabel }}</span></sc-if>
+                  <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ trFromName }}<span class="pn">{{ trFromExtra }}</span></span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin:0 -1.3px;color:oklch(0.5 0.02 250)"><path d="m9 18 6-6-6-6"></path></svg><sc-if value="{{ trHasMidStops }}" hint-placeholder-val="{{ false }}"><button type="button" sc-camel-on-click="{{ onTripStopsClick }}" aria-label="{{ trStopsAria }}" style="flex:none;min-width:24px;min-height:24px;padding:2px 8px;display:inline-flex;align-items:center;justify-content:center;background:oklch(0.95 0.045 258);color:oklch(0.38 0.13 258);border:none;border-radius:9999px;font-size:11px;font-weight:700;font-family:'Google Sans Flex',sans-serif;white-space:nowrap;cursor:pointer" style-hover="background:oklch(0.9 0.06 258)">{{ trStopsPillLabel }}</button><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin:0 -1.3px;color:oklch(0.5 0.02 250)"><path d="m9 18 6-6-6-6"></path></svg></sc-if><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ trToName }}<span class="pn">{{ trToExtra }}</span></span><sc-if value="{{ trHasRide }}" hint-placeholder-val="{{ true }}"><span style="flex:none;margin-left:4px;font-family:'Google Sans Flex',sans-serif;font-size:12px;font-weight:600;padding:4px 8px;border-radius:24px;background:oklch(0.44 0.14 258 / 0.1);color:oklch(0.38 0.13 258)">{{ trRideLabel }}</span></sc-if>
                 </div>
               </div>
-              <button type="button" sc-camel-on-click="{{ onRouteInfoClick }}" aria-label="Service note" style="flex:none;width:32px;height:32px;margin:-4px -4px -4px 0;padding:0;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:oklch(0.5 0.02 250);border-radius:9999px" style-hover="background:oklch(0.94 0.01 250)">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
-              </button>
             </div>
             <sc-if value="{{ shRouteInfoOpen }}" hint-placeholder-val="{{ false }}">
               <div ref="{{ routeInfoCardRef }}" style="{{ shRouteInfoStyle }}"><sc-if value="{{ shRouteInfoHasLabel }}" hint-placeholder-val="{{ false }}"><span style="font-weight:700">{{ shRouteInfoLabel }}</span> </sc-if><span style="{{ shRouteInfoTextStyle }}">{{ shRouteInfoText }}</span><sc-if value="{{ shRouteInfoHasParts }}" hint-placeholder-val="{{ false }}"><span style="font-weight:700"><sc-for list="{{ shRouteInfoParts }}" as="pt" hint-placeholder-count="2"><sc-if value="{{ pt.sep }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin:0 3px"><path d="m9 18 6-6-6-6"></path></svg></sc-if>{{ pt.name }}</sc-for></span></sc-if></div>
@@ -2258,7 +2294,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     <div style="grid-area:1/1;display:flex;align-items:baseline;gap:8px">
                       <span style="{{ b.roleStyle }}">{{ b.role }}</span>
                       <sc-if value="{{ b.showDayFlag }}" hint-placeholder-val="{{ false }}">
-                        <span style="font-size:11px;font-weight:600;color:oklch(0.5 0.13 60)">{{ b.dayFlag }}</span>
+                        <span style="font-size:11px;font-weight:600;white-space:nowrap;color:oklch(0.5 0.13 60)">{{ b.dayFlag }}</span>
                       </sc-if>
                     </div>
                     <div style="grid-area:1/2/3/3;justify-self:end;align-self:center;display:flex;align-items:center;gap:8px">
@@ -2310,7 +2346,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     <sc-if value="{{ onSaved }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="Saved" style="flex:1;min-height:0;overflow:auto;padding:16px 16px 24px" ref="{{ screenRef }}">
-        <h2 style="max-width:720px;margin:0 auto 16px;font-size:18px;letter-spacing:-0.01em">{{ savedTitle }}</h2>
+        <h2 style="max-width:720px;margin:0 auto 16px;padding:2px 2px 0;font-size:18px;letter-spacing:-0.01em">{{ savedTitle }}</h2>
         <div style="display:flex;flex-direction:column;gap:8px;max-width:720px;margin:0 auto">
           <sc-for list="{{ savedList }}" as="r" hint-placeholder-count="2">
             <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:18px">
@@ -2331,7 +2367,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <sc-if value="{{ onAbout }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="About" style="flex:1;min-height:0;overflow:auto;padding:16px 16px 12px;display:flex;flex-direction:column" ref="{{ screenRef }}">
         <div style="flex:none;width:100%;max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
-          <h2 style="margin:0;font-size:18px;letter-spacing:-0.01em">{{ lg.aboutTitle }}</h2>
+          <h2 style="margin:0;padding:2px 2px 0;font-size:18px;letter-spacing:-0.01em">{{ lg.aboutTitle }}</h2>
           <div style="background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:13px">
             <p style="margin:0;font-weight:700">{{ lg.hello }} <em lang="ms">Apa khabar?</em></p>
             <p style="margin:0;max-width:62ch"><sc-for list="{{ aboutP1 }}" as="x" hint-placeholder-count="3"><sc-if value="{{ x.em }}" hint-placeholder-val="{{ false }}"><em>{{ x.t }}</em></sc-if><sc-if value="{{ x.plain }}" hint-placeholder-val="{{ true }}">{{ x.t }}</sc-if></sc-for></p>
@@ -2864,7 +2900,6 @@ const BUS_PATHS = {
   D:  { hda: ['hda', 'cock', 'res'], apt: ['apt', 'cock', 'res'] }
 };
 const stopsBetween = (code, a, b) => { const p = (BUS_PATHS[code] || {})[a] || [], i = p.indexOf(b, 1); return i > 0 ? p.slice(1, i) : []; };
-const busCallsAt = (code, ko) => ko ? ({ C: '순환버스 정차:', J: '중앙역 경유 버스 정차:' }[code] || '직행버스 정차:') : ({ C: 'Cycle bus calls at:', J: 'Via-Jungang bus calls at:' }[code] || 'Direct bus calls at:');
 const ROUTES = {
   C: { tag: 'C', en: 'Cycle Route', ko: '순환노선', hue: '0.44 0.12 252', desc: 'Runs all day, calls at every stop in order', descKo: '전 시간대 운행 · 전 정류장 순서대로 정차' },
   DH: { tag: 'DH', en: 'Direct — Handaeap Stn', ko: '한대앞역 직행', hue: '0.46 0.13 158', desc: 'Direct to Handaeap Stn, skips the stops in between', descKo: '한대앞역 직행 · 중간 정류장 통과' },
@@ -3202,7 +3237,7 @@ class Component extends DCLogic {
       trFrom: 'cock', trTo: 'hda', trDate: null, trTime: null, trFullOpen: false,
       mapMode: 'real', baseLabels: !!(stored && stored.baseLabels), gymTipSeen: !!(stored && stored.gymTipSeen), gymTip: false,
       osmStatus: '', osmBusy: false, placing: false,
-      exportOpen: false, exportCopied: false, mapBearing: 0,
+      exportOpen: false, exportCopied: false, mapRotated: false,
       realRoute: null, routeBusy: false
     });
   }
@@ -3876,6 +3911,10 @@ class Component extends DCLogic {
     const L = window.L;
     this.map = L.map(this.mapNode, {
       zoomControl: false, maxZoom: 23,
+      // Fractional zoom: pinch and trackpad zoom stop where the fingers stop
+      // instead of snapping to the next whole level afterwards. Wheel zoom is
+      // our own handler below (Leaflet's drops wheel input mid-animation).
+      zoomSnap: 0, scrollWheelZoom: false,
       rotate: true, rotateControl: false, touchRotate: true, bearing: 0,
       maxBounds: MAP_BOX_BOUNDS, maxBoundsViscosity: 1.0, bounceAtZoomLimits: false
     }).setView([37.2978, 126.8358], 16);
@@ -3893,7 +3932,13 @@ class Component extends DCLogic {
     window.addEventListener('resize', this._updateMinZoom);
     // Keep our own bearing state in sync for the reset-north button, whether
     // the rotation came from our +/- buttons or a two-finger touch gesture.
-    this.map.on('rotate', () => { if (this.map.getBearing) this.setState({ mapBearing: this.map.getBearing() }); });
+    // Only re-render React when the button actually needs to appear/disappear,
+    // not on every frame of a rotate gesture.
+    this.map.on('rotate', () => {
+      const b = ((this.map.getBearing() % 360) + 360) % 360;
+      const rotated = Math.min(b, 360 - b) > 0.5;
+      if (rotated !== this.state.mapRotated) this.setState({ mapRotated: rotated });
+    });
     // Two-finger trackpad *twist* has no cross-browser event at all — only
     // Safari exposes it, via its own non-standard Gesture Events (rotation in
     // degrees). Chrome/Firefox never fire anything distinguishable for a
@@ -3906,6 +3951,7 @@ class Component extends DCLogic {
       let gestureStartBearing = 0;
       this.mapNode.addEventListener('gesturestart', e => {
         e.preventDefault();
+        window.cancelAnimationFrame(this._bearingRaf); this._bearingRaf = 0;
         gestureStartBearing = this.map.getBearing ? this.map.getBearing() : 0;
       });
       this.mapNode.addEventListener('gesturechange', e => {
@@ -3914,11 +3960,43 @@ class Component extends DCLogic {
       });
       this.mapNode.addEventListener('gestureend', e => { e.preventDefault(); });
     }
+    // Smooth wheel / trackpad zoom: every wheel event nudges a target zoom
+    // and each frame eases toward it around the cursor, so a mouse notch is a
+    // short glide (~half a level) and a trackpad scroll or pinch (ctrlKey)
+    // tracks the fingers continuously. ponytail: fixed rates; tune the 200/100
+    // divisors if a particular mouse feels too slow or fast.
+    let wheelTarget = null, wheelAround = null, wheelRaf = 0;
+    const wheelStep = () => {
+      const map = this.map;
+      if (!map) { wheelRaf = 0; return; }
+      const z = map.getZoom();
+      let nz = z + (wheelTarget - z) * 0.3;
+      if (Math.abs(wheelTarget - nz) < 0.005) nz = wheelTarget;
+      map.setZoomAround(wheelAround, nz, { animate: false });
+      if (nz !== wheelTarget) wheelRaf = window.requestAnimationFrame(wheelStep);
+      else { wheelRaf = 0; wheelTarget = null; }
+    };
+    this.mapNode.addEventListener('wheel', e => {
+      if (!this.map) return;
+      e.preventDefault();
+      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+      const step = Math.max(-1, Math.min(1, -dy / (e.ctrlKey ? 100 : 200)));
+      const base = wheelTarget != null ? wheelTarget : this.map.getZoom();
+      wheelTarget = Math.max(this.map.getMinZoom(), Math.min(this.map.getMaxZoom(), base + step));
+      wheelAround = this.map.mouseEventToContainerPoint(e);
+      if (!wheelRaf) wheelRaf = window.requestAnimationFrame(wheelStep);
+    }, { passive: false });
     this.geoLayer = L.layerGroup().addTo(this.map);
     this.syncTiles();
     this.markerLayer = L.layerGroup().addTo(this.map);
     this.routeLayer = L.layerGroup().addTo(this.map);
-    this.map.on('zoomend', () => this.syncMap());
+    // Labels re-declutter live, at most once per frame, while zooming or
+    // rotating -- no rebuild of markers or building shapes.
+    const relabel = () => {
+      if (this._relabelRaf) return;
+      this._relabelRaf = window.requestAnimationFrame(() => { this._relabelRaf = 0; this.declutterLabels(); });
+    };
+    this.map.on('zoom zoomend rotate resize', relabel);
     // leaflet-rotate's pinch/touch handler drives zoom via a raw _move() call
     // every frame, which never fires Leaflet's own 'zoomanim' event -- the
     // one thing the SVG renderer listens to for live per-frame scaling of
@@ -4007,19 +4085,29 @@ class Component extends DCLogic {
     }
   }
 
-  rotateMapBy(deltaDeg) {
+  // Eases the bearing to `target` along the shortest way round. Repeated
+  // taps while it's still turning stack onto the pending target.
+  animateBearing(target) {
     if (!this.map || !this.map.setBearing) return;
-    const cur = this.map.getBearing ? this.map.getBearing() : 0;
-    const next = cur + deltaDeg;
-    this.map.setBearing(next);
-    this.setState({ mapBearing: next });
+    window.cancelAnimationFrame(this._bearingRaf);
+    const from = this.map.getBearing();
+    const delta = ((((target - from) % 360) + 540) % 360) - 180;
+    const t0 = performance.now(), dur = 260;
+    this._bearingTarget = target;
+    const step = now => {
+      const t = Math.min(1, (now - t0) / dur);
+      this.map.setBearing(from + delta * (1 - Math.pow(1 - t, 3)));
+      this._bearingRaf = t < 1 ? window.requestAnimationFrame(step) : 0;
+    };
+    this._bearingRaf = window.requestAnimationFrame(step);
   }
 
-  resetMapBearing() {
-    if (!this.map || !this.map.setBearing) return;
-    this.map.setBearing(0);
-    this.setState({ mapBearing: 0 });
+  rotateMapBy(deltaDeg) {
+    if (!this.map || !this.map.getBearing) return;
+    this.animateBearing((this._bearingRaf ? this._bearingTarget : this.map.getBearing()) + deltaDeg);
   }
+
+  resetMapBearing() { this.animateBearing(0); }
 
   syncTiles() {
     if (!this.map || !window.L) return;
@@ -4117,9 +4205,6 @@ class Component extends DCLogic {
     const L = window.L, s = this.state;
     this.markerLayer.clearLayers();
     this.routeLayer.clearLayers();
-    const zoom = this.map.getZoom();
-    const minZ = this.map.getMinZoom();
-    const hideZoom = minZ + 0.75, compactZoom = minZ + 2.5;
     const withPos = s.buildings.filter(b => b.lat && b.lng);
     // A building's own lat/lng is its geometry (shape centroid, or its only
     // location when there's no traced shape) and is kept in sync across a
@@ -4127,45 +4212,18 @@ class Component extends DCLogic {
     // override for where its tag renders, e.g. to pull two labels apart when
     // their buildings share one polygon. Falls back to lat/lng when unset.
     const labelPos = b => [b.labelLat != null ? b.labelLat : b.lat, b.labelLng != null ? b.labelLng : b.lng];
-    const placedFull = [];
-    const hideById = {}, compactById = {};
-    withPos.slice().sort((a, b) => {
-      const aPin = (s.selected === a.id || s.routeTarget === a.id) ? 0 : 1;
-      const bPin = (s.selected === b.id || s.routeTarget === b.id) ? 0 : 1;
-      return aPin - bPin;
-    }).forEach(b => {
-      const on = s.selected === b.id, tgt = s.routeTarget === b.id;
-      const pt = this.map.latLngToContainerPoint(labelPos(b));
-      const hide = zoom <= hideZoom && !on && !tgt;
-      let compact = !hide && zoom <= compactZoom && !on && !tgt;
-      if (!hide && !compact && !on && !tgt && placedFull.some(p => Math.hypot(p.x - pt.x, p.y - pt.y) < 62)) compact = true;
-      if (!hide && !compact) placedFull.push(pt);
-      hideById[b.id] = hide;
-      compactById[b.id] = compact;
-    });
+    // Markers are built once per data change; zoom/rotate only re-run
+    // declutterLabels(), which swaps each tag between full / number / hidden.
+    this.labelMarkers = [];
     withPos.forEach(b => {
-      if (hideById[b.id]) return;
-      const n = this.names(b);
-      const on = s.selected === b.id, tgt = s.routeTarget === b.id;
-      const accent = on || tgt ? 'oklch(0.44 0.14 258)' : 'oklch(1 0 0)';
-      const fg = on || tgt ? 'oklch(1 0 0)' : 'oklch(0.32 0.02 250)';
-      const compact = compactById[b.id];
-      const html = compact
-        ? '<div style="transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center">' +
-          '<div style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:' + accent +
-          ';border:1.5px solid oklch(0.5 0.11 258);border-radius:50%;box-shadow:0 1px 4px rgba(30,40,60,.25);font-family:\'Google Sans Flex\',sans-serif;font-weight:600;font-size:10px;color:' + fg + '">' + b.num + '</div></div>'
-        : '<div style="transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center">' +
-          '<div style="display:flex;align-items:center;gap:5px;padding:3px 7px;background:' + accent +
-          ';border:1.5px solid oklch(0.44 0.14 258);border-radius:9px;box-shadow:0 1px 5px rgba(30,40,60,.28);white-space:nowrap;font-family:\'Google Sans Flex\',sans-serif">' +
-          '<span style="font-family:\'Google Sans Flex\',sans-serif;font-weight:600;font-size:11px;color:' + fg + '">' + b.num + '</span>' +
-          (n.labelled ? '<span style="font-size:11px;font-weight:600;color:' + fg + '">' + n.primary + '</span>' : '') + '</div></div>';
       const canDragMarker = s.repositioning && s.editId === b.num;
       const marker = L.marker(labelPos(b), {
-        icon: L.divIcon({ html: html, className: '', iconSize: null, iconAnchor: [0, 0] }),
+        icon: L.divIcon({ html: '', className: '', iconSize: null, iconAnchor: [0, 0] }),
         draggable: canDragMarker
       })
         .on('click', () => this.setState({ selected: b.id }))
         .addTo(this.markerLayer);
+      this.labelMarkers.push({ b: b, marker: marker, mode: null });
       if (canDragMarker) {
         const hasShape = b.poly && b.poly.length > 2;
         marker.on('dragend', e => {
@@ -4194,6 +4252,7 @@ class Component extends DCLogic {
         });
       }
     });
+    this.declutterLabels();
     (s.admin ? (s.customShapes || []).filter(c => c.name && c.name.trim() && c.lat && c.lng) : []).forEach(c => {
       const accent = (c.color && c.color.trim()) || 'oklch(0.44 0.14 258)';
       const html = '<div style="transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center">' +
@@ -4549,6 +4608,72 @@ class Component extends DCLogic {
     });
   }
 
+  // Real-map style label placement, re-run live (once per frame) while
+  // zooming or rotating: below hideZoom tags vanish, below compactZoom they
+  // are number circles, above it each gets its full "num name" tag unless
+  // that tag's on-screen box would overlap one already placed, in which case
+  // it condenses to the circle. Selected/route-target tags always stay full.
+  // Tags are screen-upright (leaflet-rotate keeps markerPane unrotated), so
+  // screen-space boxes stay correct at any bearing.
+  declutterLabels() {
+    if (!this.map || !this.labelMarkers) return;
+    const s = this.state, zoom = this.map.getZoom(), minZ = this.map.getMinZoom();
+    const hideZoom = minZ + 0.75, compactZoom = minZ + 2.5, pad = 4;
+    const pinned = e => s.selected === e.b.id || s.routeTarget === e.b.id;
+    const placedFull = [], hits = box => placedFull.some(p => p.l < box.r && box.l < p.r && p.t < box.b && box.t < p.b);
+    const planned = this.labelMarkers.slice().sort((x, y) => (pinned(x) ? 0 : 1) - (pinned(y) ? 0 : 1)).map(e => {
+      const b = e.b, pin = pinned(e);
+      let mode = pin ? 'full' : zoom <= hideZoom ? 'hide' : zoom <= compactZoom ? 'compact' : 'full';
+      const pt = mode === 'hide' ? null : this.map.latLngToContainerPoint(e.marker.getLatLng());
+      if (mode === 'full') {
+        const n = this.names(b);
+        const w = 20 + this.textW(String(b.num)) + (n.labelled ? 5 + this.textW(n.primary) : 0);
+        const box = { l: pt.x - w / 2 - pad, r: pt.x + w / 2 + pad, t: pt.y - 24 - pad, b: pt.y + pad };
+        if (!pin && hits(box)) mode = 'compact';
+        else placedFull.push(box);
+      }
+      return { e: e, pin: pin, mode: mode, pt: pt };
+    });
+    // Number circles collide too: one tucked under a full tag or another
+    // circle is hidden until zooming in frees up room for it.
+    planned.forEach(x => {
+      if (x.mode !== 'compact') return;
+      const box = { l: x.pt.x - 12, r: x.pt.x + 12, t: x.pt.y - 23, b: x.pt.y + 1 };
+      if (hits(box)) x.mode = 'hide';
+      else placedFull.push(box);
+    });
+    planned.forEach(({ e, pin, mode }) => {
+      const b = e.b;
+      const el = e.marker.getElement();
+      if (mode === e.mode || !el) return;
+      e.mode = mode;
+      el.style.display = mode === 'hide' ? 'none' : '';
+      if (mode !== 'hide') el.innerHTML = this.labelHtml(b, mode === 'compact', pin);
+      // full tags draw over number circles, pinned over everything
+      e.marker.setZIndexOffset(pin ? 2000 : mode === 'full' ? 1000 : 0);
+    });
+  }
+
+  labelHtml(b, compact, pin) {
+    const n = this.names(b);
+    const accent = pin ? 'oklch(0.44 0.14 258)' : 'oklch(1 0 0)';
+    const fg = pin ? 'oklch(1 0 0)' : 'oklch(0.32 0.02 250)';
+    const wrap = '<div class="erica-lbl" style="transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center">';
+    return compact
+      ? wrap + '<div style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:' + accent +
+        ';border:1.5px solid oklch(0.5 0.11 258);border-radius:50%;box-shadow:0 1px 4px rgba(30,40,60,.25);font-family:\'Google Sans Flex\',sans-serif;font-weight:600;font-size:10px;color:' + fg + '">' + b.num + '</div></div>'
+      : wrap + '<div style="display:flex;align-items:center;gap:5px;padding:3px 7px;background:' + accent +
+        ';border:1.5px solid oklch(0.44 0.14 258);border-radius:9px;box-shadow:0 1px 5px rgba(30,40,60,.28);white-space:nowrap;font-family:\'Google Sans Flex\',sans-serif">' +
+        '<span style="font-weight:600;font-size:11px;color:' + fg + '">' + b.num + '</span>' +
+        (n.labelled ? '<span style="font-size:11px;font-weight:600;color:' + fg + '">' + n.primary + '</span>' : '') + '</div></div>';
+  }
+
+  textW(t) {
+    const ctx = this._measureCtx || (this._measureCtx = document.createElement('canvas').getContext('2d'));
+    ctx.font = "600 11px 'Google Sans Flex', sans-serif";
+    return ctx.measureText(t).width;
+  }
+
   names(b) {
     const en = b.en || ('Building ' + b.num);
     const ko = b.ko || ('건물 ' + b.num);
@@ -4770,8 +4895,7 @@ class Component extends DCLogic {
       if (!b) return '';
       const m = b.delta;
       if (m === 0) return isKo ? '입력한 시각' : 'now';
-      const nd = b.nextDay ? (isKo ? '내일 · ' : 'Tomorrow · ') : '';
-      if (m > 0) return isKo ? (nd + fmtGap(m) + ' 후') : (nd + 'in ' + fmtGap(m));
+      if (m > 0) return isKo ? (fmtGap(m) + ' 후') : ('in ' + fmtGap(m));
       return isKo ? (fmtGap(-m) + ' 전') : (fmtGap(-m) + ' ago');
     };
     const boxStyle = (kind) => ({
@@ -4784,7 +4908,7 @@ class Component extends DCLogic {
       boxShadow: kind === 'mid' ? '0 4px 12px oklch(0.44 0.14 258 / 0.12)' : 'none'
     });
     const roleStyle = (kind) => ({
-      fontSize: '11px', letterSpacing: '0.07em', textTransform: 'uppercase',
+      fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap',
       color: kind === 'mid' ? 'oklch(0.44 0.14 258)' : 'oklch(0.5 0.02 250)', fontWeight: 700
     });
     const timeStyle = (kind, on) => ({
@@ -4810,7 +4934,7 @@ class Component extends DCLogic {
       chip: b ? b.chipV : chip('C', false),
       rel: relText,
       showRelInHeader: !!relText,
-      relBadgeStyle: { fontSize: '12px', fontWeight: 600, color: 'oklch(0.44 0.14 258)', background: 'oklch(0.44 0.14 258 / 0.1)', borderRadius: '24px', padding: '4px 8px', flex: 'none', minWidth: '90px', boxSizing: 'border-box', textAlign: 'center' },
+      relBadgeStyle: { fontSize: '12px', fontWeight: 600, color: 'oklch(0.44 0.14 258)', background: 'oklch(0.44 0.14 258 / 0.1)', borderRadius: '24px', padding: '4px 8px', flex: 'none', minWidth: '95px', boxSizing: 'border-box', textAlign: 'center' },
       style: boxStyle(kind), roleStyle: roleStyle(kind), timeStyle: timeStyle(kind, !!b)
     };
     };
@@ -4878,7 +5002,7 @@ class Component extends DCLogic {
       onTripStopsClick: e => {
         const c = mid ? mid.t.code : 'C';
         const names = stopsBetween(c, from, to).map(k => k === 'jung' ? (isKo ? '중앙역' : 'Jungang Stn (Line 4)') : (() => { const st = SHUTTLE_STOPS.find(x => x.key === k); return isKo ? st.ko : st.en; })());
-        this.openRouteInfoCard(e, busCallsAt(c, isKo), names);
+        this.openRouteInfoCard(e, '', names);
       },
       trBoxes: [
         box('prev', 'Previous', '이전 차', prev, 'No earlier departure', '이전 차 없음'),
@@ -5109,7 +5233,7 @@ class Component extends DCLogic {
         top: (s.shRouteInfoCard.top != null ? s.shRouteInfoCard.top : s.shRouteInfoCard.y + 10) + 'px',
         opacity: s.shRouteInfoCard.left != null ? 1 : 0, zIndex: 1000,
         background: 'oklch(1 0 0)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 24px oklch(0.2 0.02 250 / 0.18)',
-        border: '1px solid oklch(0.9 0.012 250)', width: '240px', maxWidth: 'calc(100vw - 20px)', fontSize: '12px', lineHeight: 1.5, color: 'oklch(0.32 0.02 250)'
+        border: '1px solid oklch(0.9 0.012 250)', width: 'max-content', maxWidth: 'calc(100vw - 20px)', fontSize: '12px', lineHeight: 1.5, color: 'oklch(0.32 0.02 250)'
       } : { display: 'none' },
       routeInfoCardRef: this.routeInfoCardMountRef,
       ...this.tripVals(s, { table: table, targetM: targetM, trDate: trDate, trTime: trTime, chip: chip, d: d, nowD: nowD }),
@@ -5158,6 +5282,17 @@ class Component extends DCLogic {
   toMin(t) { if (!t) return null; const p = String(t).split(':'); return Number(p[0]) * 60 + Number(p[1] || 0); }
 
   updateModal(patch) { this.setState(s => ({ courseModal: Object.assign({}, s.courseModal, patch) })); }
+
+  // "317", "Y-317", "Y206" or a picked "317 · Name" suggestion -> building id; else a unique name match.
+  findBldgId(text, opts) {
+    const q = String(text || '').trim().toLowerCase();
+    if (!q) return null;
+    const num = q.split(' · ')[0].replace(/^y-?/, '');
+    const hit = opts.find(o => o.label.toLowerCase() === q) || opts.find(o => { const n = o.label.split(' · ')[0].toLowerCase(); return n === num || (/^\d+$/.test(num) && Number(n) === Number(num)); });
+    if (hit) return hit.value;
+    const byName = opts.filter(o => o.label.toLowerCase().indexOf(q) >= 0);
+    return byName.length === 1 ? byName[0].value : null;
+  }
 
   updateSession(i, patch) {
     this.setState(s => {
@@ -5234,8 +5369,11 @@ class Component extends DCLogic {
   }
 
   saveCourseModal() {
-    const s = this.state, m = s.courseModal;
+    const s = this.state;
+    let m = s.courseModal;
     if (!m) return;
+    if (m.sessions.some(x => x.bldgText != null && x.bldgText.trim())) { this.flashModalError(s.primary === 'ko' ? '건물을 찾을 수 없어요. 건물 번호를 확인하세요.' : 'Building not found. Check the building number.'); return; }
+    m = Object.assign({}, m, { sessions: m.sessions.map(x => { const c = Object.assign({}, x); delete c.bldgText; return c; }) });
     const err = this.validateModal(m);
     if (err) { this.flashModalError(err); return; }
     let courses;
@@ -5507,7 +5645,7 @@ class Component extends DCLogic {
     const hourLabels = [];
     for (let h = gridStartHour; h < gridEndHour; h++) {
       const top = (h - gridStartHour) * HOUR_PX;
-      hourLabels.push({ top: top, dy: 3, label: pad(h % 24) + ':00' });
+      hourLabels.push({ top: top, dy: 3, label: ((h % 12) || 12) + (h % 24 < 12 ? ' AM' : ' PM') });
     }
 
     const bldgOptions = s.buildings.filter(b => !HIDDEN_NUMS.has(b.num)).map(b => ({ value: String(b.id), label: b.num + ' · ' + this.names(b).primary }));
@@ -5553,7 +5691,7 @@ class Component extends DCLogic {
           ref: node => this.animateGymBlock(node)
         };
       }).filter(Boolean);
-      return { label: isKo ? KO_DAY[d] : d, blocks: blocks, gymBlocks: gymBlocks, isToday: isToday, headerStyle: dayHeaderStyle(isToday), colStyle: dayColStyle(isToday) };
+      return { label: isKo ? KO_DAY[d] : d.toUpperCase(), blocks: blocks, gymBlocks: gymBlocks, isToday: isToday, headerStyle: dayHeaderStyle(isToday), colStyle: dayColStyle(isToday) };
     });
 
     const unscheduledCourses = courses.filter(c => !(c.sessions || []).length).map(c => ({
@@ -5579,7 +5717,14 @@ class Component extends DCLogic {
         onEndHour: e => this.updateSession(i, { end: to24(e.target.value, et12.ampm) + ':' + et.m }),
         onEndMin: e => this.updateSession(i, { end: et.h + ':' + e.target.value }),
         onEndAmPm: e => this.updateSession(i, { end: to24(et12.h12, e.target.value) + ':' + et.m }),
-        onBldg: e => this.updateSession(i, { bldg: e.target.value }),
+        bldgText: sess.bldgText != null ? sess.bldgText : ((bldgOptions.find(o => o.value === String(sess.bldg || s.buildings[0].id)) || {}).label || ''),
+        bldgStyle: 'flex:1;min-width:0;padding:7px 8px;border:1px solid ' + (sess.bldgText != null && sess.bldgText.trim() ? 'oklch(0.6 0.2 25)' : 'oklch(0.88 0.012 250)') + ';border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)',
+        onBldgText: e => this.updateSession(i, { bldgText: e.target.value }),
+        onBldgBlur: e => {
+          const id = this.findBldgId(e.target.value, bldgOptions);
+          if (id) this.updateSession(i, { bldg: id, bldgText: null });
+          else if (!e.target.value.trim()) this.updateSession(i, { bldgText: null });
+        },
         onRoom: e => this.updateSession(i, { room: e.target.value }),
         onRemove: () => this.removeModalSession(i)
       };
@@ -5636,6 +5781,13 @@ class Component extends DCLogic {
       addSessionSamePlace: () => this.applySamePlace(),
       saveModal: () => this.saveCourseModal(),
       closeModal: () => this.setState({ courseModal: null }),
+      ttGuideOpen: !!s.ttGuideOpen,
+      openTtGuide: () => this.setState({ ttGuideOpen: true }),
+      closeTtGuide: () => this.setState({ ttGuideOpen: false }),
+      ttGuideTitle: isKo ? '강의실 코드 읽는 법' : 'How to read your classroom code',
+      ttGuideIntro: isKo ? '앞은 건물 번호, 뒤는 층과 호실이에요.' : 'Building number first, then floor and room.',
+      ttGuideB206: isKo ? '206번 건물' : 'Building 206', ttGuideR301: isKo ? '3층 301호' : 'Floor 3, Room 301',
+      ttGuideB317: isKo ? '317번 건물' : 'Building 317', ttGuideR208: isKo ? '2층 208호' : 'Floor 2, Room 208',
       deleteModalCourse: () => this.deleteCourse(modal && modal.key),
 
       gymOn: gymOn,
@@ -5978,7 +6130,7 @@ class Component extends DCLogic {
       rotateMapCCW: () => this.rotateMapBy(-15),
       rotateMapCW: () => this.rotateMapBy(15),
       resetMapBearing: () => this.resetMapBearing(),
-      mapRotated: Math.abs(((s.mapBearing % 360) + 360) % 360) > 0.5,
+      mapRotated: s.mapRotated,
 
       selected: sel ? { num: sel.num, primary: selN.primary } : null,
       closeSheet: () => this.setState({ selected: null }),
