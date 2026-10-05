@@ -3194,7 +3194,15 @@ class Component extends DCLogic {
       if (Array.isArray(stored.saved)) base.saved = stored.saved;
       if (Array.isArray(stored.deletedNums)) base.deletedNums = stored.deletedNums;
       if (Array.isArray(stored.gymSessions)) base.gymSessions = stored.gymSessions;
-      if (Array.isArray(stored.customShapes)) base.customShapes = stored.customShapes;
+      // Only an admin edits custom shapes, so a visitor's stored list is just a
+      // stale snapshot of the shipped defaults (often [] from before they
+      // existed) and must not hide shapes shipped since. Keep a stored list
+      // only once an admin has edited it -- or, for admin data saved before
+      // that flag existed, when it holds a shape the defaults don't.
+      if (Array.isArray(stored.customShapes) && (stored.customShapesEdited || stored.customShapes.some(c => !base.customShapes.some(d => d.id === c.id)))) {
+        base.customShapes = stored.customShapes;
+        base.customShapesEdited = true;
+      }
       if (Array.isArray(stored.shapes)) base.shapes = stored.shapes;
       if (Array.isArray(stored.courses)) {
         base.courses = stored.courses.map((c, i) => {
@@ -4552,12 +4560,13 @@ class Component extends DCLogic {
       const shapes = patch.shapes || this.state.shapes;
       nextPatch = Object.assign({}, patch, { buildings: this.resolveBuildings(buildings, shapes), shapes: shapes });
     }
+    if (patch.customShapes) nextPatch = Object.assign({}, nextPatch, { customShapesEdited: true });
     this.setState(nextPatch, () => {
       const s = this.state;
       if (done) done();
       try {
         window.localStorage.setItem(KEY, JSON.stringify({
-          buildings: s.buildings, saved: s.saved, courses: s.courses, anchor: s.anchor, primary: s.primary, mapMode: s.mapMode, baseLabels: s.baseLabels, deletedNums: s.deletedNums, gymSessions: s.gymSessions, customShapes: s.customShapes, shapes: s.shapes, gymTipSeen: s.gymTipSeen
+          buildings: s.buildings, saved: s.saved, courses: s.courses, anchor: s.anchor, primary: s.primary, mapMode: s.mapMode, baseLabels: s.baseLabels, deletedNums: s.deletedNums, gymSessions: s.gymSessions, customShapes: s.customShapes, customShapesEdited: s.customShapesEdited, shapes: s.shapes, gymTipSeen: s.gymTipSeen
         }));
       } catch (e) { /* storage unavailable */ }
     });
