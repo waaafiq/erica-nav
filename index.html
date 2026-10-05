@@ -3109,6 +3109,8 @@ const DEFAULT_ANCHOR = { n: 37.3002, s: 37.2955, w: 126.8318, e: 126.8398 };
 // already does the “hold while pinching past the limit, snap back on
 // release” elastic behaviour (bounceAtZoomLimits, on by default) as soon as
 // minZoom is set — nothing extra needed for that part.
+// screen space kept clear around the campus at the default / furthest-out view: search bar + filter chips on top
+const CAMPUS_PAD = { t: 150, b: 16, l: 16, r: 16 };
 const MAP_BOX_BOUNDS = [[37.286539, 126.821644], [37.309061, 126.849956]];
 const SPINE_Y = 68;
 const M_PER_UNIT = 9;
@@ -3908,10 +3910,17 @@ class Component extends DCLogic {
     // getBoundsZoom depends on the container's current pixel size, so the
     // zoom level that corresponds to “3km visible” isn't a fixed number —
     // recompute it whenever the map's size can have changed.
+    // The furthest you can zoom out is the campus buildings filling the
+    // screen (under the search bar and filter chips), not the whole 3 km
+    // box. _boxZoom stays the 3 km fit: label thresholds are tuned to it.
     this._updateMinZoom = () => {
       if (!this.map) return;
-      const z = this.map.getBoundsZoom(MAP_BOX_BOUNDS, false);
-      if (isFinite(z)) this.map.setMinZoom(z);
+      const box = this.map.getBoundsZoom(MAP_BOX_BOUNDS, false);
+      if (!isFinite(box)) return;
+      this._boxZoom = box;
+      const cb = this.campusBounds();
+      const campus = cb ? this.map.getBoundsZoom(cb, false, window.L.point(CAMPUS_PAD.l + CAMPUS_PAD.r, CAMPUS_PAD.t + CAMPUS_PAD.b)) : box;
+      this.map.setMinZoom(Math.max(box, isFinite(campus) ? campus : box));
     };
     this._updateMinZoom();
     window.addEventListener('resize', this._updateMinZoom);
@@ -4065,9 +4074,9 @@ class Component extends DCLogic {
     this.mergeEstimatedShapes();
     const withCoords = this.state.buildings.filter(b => b.lat && b.lng);
     if (this.refreshPaths(), withCoords.some(b => b.poly)) {
-      const all = withCoords.filter(b => b.poly).reduce((a, b) => a.concat(b.poly), []);
+      const cb = this.campusBounds();
       // instant: an animated fit still running would override a timetable focus set right after
-      if (all.length) this.map.fitBounds(L.latLngBounds(all).pad(1.4), { animate: false });
+      if (cb) this.map.fitBounds(cb, { paddingTopLeft: [CAMPUS_PAD.l, CAMPUS_PAD.t], paddingBottomRight: [CAMPUS_PAD.r, CAMPUS_PAD.b], animate: false });
     }
     if (this._focusId) this.applyFocus();
   }
@@ -4087,6 +4096,11 @@ class Component extends DCLogic {
       this._bearingRaf = t < 1 ? window.requestAnimationFrame(step) : 0;
     };
     this._bearingRaf = window.requestAnimationFrame(step);
+  }
+
+  campusBounds() {
+    const pts = this.state.buildings.filter(b => b.poly && b.poly.length > 2).reduce((a, b) => a.concat(b.poly), []);
+    return pts.length ? window.L.latLngBounds(pts) : null;
   }
 
   rotateMapBy(deltaDeg) {
@@ -4607,7 +4621,7 @@ class Component extends DCLogic {
   // screen-space boxes stay correct at any bearing.
   declutterLabels() {
     if (!this.map || !this.labelMarkers) return;
-    const s = this.state, zoom = this.map.getZoom(), minZ = this.map.getMinZoom();
+    const s = this.state, zoom = this.map.getZoom(), minZ = this._boxZoom != null ? this._boxZoom : this.map.getMinZoom();
     const hideZoom = minZ + 0.75, compactZoom = minZ + 2.5, pad = 4;
     const pinned = e => s.selected === e.b.id || s.routeTarget === e.b.id;
     const placedFull = [], hits = box => placedFull.some(p => p.l < box.r && box.l < p.r && p.t < box.b && box.t < p.b);
