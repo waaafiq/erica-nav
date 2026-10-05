@@ -1950,8 +1950,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <sc-if value="{{ gymTip }}" hint-placeholder-val="{{ false }}"><div ref="{{ gymTipRef }}" role="status" style="position:absolute;top:calc(100% + 8px);right:0;z-index:30;width:min(250px, calc(100vw - 32px));padding:10px 12px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;box-shadow:0 6px 24px oklch(0.2 0.03 250 / 0.18);font-size:12px;line-height:1.45;color:oklch(0.3 0.02 250)">{{ gymTipText }}</div></sc-if>
               <button sc-camel-on-click="{{ downloadTimetable }}" style="flex:none;width:36px;height:36px;border-radius:9999px;border:1.5px solid oklch(0.85 0.014 250);background:oklch(1 0 0);color:oklch(0.4 0.02 250);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:oklch(0.96 0.008 250)" aria-label="Download timetable"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></button>
               <button sc-camel-on-click="{{ openNewCourse }}" style="flex:none;width:36px;height:36px;border-radius:9999px;border:none;background:oklch(0.44 0.14 258);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:oklch(0.36 0.15 258)" aria-label="Add subject"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+              <button type="button" sc-camel-on-click="{{ toggleTtEdit }}" aria-pressed="{{ ttEdit }}" aria-label="{{ ttEditLabel }}" title="{{ ttEditLabel }}" style="{{ ttEditBtnStyle }}"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path></svg></button>
             </div>
           </div>
+          <sc-if value="{{ ttEdit }}" hint-placeholder-val="{{ false }}">
+            <div role="status" style="margin-top:12px;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 12px;background:oklch(0.44 0.14 258 / 0.08);border:1px solid oklch(0.44 0.14 258 / 0.25);border-radius:12px;font-size:12px;color:oklch(0.36 0.12 258)">
+              <span style="flex:1;min-width:0">{{ ttEditHint }}</span>
+              <button type="button" sc-camel-on-click="{{ toggleTtEdit }}" style="flex:none;border:none;background:oklch(0.44 0.14 258);color:#fff;font-weight:600;font-size:12px;padding:6px 12px;border-radius:9999px;cursor:pointer">{{ ttEditDone }}</button>
+            </div>
+          </sc-if>
 
           <div style="margin-top:14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;overflow:hidden">
             <div style="display:flex;border-bottom:1px solid oklch(0.91 0.01 250)">
@@ -1974,8 +1981,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <sc-for list="{{ dayList }}" as="d" hint-placeholder-count="5">
                   <div style="{{ d.colStyle }}">
                     <sc-for list="{{ d.blocks }}" as="blk" hint-placeholder-count="0">
-                      <div sc-camel-on-click="{{ blk.onClick }}" role="button" sc-camel-tab-index="0" aria-label="{{ blk.name }}, {{ blk.where }}" style="position:absolute;left:-1px;right:0;top:{{ blk.top }}px;height:{{ blk.height }}px;background:{{ blk.bg }};color:{{ blk.color }};border-radius:9px;padding:5px 6px;font-size:11px;line-height:1.25;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px oklch(0 0 0 / 0.1)">
-                        <div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ blk.name }}</div>
+                      <div sc-camel-on-click="{{ blk.onClick }}" role="button" sc-camel-tab-index="0" aria-label="{{ blk.aria }}" style="position:absolute;left:-1px;right:0;top:{{ blk.top }}px;height:{{ blk.height }}px;background:{{ blk.bg }};color:{{ blk.color }};outline:{{ blk.outline }};outline-offset:-3px;border-radius:9px;padding:5px 6px;font-size:11px;line-height:1.25;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px oklch(0 0 0 / 0.1)">
+                        <sc-if value="{{ ttEdit }}" hint-placeholder-val="{{ false }}">
+                          <svg viewBox="0 0 24 24" aria-hidden="true" style="position:absolute;top:4px;right:4px;width:11px;height:11px" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path></svg>
+                        </sc-if>
+                        <div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:{{ blk.namePad }}">{{ blk.name }}</div>
                         <div style="opacity:0.88;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ blk.where }}</div>
                         <sc-if value="{{ blk.hasProfessor }}" hint-placeholder-val="{{ false }}">
                           <div style="opacity:0.78;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ blk.professor }}</div>
@@ -2009,6 +2019,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
           </div>
         </div>
 
+        <sc-if value="{{ placeAsk }}" hint-placeholder-val="{{ false }}">
+          <div sc-camel-on-click="{{ closePlaceAsk }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
+            <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="{{ paTitle }}" style="background:oklch(1 0 0);border-radius:18px;max-width:340px;width:100%;padding:20px">
+              <div style="font-weight:700;font-size:15px">{{ paTitle }}</div>
+              <p style="margin:4px 0 14px;font-size:12px;line-height:1.5;color:oklch(0.5 0.02 250)">{{ paBody }}</p>
+              <sc-if value="{{ paHasBldg }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:oklch(0.975 0.006 250);border-radius:12px;margin-bottom:16px">
+                  <span style="flex:none;min-width:40px;padding:5px 8px;border-radius:8px;background:oklch(0.44 0.14 258);color:#fff;font-weight:700;font-size:13px;text-align:center">{{ paNum }}</span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font-weight:600;font-size:13px;color:oklch(0.25 0.02 250);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ paName }}</span>
+                    <sc-if value="{{ paRoom }}" hint-placeholder-val="{{ false }}"><span style="display:block;font-size:12px;color:oklch(0.5 0.02 250)">{{ paRoom }}</span></sc-if>
+                  </span>
+                </div>
+              </sc-if>
+              <div style="display:flex;gap:8px">
+                <button type="button" sc-camel-on-click="{{ closePlaceAsk }}" style="flex:1;padding:10px;border:1px solid oklch(0.88 0.012 250);background:oklch(1 0 0);border-radius:9999px;font-weight:600;font-size:13px;color:oklch(0.35 0.02 250);cursor:pointer">{{ paCancel }}</button>
+                <button type="button" sc-camel-on-click="{{ confirmPlaceAsk }}" style="flex:1;padding:10px;border:none;background:oklch(0.44 0.14 258);border-radius:9999px;font-weight:600;font-size:13px;color:#fff;cursor:pointer" style-hover="background:oklch(0.36 0.15 258)">{{ paGo }}</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
         <sc-if value="{{ ttGuideOpen }}" hint-placeholder-val="{{ false }}">
           <div sc-camel-on-click="{{ closeTtGuide }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
             <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="{{ ttGuideTitle }}" style="background:oklch(1 0 0);border-radius:18px;max-width:420px;width:100%;max-height:86vh;overflow:auto;padding:20px">
@@ -2056,53 +2087,28 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <sc-for list="{{ modalSessions }}" as="sess" hint-placeholder-count="1">
                 <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
                   <div style="display:flex;gap:8px">
-                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:7px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
+                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                       <option value="Mon">Monday</option><option value="Tue">Tuesday</option><option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option><option value="Fri">Friday</option><option value="Sat">Saturday</option><option value="Sun">Sunday</option>
                     </sc-raw-select>
                     <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" disabled="{{ sess.binDisabled }}" style="flex:none;width:30px;height:30px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);opacity:{{ sess.binOpacity }};cursor:{{ sess.binCursor }}">🗑</button>
                   </div>
-                  <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap">
-                    <sc-raw-select aria-label="Start hour" value="{{ sess.startHour }}" sc-camel-on-change="{{ sess.onStartHour }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ hourOptions }}" as="o" hint-placeholder-count="12">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="Start minute" value="{{ sess.startMin }}" sc-camel-on-change="{{ sess.onStartMin }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ minOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="Start AM or PM" value="{{ sess.startAmPm }}" sc-camel-on-change="{{ sess.onStartAmPm }}" style="flex:none;width:52px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ ampmOptions }}" as="o" hint-placeholder-count="2">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <span style="color:oklch(0.5 0.02 250);font-size:12px">–</span>
-                    <sc-raw-select aria-label="End hour" value="{{ sess.endHour }}" sc-camel-on-change="{{ sess.onEndHour }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ hourOptions }}" as="o" hint-placeholder-count="12">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="End minute" value="{{ sess.endMin }}" sc-camel-on-change="{{ sess.onEndMin }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ minOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="End AM or PM" value="{{ sess.endAmPm }}" sc-camel-on-change="{{ sess.onEndAmPm }}" style="flex:none;width:52px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ ampmOptions }}" as="o" hint-placeholder-count="2">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <input type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <span style="color:oklch(0.5 0.02 250);font-size:13px">–</span>
+                    <input type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                   <div style="display:flex;gap:8px">
-                    <input aria-label="Building" list="bldg-list" value="{{ sess.bldgText }}" sc-camel-on-change="{{ sess.onBldgText }}" sc-camel-on-blur="{{ sess.onBldgBlur }}" placeholder="Building no. e.g. 317" style="{{ sess.bldgStyle }}">
+                    <label style="{{ sess.bldgStyle }}">
+                      <input aria-label="Building number" list="bldg-list" autocomplete="off" value="{{ sess.bldgText }}" sc-camel-on-change="{{ sess.onBldgText }}" sc-camel-on-blur="{{ sess.onBldgBlur }}" placeholder="Building" style="{{ sess.bldgInputStyle }}">
+                      <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:oklch(0.5 0.02 250)">{{ sess.bldgName }}</span>
+                    </label>
                     <datalist id="bldg-list">
                       <sc-for list="{{ bldgOptions }}" as="o" hint-placeholder-count="6">
-                        <option value="{{ o.label }}"></option>
+                        <option value="{{ o.num }}">{{ o.name }}</option>
                       </sc-for>
                     </datalist>
-                    <input aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:84px;padding:7px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;font-size:12px;color:oklch(0.22 0.015 250)">
+                    <input aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:84px;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                 </div>
               </sc-for>
@@ -2143,44 +2149,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <sc-for list="{{ gymModalSessions }}" as="sess" hint-placeholder-count="1">
                 <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
                   <div style="display:flex;gap:8px">
-                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:7px 8px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
+                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                       <option value="Mon">Monday</option><option value="Tue">Tuesday</option><option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option><option value="Fri">Friday</option><option value="Sat">Saturday</option><option value="Sun">Sunday</option>
                     </sc-raw-select>
                     <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" style="flex:none;width:30px;height:30px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);cursor:pointer">🗑</button>
                   </div>
-                  <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap">
-                    <sc-raw-select aria-label="Start hour" value="{{ sess.startHour }}" sc-camel-on-change="{{ sess.onStartHour }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ hourOptions }}" as="o" hint-placeholder-count="12">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="Start minute" value="{{ sess.startMin }}" sc-camel-on-change="{{ sess.onStartMin }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ minOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="Start AM or PM" value="{{ sess.startAmPm }}" sc-camel-on-change="{{ sess.onStartAmPm }}" style="flex:none;width:52px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ ampmOptions }}" as="o" hint-placeholder-count="2">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <span style="color:oklch(0.5 0.02 250);font-size:12px">–</span>
-                    <sc-raw-select aria-label="End hour" value="{{ sess.endHour }}" sc-camel-on-change="{{ sess.onEndHour }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ hourOptions }}" as="o" hint-placeholder-count="12">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="End minute" value="{{ sess.endMin }}" sc-camel-on-change="{{ sess.onEndMin }}" style="flex:none;width:46px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ minOptions }}" as="o" hint-placeholder-count="4">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
-                    <sc-raw-select aria-label="End AM or PM" value="{{ sess.endAmPm }}" sc-camel-on-change="{{ sess.onEndAmPm }}" style="flex:none;width:52px;padding:7px 2px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)">
-                      <sc-for list="{{ ampmOptions }}" as="o" hint-placeholder-count="2">
-                        <option value="{{ o }}">{{ o }}</option>
-                      </sc-for>
-                    </sc-raw-select>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <input type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <span style="color:oklch(0.5 0.02 250);font-size:13px">–</span>
+                    <input type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                 </div>
               </sc-for>
@@ -3154,7 +3132,6 @@ const GYM_TIMETABLE = [
   { day: 'Fri', start: '09:00', end: '11:00' }
 ];
 const HOUR12_OPTIONS = Array.from({ length: 12 }, (_, i) => pad(i + 1));
-const MIN_OPTIONS = ['00', '15', '30', '45'];
 const MIN5_OPTIONS = Array.from({ length: 12 }, (_, i) => pad(i * 5));
 const AMPM_OPTIONS = ['AM', 'PM'];
 const to12 = h24 => { const h = Number(h24); const ampm = h < 12 ? 'AM' : 'PM'; let h12 = h % 12; if (h12 === 0) h12 = 12; return { h12: pad(h12), ampm: ampm }; };
@@ -3194,7 +3171,15 @@ class Component extends DCLogic {
       if (Array.isArray(stored.saved)) base.saved = stored.saved;
       if (Array.isArray(stored.deletedNums)) base.deletedNums = stored.deletedNums;
       if (Array.isArray(stored.gymSessions)) base.gymSessions = stored.gymSessions;
-      if (Array.isArray(stored.customShapes)) base.customShapes = stored.customShapes;
+      // Only an admin edits custom shapes, so a visitor's stored list is just a
+      // stale snapshot of the shipped defaults (often [] from before they
+      // existed) and must not hide shapes shipped since. Keep a stored list
+      // only once an admin has edited it -- or, for admin data saved before
+      // that flag existed, when it holds a shape the defaults don't.
+      if (Array.isArray(stored.customShapes) && (stored.customShapesEdited || stored.customShapes.some(c => !base.customShapes.some(d => d.id === c.id)))) {
+        base.customShapes = stored.customShapes;
+        base.customShapesEdited = true;
+      }
       if (Array.isArray(stored.shapes)) base.shapes = stored.shapes;
       if (Array.isArray(stored.courses)) {
         base.courses = stored.courses.map((c, i) => {
@@ -4079,10 +4064,11 @@ class Component extends DCLogic {
     this.syncMap();
     this.mergeEstimatedShapes();
     const withCoords = this.state.buildings.filter(b => b.lat && b.lng);
-    if (this.refreshPaths(), withCoords.some(b => b.poly)) {
+    if (this.refreshPaths(), withCoords.some(b => b.poly) && !this._focusId) {
       const all = withCoords.filter(b => b.poly).reduce((a, b) => a.concat(b.poly), []);
       if (all.length) this.map.fitBounds(L.latLngBounds(all).pad(1.4));
     }
+    if (this._focusId) this.applyFocus(false);
   }
 
   // Eases the bearing to `target` along the shortest way round. Repeated
@@ -4458,6 +4444,8 @@ class Component extends DCLogic {
         else if (st.locAsk) this.setState({ locAsk: false });
         else if (st.pcOpen) this.setState({ pcOpen: false, pcInput: '', pcError: false });
         else if (st.courseModal) this.setState({ courseModal: null });
+        else if (st.placeAsk) this.setState({ placeAsk: null });
+        else if (st.ttEdit) this.setState({ ttEdit: false });
         else if (st.gymModal) this.closeGymModal();
         else if (st.searchPanelOpen) this.setState({ searchPanelOpen: false });
         return;
@@ -4552,12 +4540,13 @@ class Component extends DCLogic {
       const shapes = patch.shapes || this.state.shapes;
       nextPatch = Object.assign({}, patch, { buildings: this.resolveBuildings(buildings, shapes), shapes: shapes });
     }
+    if (patch.customShapes) nextPatch = Object.assign({}, nextPatch, { customShapesEdited: true });
     this.setState(nextPatch, () => {
       const s = this.state;
       if (done) done();
       try {
         window.localStorage.setItem(KEY, JSON.stringify({
-          buildings: s.buildings, saved: s.saved, courses: s.courses, anchor: s.anchor, primary: s.primary, mapMode: s.mapMode, baseLabels: s.baseLabels, deletedNums: s.deletedNums, gymSessions: s.gymSessions, customShapes: s.customShapes, shapes: s.shapes, gymTipSeen: s.gymTipSeen
+          buildings: s.buildings, saved: s.saved, courses: s.courses, anchor: s.anchor, primary: s.primary, mapMode: s.mapMode, baseLabels: s.baseLabels, deletedNums: s.deletedNums, gymSessions: s.gymSessions, customShapes: s.customShapes, customShapesEdited: s.customShapesEdited, shapes: s.shapes, gymTipSeen: s.gymTipSeen
         }));
       } catch (e) { /* storage unavailable */ }
     });
@@ -5268,6 +5257,24 @@ class Component extends DCLogic {
     this.setState({ editId: num, adminOpen: true, savedFlash: false, repositioning: false, form: form });
   }
 
+  // Timetable -> map: switch to the Map tab, select the building (opens its
+  // card) and frame it. The map unmounts off the Map tab, so a fresh map
+  // picks the pending focus up at the end of initMap instead.
+  focusBuilding(id) {
+    this._focusId = id;
+    this.setState({ tab: 'map', mapMode: 'real', selected: id, placeAsk: null, ttEdit: false }, () => this.applyFocus(true));
+  }
+
+  applyFocus(animate) {
+    const b = this.byId(this._focusId), L = window.L;
+    if (!this.map || !L || !b) return;
+    this._focusId = null;
+    // leave room for the search bar on top and the building card at the bottom
+    const opts = { paddingTopLeft: [40, 150], paddingBottomRight: [40, 260], maxZoom: 18.5, animate: animate, duration: 0.6 };
+    if (b.poly && b.poly.length > 2) this.map[animate ? 'flyToBounds' : 'fitBounds'](L.latLngBounds(b.poly), opts);
+    else if (b.lat && b.lng) this.map[animate ? 'flyToBounds' : 'fitBounds'](L.latLngBounds([[b.lat, b.lng], [b.lat, b.lng]]), opts);
+  }
+
   openCourseModal(key) {
     const s = this.state;
     if (key) {
@@ -5283,15 +5290,12 @@ class Component extends DCLogic {
 
   updateModal(patch) { this.setState(s => ({ courseModal: Object.assign({}, s.courseModal, patch) })); }
 
-  // "317", "Y-317", "Y206" or a picked "317 · Name" suggestion -> building id; else a unique name match.
-  findBldgId(text, opts) {
-    const q = String(text || '').trim().toLowerCase();
+  // Exact building-number match ("317", "c01", "y-317"), for the number-only class place field.
+  findBldgNum(text, opts) {
+    const q = String(text || '').trim().toLowerCase().replace(/^y-?/, '');
     if (!q) return null;
-    const num = q.split(' · ')[0].replace(/^y-?/, '');
-    const hit = opts.find(o => o.label.toLowerCase() === q) || opts.find(o => { const n = o.label.split(' · ')[0].toLowerCase(); return n === num || (/^\d+$/.test(num) && Number(n) === Number(num)); });
-    if (hit) return hit.value;
-    const byName = opts.filter(o => o.label.toLowerCase().indexOf(q) >= 0);
-    return byName.length === 1 ? byName[0].value : null;
+    const hit = opts.find(o => String(o.num).toLowerCase() === q || (/^\d+$/.test(q) && Number(o.num) === Number(q)));
+    return hit ? hit.value : null;
   }
 
   updateSession(i, patch) {
@@ -5304,7 +5308,7 @@ class Component extends DCLogic {
 
   addModalSession() {
     this.setState(s => {
-      const base = { day: 'Mon', start: '09:00', end: '10:00', bldg: String(s.buildings[0].id), room: '' };
+      const base = { day: 'Mon', start: '09:00', end: '10:00', bldg: '', room: '' };
       return { courseModal: Object.assign({}, s.courseModal, { sessions: s.courseModal.sessions.concat([base]) }) };
     });
   }
@@ -5320,7 +5324,7 @@ class Component extends DCLogic {
   applySamePlace() {
     this.setState(s => {
       const sessions = s.courseModal.sessions.slice(), src = sessions[0];
-      sessions[sessions.length - 1] = Object.assign({}, sessions[sessions.length - 1], { bldg: src.bldg, room: src.room });
+      sessions[sessions.length - 1] = Object.assign({}, sessions[sessions.length - 1], { bldg: src.bldg, bldgText: null, room: src.room });
       return { courseModal: Object.assign({}, s.courseModal, { sessions: sessions }) };
     });
   }
@@ -5372,7 +5376,7 @@ class Component extends DCLogic {
     const s = this.state;
     let m = s.courseModal;
     if (!m) return;
-    if (m.sessions.some(x => x.bldgText != null && x.bldgText.trim())) { this.flashModalError(s.primary === 'ko' ? '건물을 찾을 수 없어요. 건물 번호를 확인하세요.' : 'Building not found. Check the building number.'); return; }
+    if (m.sessions.some(x => !x.bldg && x.bldgText != null && x.bldgText.trim())) { this.flashModalError(s.primary === 'ko' ? '건물을 찾을 수 없어요. 건물 번호를 확인하세요.' : 'Building not found. Check the building number.'); return; }
     m = Object.assign({}, m, { sessions: m.sessions.map(x => { const c = Object.assign({}, x); delete c.bldgText; return c; }) });
     const err = this.validateModal(m);
     if (err) { this.flashModalError(err); return; }
@@ -5618,6 +5622,7 @@ class Component extends DCLogic {
 
   timetableVals(s) {
     const isKo = s.primary === 'ko';
+    const ttEdit = !!s.ttEdit;
     const DAY_ORDER = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const KO_DAY = { Mon: '월', Tue: '화', Wed: '수', Thu: '목', Fri: '금', Sat: '토', Sun: '일' };
     const courses = s.courses || [];
@@ -5648,7 +5653,7 @@ class Component extends DCLogic {
       hourLabels.push({ top: top, dy: 3, label: ((h % 12) || 12) + (h % 24 < 12 ? ' AM' : ' PM') });
     }
 
-    const bldgOptions = s.buildings.filter(b => !HIDDEN_NUMS.has(b.num)).map(b => ({ value: String(b.id), label: b.num + ' · ' + this.names(b).primary }));
+    const bldgOptions = s.buildings.filter(b => !HIDDEN_NUMS.has(b.num)).map(b => ({ value: String(b.id), num: b.num, name: this.names(b).primary, label: b.num + ' · ' + this.names(b).primary }));
 
     const DOW_KEYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const todayKey = DOW_KEYS[new Date(s.now || Date.now()).getDay()];
@@ -5678,7 +5683,13 @@ class Component extends DCLogic {
             bg: c.color ? c.color.bg : COURSE_COLORS[0].bg,
             color: c.color ? c.color.text : '#fff',
             name: c.name, where: where, professor: c.professor || '', hasProfessor: !!c.professor,
-            onClick: () => this.openCourseModal(c.key)
+            aria: c.name + (where ? ', ' + where : '') + (ttEdit ? (isKo ? ' — 편집' : ' — edit') : ''),
+            outline: ttEdit ? '1.5px dashed ' + (c.color ? c.color.text : '#fff') : 'none',
+            namePad: ttEdit ? '12px' : '0',
+            onClick: () => {
+              if (this.state.ttEdit) { this.openCourseModal(c.key); return; }
+              this.setState({ placeAsk: { courseKey: c.key, name: c.name, bldgId: bObj ? bObj.id : null, room: sess.room || '' } });
+            }
           });
         });
       });
@@ -5703,28 +5714,26 @@ class Component extends DCLogic {
     const splitTime = (t, defH, defM) => { const p = (t || '').split(':'); return { h: p[0] || defH, m: p[1] || defM }; };
     const modalSessions = modal ? modal.sessions.map((sess, i) => {
       const st = splitTime(sess.start, '09', '00'), et = splitTime(sess.end, '10', '00');
-      const st12 = to12(st.h), et12 = to12(et.h);
       const single = false;
+      const bOpt = sess.bldg ? bldgOptions.find(o => o.value === String(sess.bldg)) : null;
+      const bldgBad = !bOpt && !!(sess.bldgText || '').trim();
       return {
-        day: sess.day, bldg: sess.bldg || String(s.buildings[0].id), room: sess.room || '',
+        day: sess.day, bldg: sess.bldg || '', room: sess.room || '',
         binDisabled: single, binOpacity: single ? 0.35 : 1, binCursor: single ? 'not-allowed' : 'pointer',
-        startHour: st12.h12, startMin: st.m, startAmPm: st12.ampm,
-        endHour: et12.h12, endMin: et.m, endAmPm: et12.ampm,
+        start: st.h + ':' + st.m, end: et.h + ':' + et.m,
         onDay: e => this.updateSession(i, { day: e.target.value }),
-        onStartHour: e => this.updateSession(i, { start: to24(e.target.value, st12.ampm) + ':' + st.m }),
-        onStartMin: e => this.updateSession(i, { start: st.h + ':' + e.target.value }),
-        onStartAmPm: e => this.updateSession(i, { start: to24(st12.h12, e.target.value) + ':' + st.m }),
-        onEndHour: e => this.updateSession(i, { end: to24(e.target.value, et12.ampm) + ':' + et.m }),
-        onEndMin: e => this.updateSession(i, { end: et.h + ':' + e.target.value }),
-        onEndAmPm: e => this.updateSession(i, { end: to24(et12.h12, e.target.value) + ':' + et.m }),
-        bldgText: sess.bldgText != null ? sess.bldgText : ((bldgOptions.find(o => o.value === String(sess.bldg || s.buildings[0].id)) || {}).label || ''),
-        bldgStyle: 'flex:1;min-width:0;padding:7px 8px;border:1px solid ' + (sess.bldgText != null && sess.bldgText.trim() ? 'oklch(0.6 0.2 25)' : 'oklch(0.88 0.012 250)') + ';border-radius:9px;background:oklch(1 0 0);font-size:12px;color:oklch(0.22 0.015 250)',
-        onBldgText: e => this.updateSession(i, { bldgText: e.target.value }),
-        onBldgBlur: e => {
-          const id = this.findBldgId(e.target.value, bldgOptions);
-          if (id) this.updateSession(i, { bldg: id, bldgText: null });
-          else if (!e.target.value.trim()) this.updateSession(i, { bldgText: null });
-        },
+        // a cleared time field reports '' -- keep the last valid time instead
+        onStart: e => { if (e.target.value) this.updateSession(i, { start: e.target.value.slice(0, 5) }); },
+        onEnd: e => { if (e.target.value) this.updateSession(i, { end: e.target.value.slice(0, 5) }); },
+        // Only the number is typed; the building's name sits beside it as
+        // plain text, so backspace edits the number digit by digit.
+        bldgText: sess.bldgText != null ? sess.bldgText : (bOpt ? bOpt.num : ''),
+        bldgName: bOpt ? bOpt.name : '',
+        bldgStyle: 'flex:1;min-width:0;display:flex;align-items:center;gap:6px;cursor:text;padding:9px 10px;border:1px solid ' + (bldgBad ? 'oklch(0.6 0.2 25)' : 'oklch(0.88 0.012 250)') + ';border-radius:10px;background:oklch(1 0 0)',
+        // em, not px, so the slot still fits "Building" when iOS draws fields at 16px
+        bldgInputStyle: 'flex:none;width:4.6em;min-width:0;padding:0;border:none;outline:none;background:transparent;font-size:13px;color:oklch(0.22 0.015 250)',
+        onBldgText: e => { const v = e.target.value; this.updateSession(i, { bldgText: v, bldg: this.findBldgNum(v, bldgOptions) || '' }); },
+        onBldgBlur: () => { if (sess.bldg || !(sess.bldgText || '').trim()) this.updateSession(i, { bldgText: null }); },
         onRoom: e => this.updateSession(i, { room: e.target.value }),
         onRemove: () => this.removeModalSession(i)
       };
@@ -5734,18 +5743,13 @@ class Component extends DCLogic {
     const gymModal = s.gymModal;
     const gymModalSessions = gymModal ? gymModal.sessions.map((sess, i) => {
       const st = splitTime(sess.start, '07', '00'), et = splitTime(sess.end, '08', '00');
-      const st12 = to12(st.h), et12 = to12(et.h);
       return {
         day: sess.day,
-        startHour: st12.h12, startMin: st.m, startAmPm: st12.ampm,
-        endHour: et12.h12, endMin: et.m, endAmPm: et12.ampm,
+        start: st.h + ':' + st.m, end: et.h + ':' + et.m,
         onDay: e => this.updateGymSession(i, { day: e.target.value }),
-        onStartHour: e => this.updateGymSession(i, { start: to24(e.target.value, st12.ampm) + ':' + st.m }),
-        onStartMin: e => this.updateGymSession(i, { start: st.h + ':' + e.target.value }),
-        onStartAmPm: e => this.updateGymSession(i, { start: to24(st12.h12, e.target.value) + ':' + st.m }),
-        onEndHour: e => this.updateGymSession(i, { end: to24(e.target.value, et12.ampm) + ':' + et.m }),
-        onEndMin: e => this.updateGymSession(i, { end: et.h + ':' + e.target.value }),
-        onEndAmPm: e => this.updateGymSession(i, { end: to24(et12.h12, e.target.value) + ':' + et.m }),
+        // a cleared time field reports '' -- keep the last valid time instead
+        onStart: e => { if (e.target.value) this.updateGymSession(i, { start: e.target.value.slice(0, 5) }); },
+        onEnd: e => { if (e.target.value) this.updateGymSession(i, { end: e.target.value.slice(0, 5) }); },
         onRemove: () => this.removeGymSession(i)
       };
     }) : [];
@@ -5775,13 +5779,43 @@ class Component extends DCLogic {
       modalProfessor: modal ? modal.professor : '', onModalProfessor: e => this.updateModal({ professor: e.target.value }),
       modalError: modal ? modal.error : null, hasModalError: !!(modal && modal.error),
       showQuickAdd: !!(modal && modal.sessions.length > 1),
-      modalSessions: modalSessions, bldgOptions: bldgOptions, hourOptions: HOUR12_OPTIONS, minOptions: MIN_OPTIONS, ampmOptions: AMPM_OPTIONS,
+      modalSessions: modalSessions, bldgOptions: bldgOptions,
       addSessionBlank: () => this.addModalSession(),
       addSessionSameTime: () => this.applySameTime(),
       addSessionSamePlace: () => this.applySamePlace(),
       saveModal: () => this.saveCourseModal(),
       closeModal: () => this.setState({ courseModal: null }),
       ttGuideOpen: !!s.ttGuideOpen,
+      ttEdit: ttEdit,
+      ttEditLabel: ttEdit ? (isKo ? '편집 끝내기' : 'Done editing') : (isKo ? '시간표 편집' : 'Edit timetable'),
+      ttEditHint: isKo ? '편집 중이에요. 수업을 눌러 수정하세요.' : 'Editing. Tap a class to change it.',
+      ttEditDone: isKo ? '완료' : 'Done',
+      // same blue as Add; darker with an inner ring while edit mode is on
+      ttEditBtnStyle: 'flex:none;width:36px;height:36px;border-radius:9999px;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .15s, box-shadow .15s;background:' +
+        (ttEdit ? 'oklch(0.3 0.12 258);box-shadow:inset 0 0 0 2px oklch(1 0 0 / 0.35), 0 0 0 3px oklch(0.44 0.14 258 / 0.25)' : 'oklch(0.44 0.14 258)'),
+      toggleTtEdit: () => this.setState({ ttEdit: !this.state.ttEdit }),
+      placeAsk: !!s.placeAsk,
+      ...(() => {
+        const pa = s.placeAsk;
+        if (!pa) return {};
+        const pb = pa.bldgId != null ? this.byId(pa.bldgId) : null;
+        if (pb) return {
+          paHasBldg: true, paNum: pb.num, paName: this.names(pb).primary,
+          paRoom: pa.room ? (isKo ? pa.room + '호' : 'Room ' + pa.room) : '',
+          paTitle: isKo ? '지도에서 볼까요?' : 'Show on the map?',
+          paBody: isKo ? pa.name + ' 수업 건물을 지도에서 보여 드릴게요.' : 'Jump to where ' + pa.name + ' is held.',
+          paCancel: isKo ? '취소' : 'Not now', paGo: isKo ? '지도에서 보기' : 'Show on map',
+          confirmPlaceAsk: () => this.focusBuilding(pb.id)
+        };
+        return {
+          paHasBldg: false, paNum: '', paName: '', paRoom: '',
+          paTitle: isKo ? '건물이 없어요' : 'No building yet',
+          paBody: isKo ? pa.name + ' 수업에 건물을 추가하면 지도에서 찾을 수 있어요.' : 'Add a building to ' + pa.name + ' to find it on the map.',
+          paCancel: isKo ? '취소' : 'Not now', paGo: isKo ? '건물 추가' : 'Add building',
+          confirmPlaceAsk: () => { this.setState({ placeAsk: null }); this.openCourseModal(pa.courseKey); }
+        };
+      })(),
+      closePlaceAsk: () => this.setState({ placeAsk: null }),
       openTtGuide: () => this.setState({ ttGuideOpen: true }),
       closeTtGuide: () => this.setState({ ttGuideOpen: false }),
       ttGuideTitle: isKo ? '강의실 코드 읽는 법' : 'How to read your classroom code',
@@ -5897,7 +5931,7 @@ class Component extends DCLogic {
         transition: 'left 0.32s cubic-bezier(0.34,1.1,0.4,1), width 0.32s cubic-bezier(0.34,1.1,0.4,1)'
       } : { position: 'absolute', opacity: 0 },
       tabs: TABS.map(t => ({
-        label: t.label, go: () => this.setState({ tab: t.key }), btnRef: this.setNavBtnRef(t.key),
+        label: t.label, go: () => this.setState({ tab: t.key, ttEdit: false }), btnRef: this.setNavBtnRef(t.key),
         topStyle: tabStyle(t.key, 'top'), botStyle: tabStyle(t.key, 'bot'), current: s.tab === t.key ? 'page' : undefined,
         isMap: t.key === 'map', isTimetable: t.key === 'timetable',
         isShuttle: t.key === 'shuttle', isSaved: t.key === 'saved', isAbout: t.key === 'about'
