@@ -1727,6 +1727,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .btn-sm { flex: none; height: 32px; padding: 0 12px; font-size: 12px; }
   .icon-close { flex: none; width: 32px; height: 32px; padding: 0; border: none; border-radius: 9999px; background: transparent; color: oklch(0.45 0.02 250); font-size: 20px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
   .icon-close:hover { background: oklch(0.95 0.008 250); }
+  /* fields built as a box around a bare input (building number, search boxes):
+     the focus ring goes on the box, not on the input inside it */
+  .fieldbox input:focus-visible { outline: none !important; }
+  .fieldbox:has(input:focus-visible) { outline: 2px solid oklch(0.44 0.14 258); outline-offset: 2px; }
   .mapfab { width: 40px; height: 40px; padding: 0; border-radius: 9999px; border: 1px solid oklch(0.88 0.012 250); background: oklch(1 0 0); color: oklch(0.4 0.02 250); box-shadow: 0 1px 6px oklch(0.2 0.02 250 / 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .mapfab:hover { background: oklch(0.97 0.005 250); }
   /* class/gym editor rows: every field the same height; iOS draws time inputs taller unless appearance is reset */
@@ -1819,7 +1823,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div style="position:absolute;top:0;left:0;right:0;z-index:20;pointer-events:none;padding:12px 14px 8px">
           <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex;gap:10px;align-items:center">
-          <div style="flex:1;display:flex;align-items:center;gap:8px;pointer-events:auto;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
+          <div class="fieldbox" style="flex:1;display:flex;align-items:center;gap:8px;pointer-events:auto;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
             <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" sc-camel-on-focus="{{ openSearchPanel }}" sc-camel-on-click="{{ openSearchPanel }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0">
             <button type="button" sc-camel-on-click="{{ openDirectionsBlank }}" aria-label="{{ navOpenLabel }}" title="{{ navOpenLabel }}" style="flex:none;width:32px;height:32px;margin:-6px -6px -6px 0;padding:0;border:none;border-radius:9999px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);display:flex;align-items:center;justify-content:center;cursor:pointer"><svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M360-120v-567l-64 63-56-56 160-160 160 160-56 57-64-64v261q35-31 79-44.5t88-13.5q11 0 21 1t19 3l-63-64 56-56 160 160-160 160-56-56 63-64q-11-2-22-3.5t-22-1.5q-54 0-99.5 30.5T440-280v160h-80Z"></path></svg></button>
@@ -1961,7 +1965,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div role="dialog" aria-modal="true" aria-label="{{ navPickTitle }}" style="position:absolute;inset:0;z-index:1100;background:oklch(1 0 0);display:flex;flex-direction:column">
             <div style="flex:none;display:flex;align-items:center;gap:6px;padding:12px 14px 10px">
               <button type="button" sc-camel-on-click="{{ closePick }}" aria-label="{{ navBackLabel }}" class="icon-close" style="margin-left:-6px"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
-              <div style="flex:1;display:flex;align-items:center;gap:8px;height:40px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:0 12px">
+              <div class="fieldbox" style="flex:1;display:flex;align-items:center;gap:8px;height:40px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:0 12px">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
                 <input aria-label="{{ navPickTitle }}" sc-camel-auto-focus="true" value="{{ navQuery }}" sc-camel-on-change="{{ onNavQuery }}" placeholder="{{ navPickTitle }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0;font-size:13px">
               </div>
@@ -1996,7 +2000,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <button sc-camel-on-click="{{ closeSearchPanel }}" aria-label="Close search" style="border:none;background:oklch(0.93 0.01 250);width:32px;height:32px;border-radius:9999px;cursor:pointer;font-size:13px;line-height:1;color:oklch(0.4 0.02 250)">✕</button>
           </div>
           <div style="flex:none;padding:0 16px 10px">
-            <div style="display:flex;align-items:center;gap:8px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px">
+            <div class="fieldbox" style="display:flex;align-items:center;gap:8px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
               <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0;font-size:13px">
             </div>
@@ -2180,7 +2184,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     <input class="sfld" aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:64px;padding:0 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                   <div style="display:flex;gap:8px">
-                    <label style="{{ sess.bldgStyle }}">
+                    <label class="fieldbox" style="{{ sess.bldgStyle }}">
                       <input class="bnum" aria-label="Building number" list="bldg-list" autocomplete="off" value="{{ sess.bldgText }}" sc-camel-on-change="{{ sess.onBldgText }}" sc-camel-on-blur="{{ sess.onBldgBlur }}" placeholder="Building" style="{{ sess.bldgInputStyle }}">
                       <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:oklch(0.5 0.02 250)">{{ sess.bldgName }}</span>
                     </label>
