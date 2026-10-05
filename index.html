@@ -1720,6 +1720,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   ::-webkit-scrollbar-thumb { background: oklch(0.8 0.02 250); border-radius: 999px; border: 2px solid oklch(0.97 0.005 250); }
   ::-webkit-scrollbar-thumb:hover { background: oklch(0.7 0.03 250); }
   .no-scrollbar { scrollbar-width: none; }
+  /* timetable edit mode: classes wiggle like iOS home-screen icons */
+  @keyframes ttJiggle { 0%, 100% { transform: rotate(-1.1deg); } 50% { transform: rotate(1.1deg); } }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   /* the filter pills run to the screen edge; the overlay's gutter (14px, 16px on phones) is padding inside the row so the first pill still lines up with the search bar */
   .pillrow { margin: 8px -14px 0; padding: 0 14px 4px; max-width: calc(100% + 28px); }
@@ -1955,12 +1957,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <button type="button" sc-camel-on-click="{{ toggleTtEdit }}" aria-pressed="{{ ttEdit }}" aria-label="{{ ttEditLabel }}" title="{{ ttEditLabel }}" style="{{ ttEditBtnStyle }}"><svg viewBox="0 0 24 24" style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path></svg></button>
             </div>
           </div>
-          <sc-if value="{{ ttEdit }}" hint-placeholder-val="{{ false }}">
-            <div role="status" style="margin-top:12px;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 12px;background:oklch(0.44 0.14 258 / 0.08);border:1px solid oklch(0.44 0.14 258 / 0.25);border-radius:12px;font-size:12px;color:oklch(0.36 0.12 258)">
-              <span style="flex:1;min-width:0">{{ ttEditHint }}</span>
-              <button type="button" sc-camel-on-click="{{ toggleTtEdit }}" style="flex:none;border:none;background:oklch(0.44 0.14 258);color:#fff;font-weight:600;font-size:12px;padding:6px 12px;border-radius:9999px;cursor:pointer">{{ ttEditDone }}</button>
-            </div>
-          </sc-if>
 
           <div style="margin-top:14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;overflow:hidden">
             <div style="display:flex;border-bottom:1px solid oklch(0.91 0.01 250)">
@@ -1983,9 +1979,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <sc-for list="{{ dayList }}" as="d" hint-placeholder-count="5">
                   <div style="{{ d.colStyle }}">
                     <sc-for list="{{ d.blocks }}" as="blk" hint-placeholder-count="0">
-                      <div sc-camel-on-click="{{ blk.onClick }}" role="button" sc-camel-tab-index="0" aria-label="{{ blk.aria }}" style="position:absolute;left:-1px;right:0;top:{{ blk.top }}px;height:{{ blk.height }}px;background:{{ blk.bg }};color:{{ blk.color }};outline:{{ blk.outline }};outline-offset:-3px;border-radius:9px;padding:5px 6px;font-size:11px;line-height:1.25;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px oklch(0 0 0 / 0.1)">
+                      <div sc-camel-on-click="{{ blk.onClick }}" role="button" sc-camel-tab-index="0" aria-label="{{ blk.aria }}" style="position:absolute;left:-1px;right:0;top:{{ blk.top }}px;height:{{ blk.height }}px;background:{{ blk.bg }};color:{{ blk.color }};animation:{{ blk.anim }};border-radius:9px;padding:5px 6px;font-size:11px;line-height:1.25;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px oklch(0 0 0 / 0.1)">
                         <sc-if value="{{ ttEdit }}" hint-placeholder-val="{{ false }}">
-                          <svg viewBox="0 0 24 24" aria-hidden="true" style="position:absolute;top:4px;right:4px;width:11px;height:11px" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path></svg>
+                          <button type="button" sc-camel-on-click="{{ blk.onDelete }}" aria-label="{{ blk.delLabel }}" style="position:absolute;top:0;right:0;z-index:1;width:26px;height:26px;padding:0;border:none;background:transparent;cursor:pointer;display:flex;align-items:flex-start;justify-content:flex-end">
+                            <span style="margin:3px 3px 0 0;width:17px;height:17px;border-radius:9999px;background:oklch(0.22 0.02 250 / 0.75);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px oklch(0 0 0 / 0.25)"><svg viewBox="0 0 24 24" style="width:11px;height:11px" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></span>
+                          </button>
                         </sc-if>
                         <div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:{{ blk.namePad }}">{{ blk.name }}</div>
                         <div style="opacity:0.88;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ blk.where }}</div>
@@ -2021,6 +2019,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
           </div>
         </div>
 
+        <sc-if value="{{ delAsk }}" hint-placeholder-val="{{ false }}">
+          <div sc-camel-on-click="{{ closeDelAsk }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
+            <div sc-camel-on-click="{{ stopClick }}" role="alertdialog" aria-modal="true" aria-label="{{ delTitle }}" style="background:oklch(1 0 0);border-radius:18px;max-width:340px;width:100%;padding:20px">
+              <div style="font-weight:700;font-size:15px">{{ delTitle }}</div>
+              <p style="margin:4px 0 16px;font-size:12px;line-height:1.5;color:oklch(0.5 0.02 250)">{{ delBody }}</p>
+              <div style="display:flex;gap:8px">
+                <button type="button" sc-camel-on-click="{{ closeDelAsk }}" style="flex:1;padding:10px;border:1px solid oklch(0.88 0.012 250);background:oklch(1 0 0);border-radius:9999px;font-weight:600;font-size:13px;color:oklch(0.35 0.02 250);cursor:pointer">{{ delCancel }}</button>
+                <button type="button" sc-camel-on-click="{{ confirmDelAsk }}" style="flex:1;padding:10px;border:none;background:oklch(0.55 0.2 25);border-radius:9999px;font-weight:600;font-size:13px;color:#fff;cursor:pointer" style-hover="background:oklch(0.48 0.2 25)">{{ delGo }}</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
         <sc-if value="{{ placeAsk }}" hint-placeholder-val="{{ false }}">
           <div sc-camel-on-click="{{ closePlaceAsk }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.35);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px">
             <div sc-camel-on-click="{{ stopClick }}" role="dialog" aria-modal="true" aria-label="{{ paTitle }}" style="background:oklch(1 0 0);border-radius:18px;max-width:340px;width:100%;padding:20px">
@@ -4443,6 +4453,7 @@ class Component extends DCLogic {
         else if (st.locAsk) this.setState({ locAsk: false });
         else if (st.pcOpen) this.setState({ pcOpen: false, pcInput: '', pcError: false });
         else if (st.courseModal) this.setState({ courseModal: null });
+        else if (st.delAsk) this.setState({ delAsk: null });
         else if (st.placeAsk) this.setState({ placeAsk: null });
         else if (st.ttEdit) this.setState({ ttEdit: false });
         else if (st.gymModal) this.closeGymModal();
@@ -4454,7 +4465,7 @@ class Component extends DCLogic {
       if ((e.key === 'Enter' || e.key === ' ') && el && el.getAttribute && el.getAttribute('role') === 'button' && el.tagName !== 'BUTTON') { e.preventDefault(); el.click(); return; }
       // keep Tab inside an open modal dialog
       if (e.key === 'Tab') {
-        const d = document.querySelector('[role="dialog"][aria-modal="true"]');
+        const d = document.querySelector('[role="dialog"][aria-modal="true"], [role="alertdialog"][aria-modal="true"]');
         if (!d) return;
         const f = d.querySelectorAll('a[href],button:not([disabled]),input:not([type="hidden"]),select,textarea,[tabindex="0"]');
         if (!f.length) return;
@@ -5683,8 +5694,11 @@ class Component extends DCLogic {
             color: c.color ? c.color.text : '#fff',
             name: c.name, where: where, professor: c.professor || '', hasProfessor: !!c.professor,
             aria: c.name + (where ? ', ' + where : '') + (ttEdit ? (isKo ? ' — 편집' : ' — edit') : ''),
-            outline: ttEdit ? '1.5px dashed ' + (c.color ? c.color.text : '#fff') : 'none',
-            namePad: ttEdit ? '12px' : '0',
+            // iOS-style wiggle while editing; staggered so blocks don't move in lockstep
+            anim: ttEdit ? 'ttJiggle 0.32s ease-in-out ' + (-((days.indexOf(d) + blocks.length) % 3) * 0.11).toFixed(2) + 's infinite' : 'none',
+            namePad: ttEdit ? '16px' : '0',
+            delLabel: (isKo ? '삭제: ' : 'Delete ') + c.name,
+            onDelete: e => { e.stopPropagation(); this.setState({ delAsk: { key: c.key, name: c.name } }); },
             onClick: () => {
               if (this.state.ttEdit) { this.openCourseModal(c.key); return; }
               this.setState({ placeAsk: { courseKey: c.key, name: c.name, bldgId: bObj ? bObj.id : null, room: sess.room || '' } });
@@ -5789,11 +5803,20 @@ class Component extends DCLogic {
       ttGuideOpen: !!s.ttGuideOpen,
       ttEdit: ttEdit,
       ttEditLabel: ttEdit ? (isKo ? '편집 끝내기' : 'Done editing') : (isKo ? '시간표 편집' : 'Edit timetable'),
-      ttEditHint: isKo ? '편집 중이에요. 수업을 눌러 수정하세요.' : 'Editing. Tap a class to change it.',
-      ttEditDone: isKo ? '완료' : 'Done',
-      // same blue as Add; darker with an inner ring while edit mode is on
+      delAsk: !!s.delAsk,
+      delTitle: isKo ? '과목을 삭제할까요?' : 'Delete subject?',
+      delBody: s.delAsk ? (isKo ? s.delAsk.name + '의 모든 시간과 장소가 시간표에서 지워집니다. 되돌릴 수 없어요.' : s.delAsk.name + ' and all its times and places will be removed from your timetable. This can\'t be undone.') : '',
+      delCancel: isKo ? '취소' : 'Cancel', delGo: isKo ? '삭제' : 'Delete',
+      closeDelAsk: () => this.setState({ delAsk: null }),
+      confirmDelAsk: () => {
+        const key = s.delAsk && s.delAsk.key;
+        const left = this.state.courses.filter(c => c.key !== key);
+        // nothing left to edit -> leave edit mode too
+        this.persist({ courses: left, delAsk: null, ttEdit: left.length > 0 && this.state.ttEdit });
+      },
+      // same blue as Add; darker with a white outline while edit mode is on
       ttEditBtnStyle: 'flex:none;width:36px;height:36px;border-radius:9999px;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .15s, box-shadow .15s;background:' +
-        (ttEdit ? 'oklch(0.3 0.12 258);box-shadow:inset 0 0 0 2px oklch(1 0 0 / 0.35), 0 0 0 3px oklch(0.44 0.14 258 / 0.25)' : 'oklch(0.44 0.14 258)'),
+        (ttEdit ? 'oklch(0.3 0.12 258);box-shadow:inset 0 0 0 2px oklch(1 0 0)' : 'oklch(0.44 0.14 258)'),
       toggleTtEdit: () => this.setState({ ttEdit: !this.state.ttEdit }),
       placeAsk: !!s.placeAsk,
       ...(() => {
