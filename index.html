@@ -1854,7 +1854,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <div ref="{{ mapRef }}" style="position:absolute;inset:0;background:oklch(0.955 0.012 145)"></div>
             <div style="position:absolute;right:12px;bottom:{{ rotCtlBottom }};z-index:640;display:flex;flex-direction:column;gap:8px;transition:bottom .2s ease">
               <!-- needle always points north (turns with the map); tap to face north again -->
-              <button type="button" sc-camel-on-click="{{ resetMapBearing }}" aria-label="{{ compassLabel }}" title="{{ compassLabel }}" class="mapfab"><svg ref="{{ compassRef }}" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:rotate(-45deg);transition:transform .08s linear"><circle cx="12" cy="12" r="10"></circle><path d="M16.24 7.76 14.44 13.17 9.56 10.83Z" fill="oklch(0.55 0.2 25)" stroke="none"></path><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg></button>
+              <button type="button" sc-camel-on-click="{{ resetMapBearing }}" aria-label="{{ compassLabel }}" title="{{ compassLabel }}" class="mapfab"><svg ref="{{ compassRef }}" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M16.24 7.76 14.44 13.17 9.56 10.83Z" fill="oklch(0.55 0.2 25)" stroke="none"></path><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg></button>
               <button type="button" sc-camel-on-click="{{ centreOnMe }}" aria-label="{{ locateLabel }}" title="{{ locateLabel }}" class="mapfab" style="{{ locateStyle }}"><svg viewBox="0 -960 960 960" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M440-42v-80q-125-14-214.5-103.5T122-440H42v-80h80q14-125 103.5-214.5T440-838v-80h80v80q125 14 214.5 103.5T838-520h80v80h-80q-14 125-103.5 214.5T520-122v80h-80Zm238-240q82-82 82-198t-82-198q-82-82-198-82t-198 82q-82 82-82 198t82 198q82 82 198 82t198-82Zm-311-85q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm169.5-56.5Q560-447 560-480t-23.5-56.5Q513-560 480-560t-56.5 23.5Q400-513 400-480t23.5 56.5Q447-400 480-400t56.5-23.5ZM480-480Z"></path></svg></button>
             </div>
           </sc-if>
@@ -4243,8 +4243,20 @@ class Component extends DCLogic {
 
   resetMapBearing() { this.animateBearing(0); }
 
+  // Needle angle follows the bearing with no CSS transition (rotate events
+  // already arrive every frame; a transition lagged and, when the bearing
+  // wrapped 359 -> 0, animated the long way round). The angle is unwrapped so
+  // it always moves the short way, and writes are coalesced to one per frame.
   syncCompass() {
-    if (this.compassNode && this.map && this.map.getBearing) this.compassNode.style.transform = 'rotate(' + (this.map.getBearing() - 45) + 'deg)';
+    if (this._compassRaf) return;
+    this._compassRaf = window.requestAnimationFrame(() => {
+      this._compassRaf = 0;
+      if (!this.compassNode || !this.map || !this.map.getBearing) return;
+      const target = this.map.getBearing() - 45;
+      const prev = this._compassDeg == null ? target : this._compassDeg;
+      this._compassDeg = prev + ((((target - prev) % 360) + 540) % 360) - 180;
+      this.compassNode.style.transform = 'rotate(' + this._compassDeg + 'deg)';
+    });
   }
 
   // Centre on the device location; asks for it first if needed (watchGps
@@ -6518,7 +6530,7 @@ class Component extends DCLogic {
       photoAlt: sel && sel.photo ? 'Photo of ' + selN.primary : undefined,
 
       resetMapBearing: () => this.resetMapBearing(),
-      compassRef: node => { this.compassNode = node; this.syncCompass(); },
+      compassRef: node => { this.compassNode = node; this._compassDeg = null; if (node) node.style.transform = 'rotate(' + ((this.map && this.map.getBearing ? this.map.getBearing() : 0) - 45) + 'deg)'; },
       compassLabel: s.primary === 'ko' ? '북쪽으로 맞추기' : 'Face north',
       centreOnMe: () => this.centreOnMe(),
       locateLabel: s.primary === 'ko' ? '내 위치로 이동' : 'Show my location',
