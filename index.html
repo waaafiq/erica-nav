@@ -1699,6 +1699,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   * { box-sizing: border-box; }
   /* map tags fade in when they appear or swap between full tag and number circle */
   .erica-lbl { animation: ericaLblIn .16s ease-out; }
+  /* the class building field is sized to its number; Chrome's datalist arrow would eat that width */
+  .bnum::-webkit-calendar-picker-indicator { display: none !important; }
   @keyframes ericaLblIn { from { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .erica-lbl { animation: none; } }
   a { color: oklch(0.44 0.14 258); text-decoration: none; }
@@ -2082,7 +2084,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <input value="{{ modalProfessor }}" sc-camel-on-change="{{ onModalProfessor }}" placeholder="e.g. Prof. Kim / Café" style="padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
               </label>
 
-              <p style="margin:0 0 12px;font-size:11px;color:oklch(0.45 0.02 250)">{{ lg.deviceOnly }}</p>
               <div style="font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:6px">Times and Places</div>
               <sc-for list="{{ modalSessions }}" as="sess" hint-placeholder-count="1">
                 <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
@@ -2100,7 +2101,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   </div>
                   <div style="display:flex;gap:8px">
                     <label style="{{ sess.bldgStyle }}">
-                      <input aria-label="Building number" list="bldg-list" autocomplete="off" value="{{ sess.bldgText }}" sc-camel-on-change="{{ sess.onBldgText }}" sc-camel-on-blur="{{ sess.onBldgBlur }}" placeholder="Building" style="{{ sess.bldgInputStyle }}">
+                      <input class="bnum" aria-label="Building number" list="bldg-list" autocomplete="off" value="{{ sess.bldgText }}" sc-camel-on-change="{{ sess.onBldgText }}" sc-camel-on-blur="{{ sess.onBldgBlur }}" placeholder="Building" style="{{ sess.bldgInputStyle }}">
                       <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:oklch(0.5 0.02 250)">{{ sess.bldgName }}</span>
                     </label>
                     <datalist id="bldg-list">
@@ -2348,9 +2349,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <h2 style="margin:0;padding:2px 2px 0;font-size:18px;letter-spacing:-0.01em">{{ lg.aboutTitle }}</h2>
           <div style="background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:13px">
             <p style="margin:0;font-weight:700">{{ lg.hello }} <em lang="ms">Apa khabar?</em></p>
-            <p style="margin:0;max-width:62ch"><sc-for list="{{ aboutP1 }}" as="x" hint-placeholder-count="3"><sc-if value="{{ x.em }}" hint-placeholder-val="{{ false }}"><em>{{ x.t }}</em></sc-if><sc-if value="{{ x.plain }}" hint-placeholder-val="{{ true }}">{{ x.t }}</sc-if></sc-for></p>
-            <p style="margin:0;max-width:62ch"><sc-for list="{{ aboutP2 }}" as="x" hint-placeholder-count="3"><sc-if value="{{ x.em }}" hint-placeholder-val="{{ false }}"><em>{{ x.t }}</em></sc-if><sc-if value="{{ x.plain }}" hint-placeholder-val="{{ true }}">{{ x.t }}</sc-if></sc-for></p>
-            <p style="margin:0;max-width:62ch"><sc-for list="{{ aboutP3 }}" as="x" hint-placeholder-count="3"><sc-if value="{{ x.em }}" hint-placeholder-val="{{ false }}"><em>{{ x.t }}</em></sc-if><sc-if value="{{ x.plain }}" hint-placeholder-val="{{ true }}">{{ x.t }}</sc-if></sc-for></p>
+            <p style="margin:0;max-width:62ch"><sc-for list="{{ aboutP1 }}" as="x" hint-placeholder-count="3"><sc-if value="{{ x.em }}" hint-placeholder-val="{{ false }}"><strong style="font-weight:700">{{ x.t }}</strong></sc-if><sc-if value="{{ x.plain }}" hint-placeholder-val="{{ true }}">{{ x.t }}</sc-if></sc-for></p>
+            <p style="margin:0;max-width:62ch"><sc-for list="{{ aboutP2 }}" as="x" hint-placeholder-count="3"><sc-if value="{{ x.em }}" hint-placeholder-val="{{ false }}"><strong style="font-weight:700">{{ x.t }}</strong></sc-if><sc-if value="{{ x.plain }}" hint-placeholder-val="{{ true }}">{{ x.t }}</sc-if></sc-for></p>
+            <p style="margin:0;max-width:62ch"><sc-for list="{{ aboutP3 }}" as="x" hint-placeholder-count="3"><sc-if value="{{ x.em }}" hint-placeholder-val="{{ false }}"><strong style="font-weight:700">{{ x.t }}</strong></sc-if><sc-if value="{{ x.plain }}" hint-placeholder-val="{{ true }}">{{ x.t }}</sc-if></sc-for></p>
           </div>
           <button type="button" sc-camel-on-click="{{ openFb }}" style="width:100%;min-height:40px;display:flex;align-items:center;justify-content:center;padding:0 14px;border-radius:9999px;font-weight:600;font-size:13px;text-decoration:none;cursor:pointer;background:oklch(1 0 0);border:1px solid oklch(0.85 0.014 250);color:oklch(0.35 0.02 250)">{{ lg.fbBtn }}</button>
           <div style="display:flex;gap:8px">
@@ -2677,7 +2678,6 @@ const LG_EN = { aboutTitle: 'About ERICA Nav', hello: 'Hello!', close: 'Close', 
   eraseConfirm: 'Delete your saved places, timetable and settings from this device? This cannot be undone.',
   locTitle: 'Use your location?', locAllow: 'Allow location', locDeny: 'Not now', locStop: 'Stop sharing location',
   locBody: 'ERICA Nav uses your device location only to show where you are on the map. It is not stored or sent to us. If you choose "My current position" as a route start, those coordinates are sent to the public OSRM routing server to draw the route. You can stop at any time.',
-  deviceOnly: 'Saved on this device only. It is not sent anywhere.',
   unofficialTimes: 'Unofficial: confirm with the university\'s shuttle notice.' };
 const LG_KO = { aboutTitle: 'ERICA Nav 정보', hello: '안녕하세요!', close: '닫기', privacy: '개인정보처리방침', terms: '이용약관',
   unofficial: 'ERICA Nav는 개인이 만든 비공식 캠퍼스 지도 서비스이며, 한양대학교와 제휴·후원·운영 관계가 없습니다.',
@@ -2687,7 +2687,6 @@ const LG_KO = { aboutTitle: 'ERICA Nav 정보', hello: '안녕하세요!', close
   eraseConfirm: '저장한 장소, 시간표, 설정을 이 기기에서 삭제할까요? 되돌릴 수 없습니다.',
   locTitle: '위치 정보를 사용할까요?', locAllow: '위치 사용 허용', locDeny: '나중에', locStop: '위치 공유 중지',
   locBody: 'ERICA Nav는 지도에 내 위치를 표시하기 위해서만 기기 위치를 사용하며, 저장하거나 운영자에게 전송하지 않습니다. 경로 출발지로 "내 현재 위치"를 선택하면 경로를 그리기 위해 해당 좌표가 공개 OSRM 경로 서버로 전송됩니다. 언제든 중지할 수 있습니다.',
-  deviceOnly: '이 기기에만 저장되며 어디로도 전송되지 않습니다.',
   unofficialTimes: '비공식 정보이니 학교 셔틀 공지를 함께 확인하세요.' };
 const BBOX = '37.286539,126.821644,37.309061,126.849956';
 const OVERPASS = ['https://overpass.kumi.systems/api/interpreter', 'https://overpass-api.de/api/interpreter', 'https://overpass.osm.ch/api/interpreter'];
@@ -2711,17 +2710,17 @@ Object.assign(LG_KO, {
   fbErrLimit: '최근 여러 번 보내셨습니다. 1시간 뒤에 다시 시도해 주세요.',
   fbEmailInstead: '이메일로 보내기 (이메일 주소가 공개됩니다).', fbDiscard: '작성한 내용을 버릴까요?'
 });
-// *asterisks* mark the phrases shown in italics on the About tab
+// *asterisks* mark the phrases shown in bold on the About tab
 const md = str => str.split('*').map((t, i) => ({ t: t, em: i % 2 === 1, plain: i % 2 === 0 })).filter(p => p.t);
 Object.assign(LG_EN, {
   unofficial: 'ERICA Nav is an independent, *unofficial* campus map. It is *not affiliated with, endorsed by or operated by Hanyang University.*',
   accuracy: 'Building positions, shuttle times and term dates *may be out of date or wrong*. Check official university notices before relying on them, and be mindful of where you are walking.',
-  dataNote: 'Your saved places and timetable stay in this browser on your device; *nothing is sent to us*. Directions are calculated by a public routing server (OSRM), which receives the start and end points.'
+  dataNote: '*Your saved places and timetable stay in this browser on your device*; *nothing is sent to us*. Directions are calculated by a public routing server (OSRM), which receives the start and end points.'
 });
 Object.assign(LG_KO, {
   unofficial: 'ERICA Nav는 개인이 만든 *비공식* 캠퍼스 지도 서비스이며, *한양대학교와 제휴·후원·운영 관계가 없습니다.*',
   accuracy: '건물 위치, 셔틀 시간, 학기 일정은 *최신이 아니거나 틀릴 수 있습니다.* 이용 전 학교 공식 공지를 확인하시고, 걸을 때는 주변을 살펴 주세요.',
-  dataNote: '저장한 장소와 시간표는 이 기기의 브라우저에만 저장되며 *운영자에게 전송되지 않습니다.* 길찾기는 공개 경로 서버(OSRM)가 계산하며, 출발지와 도착지 좌표가 전달됩니다.'
+  dataNote: '*저장한 장소와 시간표는 이 기기의 브라우저에만 저장되며* *운영자에게 전송되지 않습니다.* 길찾기는 공개 경로 서버(OSRM)가 계산하며, 출발지와 도착지 좌표가 전달됩니다.'
 });
 const LAYOUT = [
   { id: 1, x: 14, y: 12, w: 14, h: 10 }, { id: 2, x: 30, y: 12, w: 12, h: 10 },
@@ -4657,9 +4656,9 @@ class Component extends DCLogic {
         (n.labelled ? '<span style="font-size:11px;font-weight:600;color:' + fg + '">' + n.primary + '</span>' : '') + '</div></div>';
   }
 
-  textW(t) {
+  textW(t, font) {
     const ctx = this._measureCtx || (this._measureCtx = document.createElement('canvas').getContext('2d'));
-    ctx.font = "600 11px 'Google Sans Flex', sans-serif";
+    ctx.font = font || "600 11px 'Google Sans Flex', sans-serif";
     return ctx.measureText(t).width;
   }
 
@@ -5716,6 +5715,8 @@ class Component extends DCLogic {
       const st = splitTime(sess.start, '09', '00'), et = splitTime(sess.end, '10', '00');
       const single = false;
       const bOpt = sess.bldg ? bldgOptions.find(o => o.value === String(sess.bldg)) : null;
+      // fields draw at 16px on iPhone (see the keyboard-zoom CSS rule), 13px elsewhere
+      const fieldFont = (CSS.supports('-webkit-touch-callout', 'none') && window.matchMedia('(pointer: coarse)').matches ? '16px' : '13px') + " 'Google Sans Flex', sans-serif";
       const bldgBad = !bOpt && !!(sess.bldgText || '').trim();
       return {
         day: sess.day, bldg: sess.bldg || '', room: sess.room || '',
@@ -5730,8 +5731,8 @@ class Component extends DCLogic {
         bldgText: sess.bldgText != null ? sess.bldgText : (bOpt ? bOpt.num : ''),
         bldgName: bOpt ? bOpt.name : '',
         bldgStyle: 'flex:1;min-width:0;display:flex;align-items:center;gap:6px;cursor:text;padding:9px 10px;border:1px solid ' + (bldgBad ? 'oklch(0.6 0.2 25)' : 'oklch(0.88 0.012 250)') + ';border-radius:10px;background:oklch(1 0 0)',
-        // em, not px, so the slot still fits "Building" when iOS draws fields at 16px
-        bldgInputStyle: 'flex:none;width:4.6em;min-width:0;padding:0;border:none;outline:none;background:transparent;font-size:13px;color:oklch(0.22 0.015 250)',
+        // sized to its own text so the name sits right after the number
+        bldgInputStyle: (bOpt ? 'flex:none;width:' + Math.ceil(this.textW(sess.bldgText != null ? sess.bldgText : bOpt.num, fieldFont) + 3) + 'px' : 'flex:1;width:100%') + ';min-width:0;padding:0;border:none;outline:none;background:transparent;font-size:13px;color:oklch(0.22 0.015 250)',
         onBldgText: e => { const v = e.target.value; this.updateSession(i, { bldgText: v, bldg: this.findBldgNum(v, bldgOptions) || '' }); },
         onBldgBlur: () => { if (sess.bldg || !(sess.bldgText || '').trim()) this.updateSession(i, { bldgText: null }); },
         onRoom: e => this.updateSession(i, { room: e.target.value }),
