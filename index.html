@@ -1701,6 +1701,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .erica-lbl { animation: ericaLblIn .16s ease-out; }
   /* the class building field is sized to its number; Chrome's datalist arrow would eat that width */
   .bnum::-webkit-calendar-picker-indicator { display: none !important; }
+  /* class/gym editor rows: every field the same height; iOS draws time inputs taller unless appearance is reset */
+  .sfld { height: 40px !important; box-sizing: border-box; }
+  input[type=time].sfld { -webkit-appearance: none; appearance: none; padding-top: 0 !important; padding-bottom: 0 !important; line-height: 38px; }
   @keyframes ericaLblIn { from { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .erica-lbl { animation: none; } }
   a { color: oklch(0.44 0.14 258); text-decoration: none; }
@@ -1958,14 +1961,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
             </div>
           </div>
 
-          <div style="margin-top:14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;overflow:hidden">
-            <div style="display:flex;border-bottom:1px solid oklch(0.91 0.01 250)">
+          <div style="margin-top:14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px">
+            <div style="display:flex;border-bottom:1px solid oklch(0.91 0.01 250);border-radius:13px 13px 0 0;overflow:hidden">
               <div style="flex:none;width:38px"></div>
               <sc-for list="{{ dayList }}" as="d" hint-placeholder-count="5">
                 <div style="{{ d.headerStyle }}">{{ d.label }}</div>
               </sc-for>
             </div>
-            <div style="position:relative;height:{{ gridHeight }}px">
+            <!-- clips to the card's rounded corners, except in edit mode so the delete badges can sit on block corners -->
+            <div style="position:relative;height:{{ gridHeight }}px;border-radius:0 0 13px 13px;overflow:{{ gridOverflow }}">
               <sc-for list="{{ gridLines }}" as="h" hint-placeholder-count="10">
                 <div style="position:absolute;left:-1px;right:0;top:{{ h.top }}px;border-top:1px solid oklch(0.94 0.008 250);pointer-events:none"></div>
               </sc-for>
@@ -1979,17 +1983,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <sc-for list="{{ dayList }}" as="d" hint-placeholder-count="5">
                   <div style="{{ d.colStyle }}">
                     <sc-for list="{{ d.blocks }}" as="blk" hint-placeholder-count="0">
-                      <div sc-camel-on-click="{{ blk.onClick }}" role="button" sc-camel-tab-index="0" aria-label="{{ blk.aria }}" style="position:absolute;left:-1px;right:0;top:{{ blk.top }}px;height:{{ blk.height }}px;background:{{ blk.bg }};color:{{ blk.color }};animation:{{ blk.anim }};border-radius:9px;padding:5px 6px;font-size:11px;line-height:1.25;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px oklch(0 0 0 / 0.1)">
+                      <div sc-camel-on-click="{{ blk.onClick }}" role="button" sc-camel-tab-index="0" aria-label="{{ blk.aria }}" style="position:absolute;left:-1px;right:0;top:{{ blk.top }}px;height:{{ blk.height }}px;background:{{ blk.bg }};color:{{ blk.color }};animation:{{ blk.anim }};z-index:{{ blk.z }};border-radius:9px;font-size:11px;line-height:1.25;cursor:pointer;box-shadow:0 1px 3px oklch(0 0 0 / 0.1)">
                         <sc-if value="{{ ttEdit }}" hint-placeholder-val="{{ false }}">
-                          <button type="button" sc-camel-on-click="{{ blk.onDelete }}" aria-label="{{ blk.delLabel }}" style="position:absolute;top:0;right:0;z-index:1;width:26px;height:26px;padding:0;border:none;background:transparent;cursor:pointer;display:flex;align-items:flex-start;justify-content:flex-end">
-                            <span style="margin:3px 3px 0 0;width:17px;height:17px;border-radius:9999px;background:oklch(0.22 0.02 250 / 0.75);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px oklch(0 0 0 / 0.25)"><svg viewBox="0 0 24 24" style="width:11px;height:11px" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></span>
+                          <!-- sits on the block's top-right corner, iOS-style; 32px tap area around a 20px badge -->
+                          <button type="button" sc-camel-on-click="{{ blk.onDelete }}" aria-label="{{ blk.delLabel }}" style="position:absolute;top:-16px;right:-16px;z-index:3;width:32px;height:32px;padding:0;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center">
+                            <span style="width:20px;height:20px;border-radius:9999px;background:oklch(0.25 0.02 250);border:1.5px solid oklch(1 0 0);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px oklch(0 0 0 / 0.3)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:12px;height:12px" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></span>
                           </button>
                         </sc-if>
+                        <div style="height:100%;overflow:hidden;border-radius:inherit;padding:5px 6px">
                         <div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:{{ blk.namePad }}">{{ blk.name }}</div>
                         <div style="opacity:0.88;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ blk.where }}</div>
                         <sc-if value="{{ blk.hasProfessor }}" hint-placeholder-val="{{ false }}">
                           <div style="opacity:0.78;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ blk.professor }}</div>
                         </sc-if>
+                        </div>
                       </div>
                     </sc-for>
                     <sc-if value="{{ gymMounted }}" hint-placeholder-val="{{ false }}">
@@ -2067,26 +2074,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
               </div>
 
               <label style="display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: oklch(0.5 0.02 250); margin-bottom: 12px">Subject Name*
-                <input value="{{ modalName }}" sc-camel-on-change="{{ onModalName }}" placeholder="e.g. Calculus 1" style="padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
+                <input class="sfld" value="{{ modalName }}" sc-camel-on-change="{{ onModalName }}" placeholder="e.g. Calculus 1" style="padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
               </label>
               <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:16px">Note 
-                <input value="{{ modalProfessor }}" sc-camel-on-change="{{ onModalProfessor }}" placeholder="e.g. Prof. Kim / Café" style="padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
+                <input class="sfld" value="{{ modalProfessor }}" sc-camel-on-change="{{ onModalProfessor }}" placeholder="e.g. Prof. Kim / Café" style="padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
               </label>
 
               <div style="font-size:11px;color:oklch(0.5 0.02 250);margin-bottom:6px">Times and Places</div>
               <sc-for list="{{ modalSessions }}" as="sess" hint-placeholder-count="1">
                 <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
                   <div style="display:flex;gap:8px">
-                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <sc-raw-select class="sfld" aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:0 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                       <option value="Mon">Monday</option><option value="Tue">Tuesday</option><option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option><option value="Fri">Friday</option><option value="Sat">Saturday</option><option value="Sun">Sunday</option>
                     </sc-raw-select>
-                    <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" disabled="{{ sess.binDisabled }}" style="flex:none;width:30px;height:30px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);opacity:{{ sess.binOpacity }};cursor:{{ sess.binCursor }}">🗑</button>
+                    <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" disabled="{{ sess.binDisabled }}" class="sfld" style="flex:none;width:40px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);opacity:{{ sess.binOpacity }};cursor:{{ sess.binCursor }}">🗑</button>
                   </div>
-                  <div style="display:flex;gap:8px;align-items:center">
-                    <input type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
-                    <span style="color:oklch(0.5 0.02 250);font-size:13px">–</span>
-                    <input type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                  <div style="display:flex;gap:6px;align-items:center">
+                    <input class="sfld" type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:0 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <span style="flex:none;color:oklch(0.5 0.02 250);font-size:13px">–</span>
+                    <input class="sfld" type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:0 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <input class="sfld" aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:72px;padding:0 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                   <div style="display:flex;gap:8px">
                     <label style="{{ sess.bldgStyle }}">
@@ -2098,7 +2106,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
                         <option value="{{ o.num }}">{{ o.name }}</option>
                       </sc-for>
                     </datalist>
-                    <input aria-label="Room" value="{{ sess.room }}" sc-camel-on-change="{{ sess.onRoom }}" placeholder="Room" style="flex:none;width:84px;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                 </div>
               </sc-for>
@@ -2139,16 +2146,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <sc-for list="{{ gymModalSessions }}" as="sess" hint-placeholder-count="1">
                 <div style="border:1px solid oklch(0.9 0.012 250);border-radius:13px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">
                   <div style="display:flex;gap:8px">
-                    <sc-raw-select aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <sc-raw-select class="sfld" aria-label="Day of week" value="{{ sess.day }}" sc-camel-on-change="{{ sess.onDay }}" style="flex:1;padding:0 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                       <option value="Mon">Monday</option><option value="Tue">Tuesday</option><option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option><option value="Fri">Friday</option><option value="Sat">Saturday</option><option value="Sun">Sunday</option>
                     </sc-raw-select>
-                    <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" style="flex:none;width:30px;height:30px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);cursor:pointer">🗑</button>
+                    <button sc-camel-on-click="{{ sess.onRemove }}" aria-label="Remove this time" class="sfld" style="flex:none;width:40px;border:1px solid oklch(0.9 0.012 250);background:oklch(0.98 0.004 250);border-radius:9px;color:oklch(0.5 0.02 250);cursor:pointer">🗑</button>
                   </div>
-                  <div style="display:flex;gap:8px;align-items:center">
-                    <input type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
-                    <span style="color:oklch(0.5 0.02 250);font-size:13px">–</span>
-                    <input type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:9px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                  <div style="display:flex;gap:6px;align-items:center">
+                    <input class="sfld" type="time" step="300" aria-label="Start time" value="{{ sess.start }}" sc-camel-on-change="{{ sess.onStart }}" style="flex:1;min-width:0;padding:0 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
+                    <span style="flex:none;color:oklch(0.5 0.02 250);font-size:13px">–</span>
+                    <input class="sfld" type="time" step="300" aria-label="End time" value="{{ sess.end }}" sc-camel-on-change="{{ sess.onEnd }}" style="flex:1;min-width:0;padding:0 8px;border:1px solid oklch(0.88 0.012 250);border-radius:10px;background:oklch(1 0 0);font-size:13px;color:oklch(0.22 0.015 250)">
                   </div>
                 </div>
               </sc-for>
@@ -3953,13 +3960,22 @@ class Component extends DCLogic {
     // The furthest you can zoom out is the campus buildings filling the
     // screen (under the search bar and filter chips), not the whole 3 km
     // box. _boxZoom stays the 3 km fit: label thresholds are tuned to it.
+    // Not map.getBoundsZoom(): it clamps to the current minZoom, so once the
+    // min was raised to the campus fit, the next resize (iOS browser bars
+    // showing/hiding) read the 3 km zoom back as the campus zoom and pushed
+    // every label threshold up a level. This is also unaffected by bearing.
+    const fitZoom = (bounds, padX, padY) => {
+      const size = this.map.getSize(), b = window.L.latLngBounds(bounds);
+      const nw = this.map.project(b.getNorthWest(), 0), se = this.map.project(b.getSouthEast(), 0);
+      return Math.log2(Math.min((size.x - padX) / (se.x - nw.x), (size.y - padY) / (se.y - nw.y)));
+    };
     this._updateMinZoom = () => {
       if (!this.map) return;
-      const box = this.map.getBoundsZoom(MAP_BOX_BOUNDS, false);
+      const box = fitZoom(MAP_BOX_BOUNDS, 0, 0);
       if (!isFinite(box)) return;
       this._boxZoom = box;
       const cb = this.campusBounds();
-      const campus = cb ? this.map.getBoundsZoom(cb, false, window.L.point(CAMPUS_PAD.l + CAMPUS_PAD.r, CAMPUS_PAD.t + CAMPUS_PAD.b)) : box;
+      const campus = cb ? fitZoom(cb, CAMPUS_PAD.l + CAMPUS_PAD.r, CAMPUS_PAD.t + CAMPUS_PAD.b) : box;
       this.map.setMinZoom(Math.max(box, isFinite(campus) ? campus : box));
     };
     this._updateMinZoom();
@@ -5305,9 +5321,9 @@ class Component extends DCLogic {
   }
 
   // Opens 1.5 zoom levels out (the neighbouring buildings, not the whole
-  // campus) with the building in frame, holds a
-  // beat so the surroundings register, then glides in. Touching the map
-  // during the hold cancels the glide.
+  // campus) with the building in frame, holds a beat so the surroundings
+  // register, then glides in with an ease-in-out. Touching the map during
+  // the hold or the glide stops it where it is.
   applyFocus() {
     const b = this.byId(this._focusId), L = window.L, map = this.map;
     if (!map || !L || !b) return;
@@ -5320,12 +5336,37 @@ class Component extends DCLogic {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { map.fitBounds(target, Object.assign({ maxZoom: closeZ, animate: false }, pad)); return; }
     map.fitBounds(target, Object.assign({ maxZoom: Math.max(map.getMinZoom() + 0.5, closeZ - 1.5), animate: false }, pad));
     window.clearTimeout(this._glimpseTimer);
-    const cancel = () => { window.clearTimeout(this._glimpseTimer); this.mapNode && this.mapNode.removeEventListener('pointerdown', cancel); this.mapNode && this.mapNode.removeEventListener('wheel', cancel); };
-    if (this.mapNode) { this.mapNode.addEventListener('pointerdown', cancel); this.mapNode.addEventListener('wheel', cancel); }
+    window.cancelAnimationFrame(this._glideRaf);
+    let gliding = false;
+    const node = this.mapNode;
+    const cancel = () => {
+      window.clearTimeout(this._glimpseTimer);
+      window.cancelAnimationFrame(this._glideRaf);
+      if (gliding) { gliding = false; map._moveEnd(true); }
+      if (node) { node.removeEventListener('pointerdown', cancel); node.removeEventListener('wheel', cancel); }
+    };
+    if (node) { node.addEventListener('pointerdown', cancel); node.addEventListener('wheel', cancel); }
     this._glimpseTimer = window.setTimeout(() => {
-      cancel();
-      if (this.map === map) map.flyToBounds(target, Object.assign({ maxZoom: closeZ, duration: 1.2 }, pad));
-    }, 650);
+      if (this.map !== map) return;
+      // Leaflet's flyTo always arcs out before coming in, which reads as a
+      // wobble over a 1.5-level hop. Ease zoom and centre together instead,
+      // through the same lightweight _move() a pinch uses (no full redraw
+      // per frame); the 'move' handler keeps the SVG shapes in step.
+      const end = map._getBoundsCenterZoom(target, Object.assign({ maxZoom: closeZ }, pad));
+      const z0 = map.getZoom(), p0 = map.project(map.getCenter(), 0), p1 = map.project(end.center, 0);
+      const t0 = performance.now(), dur = 1100;
+      const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      gliding = true;
+      map._moveStart(true, false);
+      const step = now => {
+        if (!gliding || this.map !== map) return;
+        const t = Math.min(1, (now - t0) / dur), e = ease(t);
+        map._move(map.unproject(p0.add(p1.subtract(p0).multiplyBy(e)), 0), z0 + (end.zoom - z0) * e);
+        if (t < 1) this._glideRaf = window.requestAnimationFrame(step);
+        else cancel();
+      };
+      this._glideRaf = window.requestAnimationFrame(step);
+    }, 500);
   }
 
   openCourseModal(key) {
@@ -5739,7 +5780,9 @@ class Component extends DCLogic {
             aria: c.name + (where ? ', ' + where : '') + (ttEdit ? (isKo ? ' — 편집' : ' — edit') : ''),
             // iOS-style wiggle while editing; staggered so blocks don't move in lockstep
             anim: ttEdit ? 'ttJiggle 0.32s ease-in-out ' + (-((days.indexOf(d) + blocks.length) % 3) * 0.11).toFixed(2) + 's infinite' : 'none',
-            namePad: ttEdit ? '16px' : '0',
+            namePad: ttEdit ? '8px' : '0',
+            // editing: earlier days stack above later ones so each corner badge isn't covered by the next day's class
+            z: ttEdit ? String(10 - days.indexOf(d)) : 'auto',
             delLabel: (isKo ? '삭제: ' : 'Delete ') + c.name,
             onDelete: e => { e.stopPropagation(); this.setState({ delAsk: { key: c.key, name: c.name } }); },
             onClick: () => {
@@ -5787,7 +5830,7 @@ class Component extends DCLogic {
         // plain text, so backspace edits the number digit by digit.
         bldgText: sess.bldgText != null ? sess.bldgText : (bOpt ? bOpt.num : ''),
         bldgName: bOpt ? bOpt.name : '',
-        bldgStyle: 'flex:1;min-width:0;display:flex;align-items:center;gap:6px;cursor:text;padding:9px 10px;border:1px solid ' + (bldgBad ? 'oklch(0.6 0.2 25)' : 'oklch(0.88 0.012 250)') + ';border-radius:10px;background:oklch(1 0 0)',
+        bldgStyle: 'flex:1;min-width:0;display:flex;align-items:center;gap:6px;cursor:text;height:40px;box-sizing:border-box;padding:0 10px;border:1px solid ' + (bldgBad ? 'oklch(0.6 0.2 25)' : 'oklch(0.88 0.012 250)') + ';border-radius:10px;background:oklch(1 0 0)',
         // sized to its own text so the name sits right after the number
         bldgInputStyle: (bOpt ? 'flex:none;width:' + Math.ceil(this.textW(sess.bldgText != null ? sess.bldgText : bOpt.num, fieldFont) + 3) + 'px' : 'flex:1;width:100%') + ';min-width:0;padding:0;border:none;outline:none;background:transparent;font-size:13px;color:oklch(0.22 0.015 250)',
         onBldgText: e => { const v = e.target.value; this.updateSession(i, { bldgText: v, bldg: this.findBldgNum(v, bldgOptions) || '' }); },
@@ -5845,6 +5888,7 @@ class Component extends DCLogic {
       closeModal: () => this.setState({ courseModal: null }),
       ttGuideOpen: !!s.ttGuideOpen,
       ttEdit: ttEdit,
+      gridOverflow: ttEdit ? 'visible' : 'hidden',
       ttEditLabel: ttEdit ? (isKo ? '편집 끝내기' : 'Done editing') : (isKo ? '시간표 편집' : 'Edit timetable'),
       delAsk: !!s.delAsk,
       delTitle: isKo ? '과목을 삭제할까요?' : 'Delete subject?',
@@ -5857,9 +5901,9 @@ class Component extends DCLogic {
         // nothing left to edit -> leave edit mode too
         this.persist({ courses: left, delAsk: null, ttEdit: left.length > 0 && this.state.ttEdit });
       },
-      // same blue as Add; darker with a white outline while edit mode is on
+      // same blue as Add; darker while edit mode is on
       ttEditBtnStyle: 'flex:none;width:36px;height:36px;border-radius:9999px;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .15s, box-shadow .15s;background:' +
-        (ttEdit ? 'oklch(0.3 0.12 258);box-shadow:inset 0 0 0 2px oklch(1 0 0)' : 'oklch(0.44 0.14 258)'),
+        (ttEdit ? 'oklch(0.3 0.12 258)' : 'oklch(0.44 0.14 258)'),
       toggleTtEdit: () => this.setState({ ttEdit: !this.state.ttEdit }),
       placeAsk: !!s.placeAsk,
       ...(() => {
