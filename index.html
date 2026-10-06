@@ -1828,7 +1828,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div class="fieldbox" style="flex:1;display:flex;align-items:center;gap:8px;pointer-events:auto;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
             <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" sc-camel-on-focus="{{ openSearchPanel }}" sc-camel-on-click="{{ openSearchPanel }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0">
-            <button type="button" sc-camel-on-click="{{ openDirectionsBlank }}" aria-label="{{ navOpenLabel }}" title="{{ navOpenLabel }}" style="flex:none;width:32px;height:32px;margin:-6px -6px -6px 0;padding:0;border:none;border-radius:9999px;background:oklch(0.44 0.14 258);color:oklch(1 0 0);display:flex;align-items:center;justify-content:center;cursor:pointer"><svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M360-120v-567l-64 63-56-56 160-160 160 160-56 57-64-64v261q35-31 79-44.5t88-13.5q11 0 21 1t19 3l-63-64 56-56 160 160-160 160-56-56 63-64q-11-2-22-3.5t-22-1.5q-54 0-99.5 30.5T440-280v160h-80Z"></path></svg></button>
           </div>
         </div>
 
@@ -1921,7 +1920,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
               </div>
 
               <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">
-                <button type="button" sc-camel-on-click="{{ routeHere }}" class="btn btn-primary" style="flex:none;padding:0 18px 0 14px"><svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M360-120v-567l-64 63-56-56 160-160 160 160-56 57-64-64v261q35-31 79-44.5t88-13.5q11 0 21 1t19 3l-63-64 56-56 160 160-160 160-56-56 63-64q-11-2-22-3.5t-22-1.5q-54 0-99.5 30.5T440-280v160h-80Z"></path></svg>Directions</button>
+                <button type="button" sc-camel-on-click="{{ routeFrom }}" class="btn btn-secondary" style="flex:none">{{ routeFromLabel }}</button>
+                <button type="button" sc-camel-on-click="{{ routeHere }}" class="btn btn-primary" style="flex:none">{{ routeToLabel }}</button>
                 <button type="button" sc-camel-on-click="{{ toggleSave }}" class="btn" style="{{ saveBtnStyle }}">{{ saveLabel }}</button>
                 <sc-if value="{{ admin }}" hint-placeholder-val="{{ false }}">
                   <button sc-camel-on-click="{{ editSelected }}" style="padding:9px 14px;background:oklch(0.98 0.004 250);border:1px solid oklch(0.85 0.014 250);border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.35 0.02 250)">Edit building</button><button sc-camel-on-click="{{ deleteSelected }}" style="padding:9px 14px;background:oklch(0.97 0.03 25);border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.5 0.16 25)">Delete building</button>
@@ -4580,9 +4580,9 @@ class Component extends DCLogic {
   // Opens walking directions to `toKey` (or with an empty destination, which
   // goes straight to picking one), starting from your location when location
   // access was already granted, otherwise the Main Gate.
-  openDirections(toKey) {
+  openDirections(toKey, fromKey) {
     const s = this.state;
-    let from = s.gps || s.locOk ? 'me' : 'gate';
+    let from = fromKey || (s.gps || s.locOk ? 'me' : 'gate');
     if (from === toKey) from = 'gate';
     this.setState({ navOpen: true, routeStart: from, routeTo: toKey || '', routeTarget: this.keyBldg(toKey), selected: null,
       searchPanelOpen: false, navPick: toKey ? null : 'to', navQuery: '', realRoute: null, navStepsOpen: false }, () => {
@@ -5959,8 +5959,6 @@ class Component extends DCLogic {
     return {
       navOpen: !!s.navOpen, navClosed: !s.navOpen,
       showCard: !!s.selected && !s.navOpen,
-      openDirectionsBlank: () => this.openDirections(''),
-      navOpenLabel: ko ? '길찾기' : 'Directions',
       closeNav: () => this.closeNav(),
       navCloseLabel: ko ? '길찾기 닫기' : 'Close directions',
       swapNav: () => this.swapNav(),
@@ -6315,7 +6313,12 @@ class Component extends DCLogic {
 
     const listItem = b => {
       const n = this.names(b);
-      return { num: b.num, primary: n.primary, go: () => { this.select(b.id); this.setState({ searchPanelOpen: false }); } };
+      return { num: b.num, primary: n.primary, go: () => {
+        // directory ids (dir-123) aren't map ids; resolve the placed building by number
+        const m = this.byNum(b.num);
+        this.setState({ searchPanelOpen: false });
+        if (m) this.focusBuilding(m.id);
+      } };
     };
 
     const facActive = s.facFilter;
@@ -6562,6 +6565,9 @@ class Component extends DCLogic {
       selectedTags: sel ? (sel.tags || []).map(t => { const f = FACS.filter(x => x.id === t)[0]; return { label: f ? f.en + ' · ' + f.ko : t }; }) : [],
       noTags: !!(sel && (!sel.tags || !sel.tags.length)),
       routeHere: () => this.openDirections(String(s.selected)),
+      routeFrom: () => this.openDirections('', String(s.selected)),
+      routeToLabel: s.primary === 'ko' ? '도착' : 'To',
+      routeFromLabel: s.primary === 'ko' ? '출발' : 'From',
       toggleSave: () => {
         const has = s.saved.indexOf(s.selected) >= 0;
         this.persist({ saved: has ? s.saved.filter(i => i !== s.selected) : s.saved.concat([s.selected]) });
