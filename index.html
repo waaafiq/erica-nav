@@ -1825,7 +1825,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div style="position:absolute;top:0;left:0;right:0;z-index:20;pointer-events:none;padding:12px 14px 8px">
           <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex;gap:10px;align-items:center">
-          <div class="fieldbox" style="flex:1;display:flex;align-items:center;gap:8px;pointer-events:auto;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
+          <div class="fieldbox" style="flex:1;display:flex;align-items:center;gap:8px;pointer-events:auto;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:9999px;padding:9px 16px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
             <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" sc-camel-on-focus="{{ openSearchPanel }}" sc-camel-on-click="{{ openSearchPanel }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0">
           </div>
@@ -1885,12 +1885,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <sc-if value="{{ sheetHandle }}" hint-placeholder-val="{{ true }}">
                 <button type="button" aria-label="{{ sheetHandleLabel }}" aria-expanded="{{ sheetFull }}" sc-camel-on-pointer-down="{{ sheetDragStart }}" sc-camel-on-pointer-up="{{ sheetDragEnd }}" sc-camel-on-click="{{ sheetHandleKey }}" style="display:flex;justify-content:center;width:calc(100% + 32px);margin:-16px -16px 4px;padding:10px 0 8px;border:none;background:none;cursor:grab;touch-action:none"><span style="width:36px;height:4px;border-radius:9999px;background:oklch(0.82 0.01 250)"></span></button>
               </sc-if>
-              <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="display:flex;align-items:center;gap:12px">
                 <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:15px;color:oklch(1 0 0);background:oklch(0.44 0.14 258);padding:5px 9px;border-radius:8px;flex:none">{{ selected.num }}</span>
                 <div style="flex:1;min-width:0">
                   <div style="font-weight:700;font-size:15px;letter-spacing:-0.01em">{{ selected.primary }}</div>
                 </div>
-                <button type="button" sc-camel-on-click="{{ closeSheet }}" aria-label="Close building details" class="icon-close" style="margin:-6px -6px 0 0">×</button>
+                <button type="button" sc-camel-on-click="{{ closeSheet }}" aria-label="Close building details" class="icon-close" style="margin:-6px -6px -6px 0">×</button>
               </div>
 
               <sc-if value="{{ sheetPeek }}" hint-placeholder-val="{{ true }}">
@@ -1900,7 +1900,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     <span style="font-family:'Google Sans Flex',sans-serif;font-size:11px;color:oklch(0.5 0.02 250);text-align:center;padding:0 4px">building<br>photo</span>
                   </sc-if>
                 </div>
-                <div style="flex:1;min-width:0;display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-content:start">
+                <div style="flex:1;min-width:0;display:flex;gap:8px 28px;align-items:flex-start">
                   <div style="min-width:0">
                     <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250);margin-bottom:5px">Facilities</div>
                     <div style="display:flex;flex-wrap:wrap;gap:5px">
@@ -1941,7 +1941,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 </sc-if>
                 <button type="button" sc-camel-on-click="{{ toggleSave }}" aria-label="{{ saveLabel }}" aria-pressed="{{ isSaved }}" title="{{ saveLabel }}" style="{{ saveBtnStyle }}"><sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path></svg></sc-if><sc-if value="{{ notSaved }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path></svg></sc-if></button>
               </div>
-              <div style="display:grid;grid-template-columns:1fr auto;gap:8px 14px;margin-top:16px">
+              <div style="display:flex;gap:8px 28px;align-items:flex-start;margin-top:16px">
                 <div style="min-width:0">
                 <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250);margin-bottom:8px">Facilities</div>
                 <div style="display:flex;flex-direction:column;gap:8px">
@@ -2040,7 +2040,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <button sc-camel-on-click="{{ closeSearchPanel }}" aria-label="Close search" style="border:none;background:oklch(0.93 0.01 250);width:32px;height:32px;border-radius:9999px;cursor:pointer;font-size:13px;line-height:1;color:oklch(0.4 0.02 250)">✕</button>
           </div>
           <div style="flex:none;padding:0 16px 10px">
-            <div class="fieldbox" style="display:flex;align-items:center;gap:8px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:12px;padding:9px 12px">
+            <div class="fieldbox" style="display:flex;align-items:center;gap:8px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:9999px;padding:9px 16px">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
               <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0;font-size:13px">
             </div>
@@ -6585,7 +6585,7 @@ class Component extends DCLogic {
         boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)', padding: '16px', overflow: 'auto', animation: 'sheetUp 0.18s ease-out'
       }, s.isDesktop
         ? { right: '8px', top: '8px', bottom: '8px', width: '340px', maxWidth: 'calc(100% - 16px)' }
-        : { left: '8px', right: '8px', bottom: '8px', maxHeight: g ? '44%' : '85%' }),
+        : { left: '0', right: '0', bottom: '0', borderRadius: '16px 16px 0 0', borderBottom: 'none', maxHeight: g ? '44%' : '85%' }),
       // phones: a pull-up sheet that peeks with name + actions; drag or tap the handle for details.
       // Keyed to the building so a new pick always starts collapsed.
       sheetHandle: !s.isDesktop,
