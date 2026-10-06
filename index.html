@@ -3247,10 +3247,11 @@ const ROMAN_MAP = { I: '1', II: '2', III: '3', IV: '4', V: '5' };
 const romanToArabic = str => str.replace(/\b(IV|III|II|I|V)$/, m => ROMAN_MAP[m]);
 
 // Hidden from every list (search, pickers, saved, route start). Data stays in buildings.csv.
-// Facility tags every visitor sees, from the "facilities" column of
-// buildings.csv (filled in by loadBuildingsCsv). Admin tags otherwise live
-// only in that browser's localStorage; these are merged on every load.
-let CSV_TAGS = {};
+// Facility tags every visitor sees, from building_facilities.csv (filled in
+// by loadFacilityCsvs). Admin tags otherwise live only in that browser's
+// localStorage; these are merged on every load. CSV_FAC_INFO holds each
+// row's optional display name / subheading: CSV_FAC_INFO['401'].printing.
+let CSV_TAGS = {}, CSV_FAC_INFO = {};
 const HIDDEN_NUMS = new Set(['C01', 'C02', 'C03', 'C04', 'C05', 'C06']);
 const LISTED_DIRECTORY = BUILDING_DIRECTORY.filter(d => !HIDDEN_NUMS.has(d.num));
 const ZONES = [
@@ -4219,7 +4220,11 @@ class Component extends DCLogic {
       renderer._updateTransform(this.map.getCenter(), this.map.getZoom());
     });
     this.map.on('click', e => {
-      if (!this.state.placing) return;
+      // tapping empty map closes whatever building was open (building taps stop here first)
+      if (!this.state.placing) {
+        if (this.state.selected != null && !this.state.repositioning && !this.state.shapeEditor) this.setState({ selected: null });
+        return;
+      }
       const num = this.state.editId;
       const lat = Number(e.latlng.lat.toFixed(6)), lng = Number(e.latlng.lng.toFixed(6));
       const exists = this.state.buildings.some(b => b.num === num);
@@ -4405,7 +4410,7 @@ class Component extends DCLogic {
           this._polyMove = { num: this.state.editId, shapeId: b.shapeId || null, base: b.poly.map(p => p.slice()), start: [e.latlng.lat, e.latlng.lng], layer: poly };
         });
       } else if (clickable) {
-        poly.on('click', () => this.setState({ selected: b.id }));
+        poly.on('click', e => { window.L.DomEvent.stopPropagation(e); this.setState({ selected: b.id }); });
       }
     });
     customShapes.filter(c => layerOf(c) === 'top').forEach(drawCustomShape);
@@ -4442,7 +4447,7 @@ class Component extends DCLogic {
         icon: L.divIcon({ html: '', className: '', iconSize: null, iconAnchor: [0, 0] }),
         draggable: canDragMarker
       })
-        .on('click', () => this.setState({ selected: b.id }))
+        .on('click', e => { window.L.DomEvent.stopPropagation(e); this.setState({ selected: b.id }); })
         .addTo(this.markerLayer);
       this.labelMarkers.push({ b: b, marker: marker, mode: null });
       if (canDragMarker) {
@@ -4839,8 +4844,9 @@ class Component extends DCLogic {
   }
 
   // facilities.csv names the facility types (id,english_name,korean_name);
-  // buildings.csv's "facilities" column says which buildings have them,
-  // ;-separated ids or English names (e.g. "library;cafe" or "Library;Café").
+  // building_facilities.csv has one row per facility in a building:
+  // building,facility (id or English name),name,subheading,korean_name,korean_subheading
+  // -- name/subheading are optional overrides, e.g. a café's brand and "Floor 2".
   async loadFacilityCsvs() {
     try {
       (await this.fetchCsv('./facilities.csv')).forEach(r => {
@@ -4853,16 +4859,19 @@ class Component extends DCLogic {
       console.warn('[ERICA Nav] Could not load facilities.csv, using built-in names:', err && err.message ? err.message : err);
     }
     try {
-      const tags = {};
-      (await this.fetchCsv('./buildings.csv')).forEach(r => {
-        const ids = (r.facilities || '').split(';').map(v => v.trim().toLowerCase()).filter(Boolean)
-          .map(v => (FACS.find(f => f.id === v || f.en.toLowerCase() === v) || {}).id).filter(Boolean);
-        if (r.number && ids.length) tags[r.number] = ids;
+      const tags = {}, info = {};
+      (await this.fetchCsv('./building_facilities.csv')).forEach(r => {
+        const v = (r.facility || '').toLowerCase();
+        const f = FACS.find(x => x.id === v || x.en.toLowerCase() === v);
+        if (!r.building || !f) return;
+        (tags[r.building] = tags[r.building] || []).push(f.id);
+        (info[r.building] = info[r.building] || {})[f.id] = { en: r.name, sub: r.subheading, ko: r.korean_name, subKo: r.korean_subheading };
       });
       CSV_TAGS = tags;
+      CSV_FAC_INFO = info;
       this.mergeEstimatedShapes();
     } catch (err) {
-      console.warn('[ERICA Nav] Could not load buildings.csv facilities:', err && err.message ? err.message : err);
+      console.warn('[ERICA Nav] Could not load building_facilities.csv:', err && err.message ? err.message : err);
     }
     this.forceUpdate();
   }
@@ -5000,15 +5009,17 @@ class Component extends DCLogic {
     });
   }
 
-  // Bead labels: the number in a circle, then one overlapping circle per
-  // matched facility icon, then (zoomed in) a pill with the name, all reading
-  // as one outlined shape. Each piece is drawn twice -- full size in the
+  // Bead labels. Zoomed out: the number in a circle, then one overlapping
+  // circle per matched facility icon. Zoomed in: the facility circles first,
+  // then one pill with "number  name". All pieces read as one outlined shape. Each piece is drawn twice -- full size in the
   // outline colour, then inset by the border in the fill colour -- so the
   // overlaps merge into a single outline pinched at every join.
   labelGeom(b, compact, icons) {
-    const n = this.names(b), parts = [{ x: 0, w: LBL_D, kind: 'num' }];
-    (icons || []).forEach(t => parts.push({ x: parts.length * LBL_STEP, w: LBL_D, kind: 'icon', id: t }));
-    if (!compact && n.labelled) parts.push({ x: parts.length * LBL_STEP, w: Math.max(LBL_D, this.textW(n.primary) + 22), kind: 'name' });
+    const n = this.names(b), parts = [];
+    const add = (kind, w, id) => parts.push({ x: parts.length * LBL_STEP, w: w, kind: kind, id: id });
+    if (compact) add('num', LBL_D);
+    (icons || []).forEach(t => add('icon', LBL_D, t));
+    if (!compact) add('name', Math.max(LBL_D, this.textW(String(b.num)) + (n.labelled ? 8 + this.textW(n.primary) : 0) + 24));
     const last = parts[parts.length - 1];
     return { parts: parts, w: last.x + last.w, name: n.primary };
   }
@@ -5021,9 +5032,11 @@ class Component extends DCLogic {
     const font = "font-family:'Google Sans Flex',sans-serif;font-weight:600;white-space:nowrap;color:" + fg;
     const content = p => {
       if (p.kind === 'num') return '<span style="' + font + ';font-size:' + (compact ? 10 : 11) + 'px">' + b.num + '</span>';
-      if (p.kind === 'name') return '<span style="' + font + ';font-size:11px">' + g.name + '</span>';
+      if (p.kind === 'name') return '<span style="' + font + ';font-size:11px;display:flex;gap:8px"><span>' + b.num + '</span>' + (this.names(b).labelled ? '<span>' + g.name + '</span>' : '') + '</span>';
       const f = FACS.find(x => x.id === p.id);
-      return FAC_ICONS[p.id] ? FAC_ICONS[p.id].replace('<svg ', '<svg width="12" height="12" style="flex:none" ')
+      // on the selected (blue) label the icons go white
+      const svg = FAC_ICONS[p.id] && (pin ? FAC_ICONS[p.id].replace(/stroke="#[0-9a-fA-F]+"/, 'stroke="#fff"') : FAC_ICONS[p.id]);
+      return svg ? svg.replace('<svg ', '<svg width="12" height="12" style="flex:none" ')
         : '<span style="' + font + ';font-size:8px">' + (f ? f.en : p.id).slice(0, 3) + '</span>';
     };
     const pos = 'position:absolute;display:flex;align-items:center;justify-content:center;border-radius:' + D + 'px;';
@@ -6716,12 +6729,18 @@ class Component extends DCLogic {
       sheetHandle: !s.isDesktop,
       sheetRef: node => { this.sheetNode = node; },
       sheetPeek: !s.isDesktop && !(s.sheetFullFor != null && s.sheetFullFor === s.selected),
-      selectedFacs: sel ? FACS.filter(f => (sel.tags || []).indexOf(f.id) >= 0).map(f => ({
-        label: s.primary === 'ko' ? f.ko : f.en, sub: s.primary === 'ko' ? f.en : f.ko,
+      // display name / subheading come from building_facilities.csv when set; a renamed
+      // facility (e.g. a café's brand) falls back to its type as the subheading
+      selectedFacs: sel ? FACS.filter(f => (sel.tags || []).indexOf(f.id) >= 0).map(f => {
+        const ko = s.primary === 'ko', i = (CSV_FAC_INFO[sel.num] || {})[f.id] || {};
+        const name = ko ? (i.ko || i.en) : i.en, type = ko ? f.ko : f.en;
+        return {
+        label: name || type, sub: (ko ? (i.subKo || i.sub) : i.sub) || (name ? type : ''),
         isCafeteria: f.id === 'cafeteria', isCafe: f.id === 'cafe', isConvenience: f.id === 'convenience',
         isLibrary: f.id === 'library', isPrinting: f.id === 'printing', isRestrooms: f.id === 'restrooms',
         isAtm: f.id === 'atm', isGym: f.id === 'gym'
-      })) : [],
+        };
+      }) : [],
       sheetFull: s.isDesktop || (s.sheetFullFor != null && s.sheetFullFor === s.selected),
       sheetHandleLabel: s.sheetFullFor === s.selected ? 'Collapse building details' : 'Expand building details',
       sheetDragStart: e => { this._sheetY = e.clientY; },
