@@ -1822,7 +1822,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     <sc-if value="{{ onMap }}" hint-placeholder-val="{{ true }}">
       <section data-screen-label="Map" style="flex:1;min-height:0;display:flex;flex-direction:column;position:relative" ref="{{ screenRef }}">
-        <div style="position:absolute;top:0;left:0;right:0;z-index:20;pointer-events:none;padding:12px 14px 8px">
+        <div style="position:absolute;top:0;left:0;right:{{ mapOverlayRight }};z-index:20;pointer-events:none;padding:12px 14px 8px">
           <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex;gap:10px;align-items:center">
           <div class="fieldbox" style="flex:1;display:flex;align-items:center;gap:8px;pointer-events:auto;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:9999px;padding:9px 16px;box-shadow:0 1px 6px oklch(0.2 0.02 250 / 0.22)">
@@ -1881,7 +1881,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           </sc-if>
 
           <sc-if value="{{ showCard }}" hint-placeholder-val="{{ false }}">
-            <div style="{{ sheetStyle }}">
+            <div ref="{{ sheetRef }}" style="{{ sheetStyle }}">
               <sc-if value="{{ sheetHandle }}" hint-placeholder-val="{{ true }}">
                 <button type="button" aria-label="{{ sheetHandleLabel }}" aria-expanded="{{ sheetFull }}" sc-camel-on-pointer-down="{{ sheetDragStart }}" sc-camel-on-pointer-up="{{ sheetDragEnd }}" sc-camel-on-click="{{ sheetHandleKey }}" style="display:flex;justify-content:center;width:calc(100% + 32px);margin:-16px -16px 4px;padding:10px 0 8px;border:none;background:none;cursor:grab;touch-action:none"><span style="width:36px;height:4px;border-radius:9999px;background:oklch(0.82 0.01 250)"></span></button>
               </sc-if>
@@ -1900,7 +1900,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     <span style="font-family:'Google Sans Flex',sans-serif;font-size:11px;color:oklch(0.5 0.02 250);text-align:center;padding:0 4px">building<br>photo</span>
                   </sc-if>
                 </div>
-                <div style="flex:1;min-width:0;display:flex;gap:8px 28px;align-items:flex-start">
+                <div style="flex:1;min-width:0;display:flex;gap:8px 40px;align-items:flex-start">
                   <div style="min-width:0">
                     <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250);margin-bottom:5px">Facilities</div>
                     <div style="display:flex;flex-wrap:wrap;gap:5px">
@@ -1941,7 +1941,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 </sc-if>
                 <button type="button" sc-camel-on-click="{{ toggleSave }}" aria-label="{{ saveLabel }}" aria-pressed="{{ isSaved }}" title="{{ saveLabel }}" style="{{ saveBtnStyle }}"><sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path></svg></sc-if><sc-if value="{{ notSaved }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path></svg></sc-if></button>
               </div>
-              <div style="display:flex;gap:8px 28px;align-items:flex-start;margin-top:16px">
+              <div style="display:flex;gap:8px 40px;align-items:flex-start;margin-top:16px">
                 <div style="min-width:0">
                 <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250);margin-bottom:8px">Facilities</div>
                 <div style="display:flex;flex-direction:column;gap:8px">
@@ -3229,6 +3229,9 @@ const ROMAN_MAP = { I: '1', II: '2', III: '3', IV: '4', V: '5' };
 const romanToArabic = str => str.replace(/\b(IV|III|II|I|V)$/, m => ROMAN_MAP[m]);
 
 // Hidden from every list (search, pickers, saved, route start). Data stays in buildings.csv.
+// Facility tags every visitor sees. Admin tags otherwise live only in that
+// browser's localStorage; these are merged onto the building on every load.
+const DEFAULT_TAGS = { '401': ['library'] };
 const HIDDEN_NUMS = new Set(['C01', 'C02', 'C03', 'C04', 'C05', 'C06']);
 const LISTED_DIRECTORY = BUILDING_DIRECTORY.filter(d => !HIDDEN_NUMS.has(d.num));
 const ZONES = [
@@ -3990,7 +3993,12 @@ class Component extends DCLogic {
     const gone = this.state.deletedNums || [];
     const extra = Object.keys(ESTIMATED_REAL_SHAPES).filter(num => !this.state.buildings.some(b => b.num === num) && gone.indexOf(num) === -1);
     const stubs = NEEDS_MANUAL_PLACEMENT.filter(n => !this.state.buildings.some(b => b.num === n.num) && gone.indexOf(n.num) === -1);
-    if (!extra.length && !stubs.length) return;
+    const withTags = b => {
+      const want = (DEFAULT_TAGS[b.num] || []).filter(t => (b.tags || []).indexOf(t) < 0);
+      return want.length ? Object.assign({}, b, { tags: (b.tags || []).concat(want) }) : b;
+    };
+    const needTags = this.state.buildings.some(b => withTags(b) !== b);
+    if (!extra.length && !stubs.length && !needTags) return;
     const nextId = Math.max(0, ...this.state.buildings.map(b => b.id)) + 1;
     const added = extra.map((num, i) => {
       const est = ESTIMATED_REAL_SHAPES[num];
@@ -4011,7 +4019,7 @@ class Component extends DCLogic {
         lat: null, lng: null
       };
     });
-    this.persist({ buildings: this.state.buildings.concat(added, stubAdded) }, () => this.syncMap());
+    this.persist({ buildings: this.state.buildings.concat(added, stubAdded).map(withTags) }, () => this.syncMap());
   }
 
   exportJson() {
@@ -4645,6 +4653,8 @@ class Component extends DCLogic {
     const s = this.state;
     const prev = prevState || this.__prevState || {};
     this.__prevState = s;
+    // a different building always opens with its card collapsed
+    if (prev.selected !== s.selected && s.sheetFullFor != null) this.setState({ sheetFullFor: null });
     if (s.mapMode === 'real' && (prev.selected !== s.selected || prev.buildings !== s.buildings || prev.gps !== s.gps || prev.routeTarget !== s.routeTarget || prev.repositioning !== s.repositioning || prev.editId !== s.editId)) this.syncMap();
     if (s.navOpen && (prev.navOpen !== s.navOpen || prev.routeStart !== s.routeStart || prev.routeTo !== s.routeTo)) this.maybeRoute();
     else if (s.navOpen && s.gps && prev.gps !== s.gps && (s.routeStart === 'me' || s.routeTo === 'me') && (!this._routeMe || this.haversine(this._routeMe, s.gps) > 25)) this.maybeRoute();
@@ -4947,6 +4957,25 @@ class Component extends DCLogic {
   centerOf(b) { return { x: b.x + b.w / 2, y: b.y + b.h / 2 }; }
 
   select(id) { this.setState({ selected: id }); }
+
+  // Expand/collapse the phone building card, easing its height from the old
+  // size to the new one instead of letting the content swap make it jump.
+  setSheetFull(id) {
+    const el = this.sheetNode, h0 = el ? el.offsetHeight : 0;
+    this.setState({ sheetFullFor: id }, () => {
+      if (!el || !el.isConnected || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const h1 = el.offsetHeight;
+      if (h0 === h1) return;
+      el.style.transition = 'none';
+      el.style.height = h0 + 'px';
+      void el.offsetHeight;
+      el.style.transition = 'height 0.32s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      el.style.height = h1 + 'px';
+      const done = e => { if (e && e.target !== el) return; window.clearTimeout(t); el.removeEventListener('transitionend', done); el.style.transition = ''; el.style.height = ''; };
+      const t = window.setTimeout(done, 400);
+      el.addEventListener('transitionend', done);
+    });
+  }
 
   routeGeometry() {
     const t = this.byId(this.state.routeTarget);
@@ -5978,6 +6007,8 @@ class Component extends DCLogic {
     return {
       navOpen: !!s.navOpen, navClosed: !s.navOpen,
       showCard: !!s.selected && !s.navOpen,
+      // desktop: keep the search bar and chips clear of the building panel (340px + 8px inset)
+      mapOverlayRight: s.isDesktop && s.selected && !s.navOpen ? '348px' : '0',
       closeNav: () => this.closeNav(),
       navCloseLabel: ko ? '길찾기 닫기' : 'Close directions',
       swapNav: () => this.swapNav(),
@@ -6589,6 +6620,7 @@ class Component extends DCLogic {
       // phones: a pull-up sheet that peeks with name + actions; drag or tap the handle for details.
       // Keyed to the building so a new pick always starts collapsed.
       sheetHandle: !s.isDesktop,
+      sheetRef: node => { this.sheetNode = node; },
       sheetPeek: !s.isDesktop && !(s.sheetFullFor != null && s.sheetFullFor === s.selected),
       selectedFacs: sel ? FACS.filter(f => (sel.tags || []).indexOf(f.id) >= 0).map(f => ({
         label: s.primary === 'ko' ? f.ko : f.en, sub: s.primary === 'ko' ? f.en : f.ko,
@@ -6603,14 +6635,14 @@ class Component extends DCLogic {
         const dy = e.clientY - (this._sheetY == null ? e.clientY : this._sheetY), full = s.sheetFullFor === s.selected;
         this._sheetY = null;
         this._sheetDragged = true;
-        if (dy < -20 || (Math.abs(dy) <= 20 && !full)) this.setState({ sheetFullFor: s.selected });
+        if (dy < -20 || (Math.abs(dy) <= 20 && !full)) this.setSheetFull(s.selected);
         else if (dy > 20 && !full) this.setState({ selected: null });
-        else this.setState({ sheetFullFor: null });
+        else this.setSheetFull(null);
       },
       // keyboard (Enter/Space) arrives as a click with no pointer gesture before it
       sheetHandleKey: () => {
         if (this._sheetDragged) { this._sheetDragged = false; return; }
-        this.setState({ sheetFullFor: s.sheetFullFor === s.selected ? null : s.selected });
+        this.setSheetFull(s.sheetFullFor === s.selected ? null : s.selected);
       },
       selectedFloors: sel ? (sel.floors ? sel.floors + ' floors' : 'Not set') : '',
       noTags: !!(sel && (!sel.tags || !sel.tags.length)),
@@ -6655,7 +6687,12 @@ class Component extends DCLogic {
         isLibrary: f.id === 'library', isPrinting: f.id === 'printing', isRestrooms: f.id === 'restrooms',
         isAtm: f.id === 'atm', isGym: f.id === 'gym',
         pressed: facActive.indexOf(f.id) >= 0,
-        toggle: () => this.setState({ facFilter: facActive.indexOf(f.id) >= 0 ? facActive.filter(x => x !== f.id) : facActive.concat([f.id]) })
+        toggle: () => {
+          // a facility only one building has (Library -> 401) jumps straight to it
+          const hits = s.buildings.filter(b => (b.tags || []).indexOf(f.id) >= 0 && !HIDDEN_NUMS.has(b.num));
+          if (hits.length === 1) return this.focusBuilding(hits[0].id);
+          this.setState({ facFilter: facActive.indexOf(f.id) >= 0 ? facActive.filter(x => x !== f.id) : facActive.concat([f.id]) });
+        }
       })),
       savedTitle: s.primary === 'ko' ? '저장한 장소' : 'Saved places',
 
