@@ -1900,16 +1900,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     <span style="font-family:'Google Sans Flex',sans-serif;font-size:11px;color:oklch(0.5 0.02 250);text-align:center;padding:0 4px">building<br>photo</span>
                   </sc-if>
                 </div>
-                <div style="flex:1;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;align-content:start">
-                  <div>
-                    <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Floors</div>
-                    <div style="font-weight:600;font-size:13px">{{ selectedFloors }}</div>
-                  </div>
-                  <div>
-                    <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Entrance</div>
-                    <div style="font-weight:600;font-size:13px">{{ selectedEntrance }}</div>
-                  </div>
-                  <div style="grid-column:1 / -1">
+                <div style="flex:1;min-width:0;display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-content:start">
+                  <div style="min-width:0">
                     <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250);margin-bottom:5px">Facilities</div>
                     <div style="display:flex;flex-wrap:wrap;gap:5px">
                       <sc-for list="{{ selectedFacs }}" as="fb" hint-placeholder-count="2">
@@ -1919,6 +1911,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
                         <span style="font-size:11px;color:oklch(0.5 0.02 250)">None recorded yet</span>
                       </sc-if>
                     </div>
+                  </div>
+                  <div>
+                    <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Floors</div>
+                    <div style="font-weight:600;font-size:13px">{{ selectedFloors }}</div>
                   </div>
                 </div>
               </div>
@@ -1945,30 +1941,28 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 </sc-if>
                 <button type="button" sc-camel-on-click="{{ toggleSave }}" aria-label="{{ saveLabel }}" aria-pressed="{{ isSaved }}" title="{{ saveLabel }}" style="{{ saveBtnStyle }}"><sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path></svg></sc-if><sc-if value="{{ notSaved }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path></svg></sc-if></button>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin-top:16px">
+              <div style="display:grid;grid-template-columns:1fr auto;gap:8px 14px;margin-top:16px">
+                <div style="min-width:0">
+                <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250);margin-bottom:8px">Facilities</div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <sc-for list="{{ selectedFacs }}" as="fb" hint-placeholder-count="2">
+                    <div style="display:flex;align-items:center;gap:12px">
+                      <span style="flex:none;width:36px;height:36px;border-radius:9999px;background:oklch(0.965 0.006 250);display:flex;align-items:center;justify-content:center" aria-hidden="true"><sc-if value="{{ fb.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ fb.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ fb.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ fb.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ fb.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ fb.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ fb.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ fb.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if></span>
+                      <span style="display:flex;flex-direction:column;min-width:0">
+                        <span style="font-weight:600;font-size:13px">{{ fb.label }}</span>
+                        <span style="font-size:11px;color:oklch(0.5 0.02 250)">{{ fb.sub }}</span>
+                      </span>
+                    </div>
+                  </sc-for>
+                  <sc-if value="{{ noTags }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:12px;color:oklch(0.5 0.02 250)">None recorded yet</span>
+                  </sc-if>
+                </div>
+                </div>
                 <div>
                   <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Floors</div>
                   <div style="font-weight:600;font-size:13px">{{ selectedFloors }}</div>
                 </div>
-                <div>
-                  <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Entrance</div>
-                  <div style="font-weight:600;font-size:13px">{{ selectedEntrance }}</div>
-                </div>
-              </div>
-              <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250);margin:16px 0 8px">Facilities</div>
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <sc-for list="{{ selectedFacs }}" as="fb" hint-placeholder-count="2">
-                  <div style="display:flex;align-items:center;gap:12px">
-                    <span style="flex:none;width:36px;height:36px;border-radius:9999px;background:oklch(0.965 0.006 250);display:flex;align-items:center;justify-content:center" aria-hidden="true"><sc-if value="{{ fb.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ fb.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ fb.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ fb.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ fb.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ fb.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ fb.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ fb.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if></span>
-                    <span style="display:flex;flex-direction:column;min-width:0">
-                      <span style="font-weight:600;font-size:13px">{{ fb.label }}</span>
-                      <span style="font-size:11px;color:oklch(0.5 0.02 250)">{{ fb.sub }}</span>
-                    </span>
-                  </div>
-                </sc-for>
-                <sc-if value="{{ noTags }}" hint-placeholder-val="{{ false }}">
-                  <span style="font-size:12px;color:oklch(0.5 0.02 250)">None recorded yet</span>
-                </sc-if>
               </div>
               </sc-if>
 
@@ -2651,15 +2645,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;color:oklch(0.5 0.02 250)">Floors
                     <input value="{{ lr.floors }}" sc-camel-on-change="{{ lr.onFloors }}" placeholder="e.g. 6" style="padding:8px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:9px">
                   </label>
-                  <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;color:oklch(0.5 0.02 250)">Main entrance
-                    <sc-raw-select value="{{ lr.entrance }}" sc-camel-on-change="{{ lr.onEntrance }}" style="padding:8px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(1 0 0)">
-                      <option value="">Not set</option>
-                      <option value="N">North side</option>
-                      <option value="S">South side</option>
-                      <option value="E">East side</option>
-                      <option value="W">West side</option>
-                    </sc-raw-select>
-                  </label>
                   <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:4px;font-size:11px;color:oklch(0.5 0.02 250)">English name <span style="text-transform:none;font-weight:400">(from buildings.csv)</span>
                     <input value="{{ lr.en }}" readonly="" style="padding:8px 10px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;background:oklch(0.96 0.006 250);color:oklch(0.45 0.02 250)">
                   </label>
@@ -2891,7 +2876,7 @@ const LAYOUT = [
 
 const FACS = [
   { id: 'cafeteria', en: 'Cafeteria', ko: '학생식당' },
-  { id: 'cafe', en: 'Cafés', ko: '카페' },
+  { id: 'cafe', en: 'Café', ko: '카페' },
   { id: 'convenience', en: 'CVS', ko: '편의점' },
   { id: 'library', en: 'Library', ko: '도서관' },
   { id: 'printing', en: 'Print & Copy', ko: '복사·출력' },
@@ -3329,7 +3314,7 @@ class Component extends DCLogic {
         // them again to edit or delete; they'd just sit there forever.
         base.buildings = stored.buildings
           .filter(b => BUILDING_DIRECTORY.some(d => d.num === b.num))
-          .map(b => Object.assign({ lat: null, lng: null, tags: [], floors: '', photo: '', entrance: '', en: '', ko: '' }, b))
+          .map(b => Object.assign({ lat: null, lng: null, tags: [], floors: '', photo: '', en: '', ko: '' }, b))
           // browsers that saved this building before the spelling fix still hold the old name in localStorage
           .map(b => (b.en && b.en.indexOf('Shuttlecoke') >= 0) ? Object.assign({}, b, { en: b.en.replace(/Shuttlecoke/g, 'Shuttlecock') }) : b);
       }
@@ -3987,7 +3972,7 @@ class Component extends DCLogic {
         const dir = BUILDING_DIRECTORY.find(d => d.num === n);
         next = next.concat([Object.assign({
           id: Math.max(0, ...next.map(b => b.id)) + 1,
-          num: n, tags: [], floors: '', photo: '', entrance: '',
+          num: n, tags: [], floors: '', photo: '',
           en: dir ? dir.en : '', ko: dir ? dir.ko : ''
         }, namePatch, linkPatch)]);
       }
@@ -4013,7 +3998,7 @@ class Component extends DCLogic {
       const lay = LAYOUT[(nextId + i) % LAYOUT.length];
       return {
         id: nextId + i, x: lay.x, y: lay.y, w: lay.w, h: lay.h, num: num,
-        en: dir.en || '', ko: dir.ko || '', tags: [], floors: '', photo: '', entrance: '',
+        en: dir.en || '', ko: dir.ko || '', tags: [], floors: '', photo: '',
         lat: est.lat, lng: est.lng, poly: est.poly, shapeId: est.shapeId || null,
         labelLat: est.labelLat != null ? est.labelLat : null, labelLng: est.labelLng != null ? est.labelLng : null
       };
@@ -4022,7 +4007,7 @@ class Component extends DCLogic {
       const lay = LAYOUT[(nextId + added.length + i) % LAYOUT.length];
       return {
         id: nextId + added.length + i, x: lay.x, y: lay.y, w: lay.w, h: lay.h, num: s.num,
-        en: s.en, ko: s.ko, tags: [], floors: '', photo: '', entrance: '',
+        en: s.en, ko: s.ko, tags: [], floors: '', photo: '',
         lat: null, lng: null
       };
     });
@@ -4219,7 +4204,7 @@ class Component extends DCLogic {
         const nextId = Math.max(0, ...this.state.buildings.map(b => b.id)) + 1;
         next = this.state.buildings.concat([{
           id: nextId, num: num, en: dir ? dir.en : '', ko: dir ? dir.ko : '',
-          tags: [], floors: '', photo: '', entrance: '', lat: lat, lng: lng, poly: null
+          tags: [], floors: '', photo: '', lat: lat, lng: lng, poly: null
         }]);
       }
       this.persist({ buildings: next, placing: false }, () => this.syncMap());
@@ -4863,8 +4848,8 @@ class Component extends DCLogic {
       const b = this.state.buildings.find(x => x.num === n);
       const dir = BUILDING_DIRECTORY.find(x => x.num === n);
       return b
-        ? { num: n, en: b.en, ko: b.ko, tags: (b.tags || []).slice(), floors: b.floors, photo: b.photo, entrance: b.entrance }
-        : { num: n, en: dir ? dir.en : '', ko: dir ? dir.ko : '', tags: [], floors: '', photo: '', entrance: '' };
+        ? { num: n, en: b.en, ko: b.ko, tags: (b.tags || []).slice(), floors: b.floors, photo: b.photo }
+        : { num: n, en: dir ? dir.en : '', ko: dir ? dir.ko : '', tags: [], floors: '', photo: '' };
     };
     return { labels: groupNums.map(toLabel), lat: existing ? existing.lat : null, lng: existing ? existing.lng : null, sharedNums: [] };
   }
@@ -5011,8 +4996,7 @@ class Component extends DCLogic {
       steps.push({ n: steps.length + 1, text: text });
     }
     const bits = [];
-    if (g.target.entrance) bits.push('The main entrance is on the ' + { N: 'north', S: 'south', E: 'east', W: 'west' }[g.target.entrance] + ' side');
-    if (g.target.floors) bits.push('the building has ' + g.target.floors + ' floors');
+    if (g.target.floors) bits.push('The building has ' + g.target.floors + ' floors');
     if (bits.length) steps.push({ n: steps.length + 1, text: 'You have arrived. ' + bits.join(' and ') + '.' });
     else steps.push({ n: steps.length + 1, text: 'You have arrived at Building ' + g.target.num + '. Check the number on the sign to confirm.' });
     return steps;
@@ -5535,8 +5519,8 @@ class Component extends DCLogic {
       const cid = Number(String(num).slice(7));
       const existingCustom = this.state.customShapes.find(c => c.id === cid);
       const customForm = existingCustom
-        ? { en: existingCustom.name || '', ko: '', tags: [], floors: '', photo: '', entrance: '', lat: existingCustom.lat, lng: existingCustom.lng }
-        : { en: '', ko: '', tags: [], floors: '', photo: '', entrance: '', lat: null, lng: null };
+        ? { en: existingCustom.name || '', ko: '', tags: [], floors: '', photo: '', lat: existingCustom.lat, lng: existingCustom.lng }
+        : { en: '', ko: '', tags: [], floors: '', photo: '', lat: null, lng: null };
       this.setState({ editId: num, adminOpen: true, savedFlash: false, repositioning: false, form: customForm });
       return;
     }
@@ -5981,14 +5965,12 @@ class Component extends DCLogic {
       const tb = to && to.bldg;
       if (tb && ko) {
         const bits = [];
-        if (tb.entrance) bits.push('주 출입구는 ' + { N: '북', S: '남', E: '동', W: '서' }[tb.entrance] + '쪽에 있어요');
         if (tb.floors) bits.push(tb.floors + '층 건물이에요');
         steps.push(tb.num + '번 건물에 도착했어요. ' + (bits.length ? bits.join('. ') + '.' : '표지판의 번호를 확인하세요.'));
       } else if (tb) {
         const bits = [];
-        if (tb.entrance) bits.push('the main entrance is on the ' + { N: 'north', S: 'south', E: 'east', W: 'west' }[tb.entrance] + ' side');
-        if (tb.floors) bits.push('the building has ' + tb.floors + ' floors');
-        steps.push('You have arrived at Building ' + tb.num + (bits.length ? '. Once there, ' + bits.join(' and ') : '. Check the number on the sign to confirm') + '.');
+        if (tb.floors) bits.push('it has ' + tb.floors + ' floors');
+        steps.push('You have arrived at Building ' + tb.num + (bits.length ? '. ' + bits.join(' and ').replace(/^i/, 'I') : '. Check the number on the sign to confirm') + '.');
       } else if (to) steps.push(ko ? to.label + '에 도착' : 'Arrive at ' + (s.routeTo === 'me' ? 'your location' : 'the ' + to.label) + '.');
     }
     const sheetBase = { position: 'absolute', zIndex: 1000, background: 'oklch(1 0 0)', border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px',
@@ -6317,7 +6299,7 @@ class Component extends DCLogic {
     const gp = this.gpsPoint();
     const sel = s.selected ? this.byId(s.selected) : null;
     const selN = sel ? this.names(sel) : null;
-    const form = s.form || { num: '', en: '', ko: '', tags: [], floors: '', photo: '', entrance: '' };
+    const form = s.form || { num: '', en: '', ko: '', tags: [], floors: '', photo: '' };
 
     const tabStyle = (key, kind) => {
       const on = s.tab === key;
@@ -6631,7 +6613,6 @@ class Component extends DCLogic {
         this.setState({ sheetFullFor: s.sheetFullFor === s.selected ? null : s.selected });
       },
       selectedFloors: sel ? (sel.floors ? sel.floors + ' floors' : 'Not set') : '',
-      selectedEntrance: sel ? ({ N: 'North side', S: 'South side', E: 'East side', W: 'West side' }[sel.entrance] || 'Not set') : '',
       noTags: !!(sel && (!sel.tags || !sel.tags.length)),
       routeHere: () => this.openDirections(String(s.selected)),
       routeFrom: () => this.openDirections('', String(s.selected)),
@@ -6704,14 +6685,13 @@ class Component extends DCLogic {
       onEEn: e => this.setState({ form: Object.assign({}, form, { en: e.target.value }) }),
       onEFloors: e => this.setState({ form: Object.assign({}, form, { floors: e.target.value }) }),
       onEPhoto: e => this.setState({ form: Object.assign({}, form, { photo: e.target.value }) }),
-      onEEntrance: e => this.setState({ form: Object.assign({}, form, { entrance: e.target.value }) }),
       eLat: form.lat == null ? '' : String(form.lat),
       eLng: form.lng == null ? '' : String(form.lng),
       onELat: e => this.setState({ form: Object.assign({}, form, { lat: e.target.value }) }),
       onELng: e => this.setState({ form: Object.assign({}, form, { lng: e.target.value }) }),
       deleteLabel: (s.editId && String(s.editId).indexOf('custom:') === 0) ? 'Delete shape' : 'Delete building',
       labelRows: (form.labels || []).map((lab, i) => {
-        // floors/photo/entrance/tags save straight onto the building as well as
+        // floors/photo/tags save straight onto the building as well as
         // the form -- they used to wait for Save and were lost on exit
         const setLab = patch => {
           const next = { form: Object.assign({}, form, { labels: form.labels.map((l, j) => j === i ? Object.assign({}, l, patch) : l) }) };
@@ -6722,13 +6702,12 @@ class Component extends DCLogic {
         return {
         num: lab.num,
         heading: lab.num + ((lab.en || lab.ko) ? (' \u00b7 ' + ((s.primary === 'ko' ? lab.ko : lab.en) || '')) : ''),
-        en: lab.en, ko: lab.ko, floors: lab.floors, photo: lab.photo, entrance: lab.entrance,
+        en: lab.en, ko: lab.ko, floors: lab.floors, photo: lab.photo,
         canRemove: lab.num !== s.editId,
         onReposition: () => this.startRepositionFor(lab.num),
         onRemove: () => this.setState({ form: Object.assign({}, form, { labels: form.labels.filter((l, j) => j !== i) }) }),
         onFloors: e => setLab({ floors: e.target.value }),
         onPhoto: e => setLab({ photo: e.target.value }),
-        onEntrance: e => setLab({ entrance: e.target.value }),
         tagChips: FACS.map(f => {
           const on = (lab.tags || []).indexOf(f.id) >= 0;
           return {
@@ -6857,11 +6836,11 @@ class Component extends DCLogic {
           shapeId = null;
         }
         let next = s.buildings;
-        // Every label in the group keeps its own name/tags/floors/photo/
-        // entrance -- only geometry (poly/lat/lng/color/clickable) is shared,
+        // Every label in the group keeps its own name/tags/floors/photo --
+        // only geometry (poly/lat/lng/color/clickable) is shared,
         // and it lives once on the shape, never copied per building anymore.
         (form.labels || []).forEach(lab => {
-          const fields = { en: lab.en, ko: lab.ko, tags: (lab.tags || []).slice(), floors: lab.floors, photo: (lab.photo || '').trim(), entrance: lab.entrance };
+          const fields = { en: lab.en, ko: lab.ko, tags: (lab.tags || []).slice(), floors: lab.floors, photo: (lab.photo || '').trim() };
           const linkPatch = shapeId
             ? { shapeId: shapeId }
             : { shapeId: null, lat: lat, lng: lng, poly: (existingPrimary && existingPrimary.poly) || null, color: (existingPrimary && existingPrimary.color) || '', clickable: !existingPrimary || existingPrimary.clickable !== false };
@@ -6878,7 +6857,7 @@ class Component extends DCLogic {
             const dir = BUILDING_DIRECTORY.find(d => d.num === n);
             next = next.concat([Object.assign({
               id: Math.max(0, ...next.map(b => b.id)) + 1,
-              num: n, tags: [], floors: '', photo: '', entrance: '',
+              num: n, tags: [], floors: '', photo: '',
               en: dir ? dir.en : '', ko: dir ? dir.ko : '', shapeId: shapeId
             })]);
           }
