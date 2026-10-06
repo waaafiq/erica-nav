@@ -1788,7 +1788,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <div style="height:100vh;height:100dvh;display:flex;flex-direction:column;background:oklch(0.97 0.005 250);color:oklch(0.22 0.015 250);font-size:14px;line-height:1.45;overflow:hidden">
 
-  <!-- hidden on phones while walking directions are open, to give the map the room -->
+  <!-- hidden on the map tab, to give the map the room -->
   <sc-if value="{{ showHeader }}" hint-placeholder-val="{{ true }}">
   <header style="flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:12px 20px;background:oklch(1 0 0 / 0.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid oklch(0.92 0.006 250 / 0.6)">
     <div style="display:flex;align-items:baseline;gap:8px;flex:none;white-space:nowrap">
@@ -1882,6 +1882,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
           <sc-if value="{{ showCard }}" hint-placeholder-val="{{ false }}">
             <div style="{{ sheetStyle }}">
+              <sc-if value="{{ sheetHandle }}" hint-placeholder-val="{{ true }}">
+                <button type="button" aria-label="{{ sheetHandleLabel }}" aria-expanded="{{ sheetFull }}" sc-camel-on-pointer-down="{{ sheetDragStart }}" sc-camel-on-pointer-up="{{ sheetDragEnd }}" sc-camel-on-click="{{ sheetHandleKey }}" style="display:flex;justify-content:center;width:calc(100% + 32px);margin:-16px -16px 4px;padding:10px 0 8px;border:none;background:none;cursor:grab;touch-action:none"><span style="width:36px;height:4px;border-radius:9999px;background:oklch(0.82 0.01 250)"></span></button>
+              </sc-if>
               <div style="display:flex;align-items:flex-start;gap:12px">
                 <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:15px;color:oklch(1 0 0);background:oklch(0.44 0.14 258);padding:5px 9px;border-radius:8px;flex:none">{{ selected.num }}</span>
                 <div style="flex:1;min-width:0">
@@ -1890,6 +1893,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <button type="button" sc-camel-on-click="{{ closeSheet }}" aria-label="Close building details" class="icon-close" style="margin:-6px -6px 0 0">×</button>
               </div>
 
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">
+                <button type="button" sc-camel-on-click="{{ routeFrom }}" class="btn btn-secondary" style="flex:none">{{ routeFromLabel }}</button>
+                <button type="button" sc-camel-on-click="{{ routeHere }}" class="btn btn-primary" style="flex:none">{{ routeToLabel }}</button>
+                <sc-if value="{{ admin }}" hint-placeholder-val="{{ false }}">
+                  <button sc-camel-on-click="{{ editSelected }}" style="padding:9px 14px;background:oklch(0.98 0.004 250);border:1px solid oklch(0.85 0.014 250);border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.35 0.02 250)">Edit building</button><button sc-camel-on-click="{{ deleteSelected }}" style="padding:9px 14px;background:oklch(0.97 0.03 25);border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.5 0.16 25)">Delete building</button>
+                </sc-if>
+                <button type="button" sc-camel-on-click="{{ toggleSave }}" aria-label="{{ saveLabel }}" aria-pressed="{{ isSaved }}" title="{{ saveLabel }}" class="icon-close" style="{{ saveBtnStyle }}"><sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 -960 960 960" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z"></path></svg></sc-if><sc-if value="{{ notSaved }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 -960 960 960" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z"></path></svg></sc-if></button>
+              </div>
+
+              <sc-if value="{{ sheetFull }}" hint-placeholder-val="{{ false }}">
               <div style="display:flex;gap:16px;margin-top:12px">
                 <div role="{{ photoRole }}" aria-label="{{ photoAlt }}" style="{{ photoStyle }}">
                   <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ true }}">
@@ -1918,15 +1931,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   </div>
                 </div>
               </div>
-
-              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">
-                <button type="button" sc-camel-on-click="{{ routeFrom }}" class="btn btn-secondary" style="flex:none">{{ routeFromLabel }}</button>
-                <button type="button" sc-camel-on-click="{{ routeHere }}" class="btn btn-primary" style="flex:none">{{ routeToLabel }}</button>
-                <button type="button" sc-camel-on-click="{{ toggleSave }}" class="btn" style="{{ saveBtnStyle }}">{{ saveLabel }}</button>
-                <sc-if value="{{ admin }}" hint-placeholder-val="{{ false }}">
-                  <button sc-camel-on-click="{{ editSelected }}" style="padding:9px 14px;background:oklch(0.98 0.004 250);border:1px solid oklch(0.85 0.014 250);border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.35 0.02 250)">Edit building</button><button sc-camel-on-click="{{ deleteSelected }}" style="padding:9px 14px;background:oklch(0.97 0.03 25);border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:oklch(0.5 0.16 25)">Delete building</button>
-                </sc-if>
-              </div>
+              </sc-if>
 
             </div>
           </sc-if>
@@ -1936,7 +1941,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <div ref="{{ navSheetRef }}" style="{{ navSheetStyle }}" role="region" aria-label="{{ navRegionLabel }}">
               <sc-if value="{{ navHasRoute }}" hint-placeholder-val="{{ false }}">
                 <button type="button" sc-camel-on-click="{{ toggleSteps }}" aria-expanded="{{ navStepsOpen }}" aria-label="{{ navStepsLabel }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:0;border:none;background:none;text-align:left;cursor:pointer;color:inherit">
-                  <span style="flex:none;width:40px;height:40px;border-radius:9999px;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4" r="2"></circle><path d="m9 20 3-6 3 3v4"></path><path d="m6 8 3-2 4 1 2 4 3 1"></path><path d="m12 14-2-4"></path></svg></span>
+                  <span style="flex:none;width:40px;height:40px;border-radius:9999px;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);display:flex;align-items:center;justify-content:center"><svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="m280-40 112-564-72 28v136h-80v-188l202-86q14-6 29.5-7t29.5 4q14 5 26.5 14t20.5 23l40 64q26 42 70.5 69T760-520v80q-70 0-125-29t-94-74l-25 123 84 80v300h-80v-260l-84-64-72 324h-84Zm203.5-723.5Q460-787 460-820t23.5-56.5Q507-900 540-900t56.5 23.5Q620-853 620-820t-23.5 56.5Q573-740 540-740t-56.5-23.5Z"></path></svg></span>
                   <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
                     <span style="display:flex;align-items:baseline;gap:6px"><span style="font-size:18px;font-weight:700;color:oklch(0.44 0.14 258)">{{ navMins }}</span><span style="font-size:13px;color:oklch(0.45 0.02 250)">{{ navDist }}</span></span>
                     <span style="font-size:12px;color:oklch(0.5 0.02 250)">{{ navSub }}</span>
@@ -1955,7 +1960,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 </sc-if>
               </sc-if>
               <sc-if value="{{ navMsg }}" hint-placeholder-val="{{ false }}">
-                <div role="status" style="display:flex;align-items:center;gap:12px;font-size:13px;color:oklch(0.45 0.02 250)"><span style="flex:none;width:40px;height:40px;border-radius:9999px;background:oklch(0.965 0.006 250);color:oklch(0.5 0.02 250);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4" r="2"></circle><path d="m9 20 3-6 3 3v4"></path><path d="m6 8 3-2 4 1 2 4 3 1"></path><path d="m12 14-2-4"></path></svg></span><span>{{ navMsg }}</span></div>
+                <div role="status" style="display:flex;align-items:center;gap:12px;font-size:13px;color:oklch(0.45 0.02 250)"><span style="flex:none;width:40px;height:40px;border-radius:9999px;background:oklch(0.965 0.006 250);color:oklch(0.5 0.02 250);display:flex;align-items:center;justify-content:center"><svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="m280-40 112-564-72 28v136h-80v-188l202-86q14-6 29.5-7t29.5 4q14 5 26.5 14t20.5 23l40 64q26 42 70.5 69T760-520v80q-70 0-125-29t-94-74l-25 123 84 80v300h-80v-260l-84-64-72 324h-84Zm203.5-723.5Q460-787 460-820t23.5-56.5Q507-900 540-900t56.5 23.5Q620-853 620-820t-23.5 56.5Q573-740 540-740t-56.5-23.5Z"></path></svg></span><span>{{ navMsg }}</span></div>
               </sc-if>
             </div>
           </sc-if>
@@ -2752,7 +2757,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <sc-if value="{{ hasCustomShapes }}" hint-placeholder-val="{{ false }}">
             <sc-for list="{{ customShapesList }}" as="c" hint-placeholder-count="2">
               <div style="border:1px solid oklch(0.9 0.012 250);border-radius:12px;padding:10px;margin-bottom:8px">
-                <div style="font-weight:600;font-size:12px;margin-bottom:8px">{{ c.name }}</div>
+                <input aria-label="Shape name" value="{{ c.nameValue }}" sc-camel-on-change="{{ c.onName }}" placeholder="{{ c.name }}" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:7px 9px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;font-weight:600;font-size:12px">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
                   <input type="color" value="{{ c.colorPickerValue }}" sc-camel-on-change="{{ c.onColorPicker }}" style="width:30px;height:26px;padding:0;border:1px solid oklch(0.88 0.012 250);border-radius:6px;background:none;cursor:pointer">
                   <input value="{{ c.colorValue }}" sc-camel-on-change="{{ c.onColor }}" placeholder="default" style="flex:1;min-width:0;padding:7px 9px;border:1px solid oklch(0.88 0.012 250);border-radius:9px;font-family:'Google Sans Flex',sans-serif;font-size:11px">
@@ -5988,7 +5993,7 @@ class Component extends DCLogic {
       // sit above whatever is pinned to the bottom of the map: the collapsed
       // route card on phones (66px + inset + gap) or the live-location note
       rotCtlBottom: s.navOpen && !s.navPick && !s.isDesktop ? '90px' : (!s.navOpen && s.mapMode === 'real' && (s.gpsErr || s.gps || s.gpsAsked)) ? '72px' : '16px',
-      showHeader: !(s.navOpen && s.tab === 'map' && !s.isDesktop),
+      showHeader: s.tab !== 'map',
       navStepsOpen: !!s.navStepsOpen,
       toggleSteps: () => this.setState({ navStepsOpen: !this.state.navStepsOpen }),
       navStepsLabel: (s.navStepsOpen ? (ko ? '경로 안내 접기' : 'Hide steps') : (ko ? '경로 안내 보기' : 'Show steps')),
@@ -6456,6 +6461,7 @@ class Component extends DCLogic {
       hasSharedNumOptions: !!(s.shapeEditor && s.shapeEditor.kind === 'building' && s.shapeEditor.num),
       customShapesList: s.customShapes.map(c => ({
         id: c.id, name: c.name || ('Shape #' + c.id),
+        nameValue: c.name || '', onName: e => this.updateCustomShape(c.id, { name: e.target.value }),
         colorValue: c.color || '', onColor: e => this.updateCustomShape(c.id, { color: e.target.value }),
         colorPickerValue: c.color || '#8ec5ff', onColorPicker: e => this.updateCustomShape(c.id, { color: e.target.value }),
         clickableChecked: c.clickable !== false, onClickable: e => this.updateCustomShape(c.id, { clickable: e.target.checked }),
@@ -6559,7 +6565,26 @@ class Component extends DCLogic {
         boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)', padding: '16px', overflow: 'auto', animation: 'sheetUp 0.18s ease-out'
       }, s.isDesktop
         ? { right: '8px', top: '8px', bottom: '8px', width: '340px', maxWidth: 'calc(100% - 16px)' }
-        : { left: '8px', right: '8px', bottom: '8px', maxHeight: g ? '44%' : '72%' }),
+        : { left: '8px', right: '8px', bottom: '8px', maxHeight: g ? '44%' : '85%' }),
+      // phones: a pull-up sheet that peeks with name + actions; drag or tap the handle for details.
+      // Keyed to the building so a new pick always starts collapsed.
+      sheetHandle: !s.isDesktop,
+      sheetFull: s.isDesktop || (s.sheetFullFor != null && s.sheetFullFor === s.selected),
+      sheetHandleLabel: s.sheetFullFor === s.selected ? 'Collapse building details' : 'Expand building details',
+      sheetDragStart: e => { this._sheetY = e.clientY; },
+      sheetDragEnd: e => {
+        const dy = e.clientY - (this._sheetY == null ? e.clientY : this._sheetY), full = s.sheetFullFor === s.selected;
+        this._sheetY = null;
+        this._sheetDragged = true;
+        if (dy < -20 || (Math.abs(dy) <= 20 && !full)) this.setState({ sheetFullFor: s.selected });
+        else if (dy > 20 && !full) this.setState({ selected: null });
+        else this.setState({ sheetFullFor: null });
+      },
+      // keyboard (Enter/Space) arrives as a click with no pointer gesture before it
+      sheetHandleKey: () => {
+        if (this._sheetDragged) { this._sheetDragged = false; return; }
+        this.setState({ sheetFullFor: s.sheetFullFor === s.selected ? null : s.selected });
+      },
       selectedFloors: sel ? (sel.floors ? sel.floors + ' floors' : 'Not set') : '',
       selectedEntrance: sel ? ({ N: 'North side', S: 'South side', E: 'East side', W: 'West side' }[sel.entrance] || 'Not set') : '',
       selectedTags: sel ? (sel.tags || []).map(t => { const f = FACS.filter(x => x.id === t)[0]; return { label: f ? f.en + ' · ' + f.ko : t }; }) : [],
@@ -6573,11 +6598,11 @@ class Component extends DCLogic {
         this.persist({ saved: has ? s.saved.filter(i => i !== s.selected) : s.saved.concat([s.selected]) });
       },
       saveLabel: sel && s.saved.indexOf(sel.id) >= 0 ? 'Saved' : 'Save',
+      isSaved: !!(sel && s.saved.indexOf(sel.id) >= 0),
+      notSaved: !(sel && s.saved.indexOf(sel.id) >= 0),
       saveBtnStyle: {
-        flex: 'none', padding: '0 18px',
-        border: '1px solid ' + (sel && s.saved.indexOf(sel.id) >= 0 ? 'oklch(0.44 0.14 258)' : 'oklch(0.85 0.014 250)'),
-        background: sel && s.saved.indexOf(sel.id) >= 0 ? 'oklch(0.95 0.045 258)' : 'oklch(1 0 0)',
-        color: sel && s.saved.indexOf(sel.id) >= 0 ? 'oklch(0.38 0.15 258)' : 'oklch(0.35 0.02 250)'
+        width: '40px', height: '40px', marginLeft: 'auto',
+        color: sel && s.saved.indexOf(sel.id) >= 0 ? 'oklch(0.44 0.14 258)' : 'oklch(0.45 0.02 250)'
       },
       editSelected: () => this.openForm(sel ? sel.num : null),
       deleteSelected: () => {
@@ -6656,7 +6681,13 @@ class Component extends DCLogic {
               border: '1px solid ' + (on ? 'oklch(0.44 0.14 258)' : 'oklch(0.88 0.012 250)'),
               background: on ? 'oklch(0.95 0.045 258)' : 'oklch(1 0 0)',
               color: on ? 'oklch(0.36 0.15 258)' : 'oklch(0.45 0.02 250)' },
-            toggle: () => this.setState({ form: Object.assign({}, form, { labels: form.labels.map((l, j) => j === i ? Object.assign({}, l, { tags: on ? l.tags.filter(x => x !== f.id) : l.tags.concat([f.id]) }) : l) }) })
+            // saved straight onto the building too -- a tag change used to sit in the form until Save and was lost on exit
+            toggle: () => {
+              const tags = on ? (lab.tags || []).filter(x => x !== f.id) : (lab.tags || []).concat([f.id]);
+              const patch = { form: Object.assign({}, form, { labels: form.labels.map((l, j) => j === i ? Object.assign({}, l, { tags: tags }) : l) }) };
+              if (s.buildings.some(b => b.num === lab.num)) patch.buildings = s.buildings.map(b => b.num === lab.num ? Object.assign({}, b, { tags: tags }) : b);
+              this.persist(patch);
+            }
           };
         })
       })),
