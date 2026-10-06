@@ -3070,7 +3070,7 @@ const HOLIDAY_META = [
 const BUILDING_DIRECTORY = [
   { id: "dir-101", num: "101", en: "Administration Building & ERICA Convergence Center", ko: "본관 및 ERICA융합원", zone: "1", lat: 37.298997, lng: 126.833072 },
   { id: "dir-102", num: "102", en: "Student Welfare Building", ko: "학생복지관", zone: "1", lat: null, lng: null },
-  { id: "dir-103", num: "103", en: "Student Union(Uni Center)", ko: "학생회관(유니센터)", zone: "1", lat: null, lng: null },
+  { id: "dir-103", num: "103", en: "Student Union (Uni Center)", ko: "학생회관(유니센터)", zone: "1", lat: null, lng: null },
   { id: "dir-104", num: "104", en: "Engineering Building II", ko: "제2공학관", zone: "1", lat: null, lng: null },
   { id: "dir-105", num: "105", en: "Architectural Design Hall", ko: "건축디자인관", zone: "1", lat: null, lng: null },
   { id: "dir-106", num: "106", en: "Structural Experiment Laboratory", ko: "초대형구조실험동", zone: "1", lat: null, lng: null },
@@ -3255,6 +3255,8 @@ const romanToArabic = str => str.replace(/\b(IV|III|II|I|V)$/, m => ROMAN_MAP[m]
 // localStorage; these are merged on every load. CSV_FAC_INFO holds each
 // row's optional display name / subheading: CSV_FAC_INFO['401'].printing.
 let CSV_TAGS = {}, CSV_FAC_INFO = {};
+// Old building names still saved in some browsers -> the corrected name.
+const NAME_FIXES = [['Shuttlecoke', 'Shuttlecock'], ['Student Union(Uni Center)', 'Student Union (Uni Center)']];
 const HIDDEN_NUMS = new Set(['C01', 'C02', 'C03', 'C04', 'C05', 'C06']);
 const LISTED_DIRECTORY = BUILDING_DIRECTORY.filter(d => !HIDDEN_NUMS.has(d.num));
 const ZONES = [
@@ -3341,8 +3343,8 @@ class Component extends DCLogic {
         base.buildings = stored.buildings
           .filter(b => BUILDING_DIRECTORY.some(d => d.num === b.num))
           .map(b => Object.assign({ lat: null, lng: null, tags: [], floors: '', photo: '', en: '', ko: '' }, b))
-          // browsers that saved this building before the spelling fix still hold the old name in localStorage
-          .map(b => (b.en && b.en.indexOf('Shuttlecoke') >= 0) ? Object.assign({}, b, { en: b.en.replace(/Shuttlecoke/g, 'Shuttlecock') }) : b);
+          // browsers that saved a building before a name fix still hold the old name in localStorage
+          .map(b => NAME_FIXES.reduce((x, [from, to]) => x.en && x.en.indexOf(from) >= 0 ? Object.assign({}, x, { en: x.en.split(from).join(to) }) : x, b));
       }
       if (Array.isArray(stored.saved)) base.saved = stored.saved;
       if (Array.isArray(stored.deletedNums)) base.deletedNums = stored.deletedNums;
