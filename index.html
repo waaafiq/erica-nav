@@ -1815,6 +1815,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="6">
         <button ref="{{ t.btnRef }}" sc-camel-on-click="{{ t.go }}" aria-current="{{ t.current }}" style="{{ t.topStyle }}">{{ t.label }}</button>
       </sc-for>
+      <sc-if value="{{ adminInTabs }}" hint-placeholder-val="{{ false }}">
+        <button type="button" sc-camel-on-click="{{ openAdmin }}" title="Admin panel" aria-label="Admin panel" style="flex:none;margin-left:auto;align-self:center;min-width:34px;min-height:34px;padding:0;border:none;background:none;cursor:pointer;font-size:18px;font-weight:700;color:oklch(0.5 0.02 250)">*</button>
+      </sc-if>
     </nav>
   </sc-if>
 
@@ -4982,7 +4985,7 @@ class Component extends DCLogic {
       const pt = mode === 'hide' ? null : this.map.latLngToContainerPoint(e.marker.getLatLng());
       if (mode === 'full') {
         const g = this.labelGeom(b, false, icons);
-        const box = { l: pt.x - LBL_D / 2 - pad, r: pt.x - LBL_D / 2 + g.w + pad, t: pt.y - LBL_D - pad, b: pt.y + pad };
+        const box = { l: pt.x - g.ax - pad, r: pt.x - g.ax + g.w + pad, t: pt.y - LBL_D - pad, b: pt.y + pad };
         if (!pin && hits(box)) mode = 'compact';
         else placedFull.push(box);
       }
@@ -4992,7 +4995,8 @@ class Component extends DCLogic {
     // circle is hidden until zooming in frees up room for it.
     planned.forEach(x => {
       if (x.mode !== 'compact') return;
-      const box = { l: x.pt.x - LBL_D / 2, r: x.pt.x - LBL_D / 2 + this.labelGeom(x.e.b, true, x.icons).w, t: x.pt.y - LBL_D, b: x.pt.y + 1 };
+      const cg = this.labelGeom(x.e.b, true, x.icons);
+      const box = { l: x.pt.x - cg.ax, r: x.pt.x - cg.ax + cg.w, t: x.pt.y - LBL_D, b: x.pt.y + 1 };
       if (hits(box) && !x.icons.length) x.mode = 'hide';
       else placedFull.push(box);
     });
@@ -5009,19 +5013,19 @@ class Component extends DCLogic {
     });
   }
 
-  // Bead labels. Zoomed out: the number in a circle, then one overlapping
-  // circle per matched facility icon. Zoomed in: the facility circles first,
-  // then one pill with "number  name". All pieces read as one outlined shape. Each piece is drawn twice -- full size in the
+  // Bead labels: one overlapping circle per matched facility icon first, then
+  // the number -- in a circle when zoomed out, in a "number  name" pill when
+  // zoomed in. The number's circle (or the pill's left end) sits on the building. All pieces read as one outlined shape. Each piece is drawn twice -- full size in the
   // outline colour, then inset by the border in the fill colour -- so the
   // overlaps merge into a single outline pinched at every join.
   labelGeom(b, compact, icons) {
     const n = this.names(b), parts = [];
     const add = (kind, w, id) => parts.push({ x: parts.length * LBL_STEP, w: w, kind: kind, id: id });
-    if (compact) add('num', LBL_D);
     (icons || []).forEach(t => add('icon', LBL_D, t));
-    if (!compact) add('name', Math.max(LBL_D, this.textW(String(b.num)) + (n.labelled ? 8 + this.textW(n.primary) : 0) + 24));
+    if (compact) add('num', LBL_D);
+    else add('name', Math.max(LBL_D, this.textW(String(b.num)) + (n.labelled ? 6 + this.textW(n.primary) : 0) + 18));
     const last = parts[parts.length - 1];
-    return { parts: parts, w: last.x + last.w, name: n.primary };
+    return { parts: parts, w: last.x + last.w, name: n.primary, ax: last.x + LBL_D / 2 };
   }
 
   labelHtml(b, compact, pin, icons) {
@@ -5032,7 +5036,7 @@ class Component extends DCLogic {
     const font = "font-family:'Google Sans Flex',sans-serif;font-weight:600;white-space:nowrap;color:" + fg;
     const content = p => {
       if (p.kind === 'num') return '<span style="' + font + ';font-size:' + (compact ? 10 : 11) + 'px">' + b.num + '</span>';
-      if (p.kind === 'name') return '<span style="' + font + ';font-size:11px;display:flex;gap:8px"><span>' + b.num + '</span>' + (this.names(b).labelled ? '<span>' + g.name + '</span>' : '') + '</span>';
+      if (p.kind === 'name') return '<span style="' + font + ';font-size:11px;display:flex;gap:6px"><span>' + b.num + '</span>' + (this.names(b).labelled ? '<span>' + g.name + '</span>' : '') + '</span>';
       const f = FACS.find(x => x.id === p.id);
       // on the selected (blue) label the icons go white
       const svg = FAC_ICONS[p.id] && (pin ? FAC_ICONS[p.id].replace(/stroke="#[0-9a-fA-F]+"/, 'stroke="#fff"') : FAC_ICONS[p.id]);
@@ -5042,8 +5046,7 @@ class Component extends DCLogic {
     const pos = 'position:absolute;display:flex;align-items:center;justify-content:center;border-radius:' + D + 'px;';
     const outline = g.parts.map(p => '<div style="' + pos + 'left:' + p.x + 'px;top:0;width:' + p.w + 'px;height:' + D + 'px;background:' + line + ';box-shadow:0 1px 4px rgba(30,40,60,.25)"></div>').join('');
     const body = g.parts.map(p => '<div style="' + pos + 'left:' + (p.x + bw) + 'px;top:' + bw + 'px;width:' + (p.w - 2 * bw) + 'px;height:' + (D - 2 * bw) + 'px;background:' + fill + '">' + content(p) + '</div>').join('');
-    // the number bead's centre sits on the building
-    return '<div class="erica-lbl" style="position:relative;width:' + g.w + 'px;height:' + D + 'px;transform:translate(-' + D / 2 + 'px,-100%)">' + outline + body + '</div>';
+    return '<div class="erica-lbl" style="position:relative;width:' + g.w + 'px;height:' + D + 'px;transform:translate(-' + g.ax + 'px,-100%)">' + outline + body + '</div>';
   }
 
   textW(t, font) {
@@ -6485,7 +6488,7 @@ class Component extends DCLogic {
       onMap: s.tab === 'map', onTimetable: s.tab === 'timetable',
       onShuttle: s.tab === 'shuttle', onSaved: s.tab === 'saved', onAbout: s.tab === 'about',
       screenRef: this.animateScreenIn,
-      admin: s.admin, adminOpen: s.adminOpen, pcOpen: s.pcOpen, pcInput: s.pcInput, pcError: s.pcError,
+      admin: s.admin, adminInTabs: s.admin && s.tab === 'map', adminOpen: s.adminOpen, pcOpen: s.pcOpen, pcInput: s.pcInput, pcError: s.pcError,
       savedFlash: s.savedFlash,
 
       navRowRef: this.setNavRowRef,
