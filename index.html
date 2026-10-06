@@ -6663,16 +6663,25 @@ class Component extends DCLogic {
       onELat: e => this.setState({ form: Object.assign({}, form, { lat: e.target.value }) }),
       onELng: e => this.setState({ form: Object.assign({}, form, { lng: e.target.value }) }),
       deleteLabel: (s.editId && String(s.editId).indexOf('custom:') === 0) ? 'Delete shape' : 'Delete building',
-      labelRows: (form.labels || []).map((lab, i) => ({
+      labelRows: (form.labels || []).map((lab, i) => {
+        // floors/photo/entrance/tags save straight onto the building as well as
+        // the form -- they used to wait for Save and were lost on exit
+        const setLab = patch => {
+          const next = { form: Object.assign({}, form, { labels: form.labels.map((l, j) => j === i ? Object.assign({}, l, patch) : l) }) };
+          const stored = patch.photo != null ? Object.assign({}, patch, { photo: patch.photo.trim() }) : patch;
+          if (s.buildings.some(b => b.num === lab.num)) next.buildings = s.buildings.map(b => b.num === lab.num ? Object.assign({}, b, stored) : b);
+          this.persist(next);
+        };
+        return {
         num: lab.num,
         heading: lab.num + ((lab.en || lab.ko) ? (' \u00b7 ' + ((s.primary === 'ko' ? lab.ko : lab.en) || '')) : ''),
         en: lab.en, ko: lab.ko, floors: lab.floors, photo: lab.photo, entrance: lab.entrance,
         canRemove: lab.num !== s.editId,
         onReposition: () => this.startRepositionFor(lab.num),
         onRemove: () => this.setState({ form: Object.assign({}, form, { labels: form.labels.filter((l, j) => j !== i) }) }),
-        onFloors: e => this.setState({ form: Object.assign({}, form, { labels: form.labels.map((l, j) => j === i ? Object.assign({}, l, { floors: e.target.value }) : l) }) }),
-        onPhoto: e => this.setState({ form: Object.assign({}, form, { labels: form.labels.map((l, j) => j === i ? Object.assign({}, l, { photo: e.target.value }) : l) }) }),
-        onEntrance: e => this.setState({ form: Object.assign({}, form, { labels: form.labels.map((l, j) => j === i ? Object.assign({}, l, { entrance: e.target.value }) : l) }) }),
+        onFloors: e => setLab({ floors: e.target.value }),
+        onPhoto: e => setLab({ photo: e.target.value }),
+        onEntrance: e => setLab({ entrance: e.target.value }),
         tagChips: FACS.map(f => {
           const on = (lab.tags || []).indexOf(f.id) >= 0;
           return {
@@ -6681,16 +6690,11 @@ class Component extends DCLogic {
               border: '1px solid ' + (on ? 'oklch(0.44 0.14 258)' : 'oklch(0.88 0.012 250)'),
               background: on ? 'oklch(0.95 0.045 258)' : 'oklch(1 0 0)',
               color: on ? 'oklch(0.36 0.15 258)' : 'oklch(0.45 0.02 250)' },
-            // saved straight onto the building too -- a tag change used to sit in the form until Save and was lost on exit
-            toggle: () => {
-              const tags = on ? (lab.tags || []).filter(x => x !== f.id) : (lab.tags || []).concat([f.id]);
-              const patch = { form: Object.assign({}, form, { labels: form.labels.map((l, j) => j === i ? Object.assign({}, l, { tags: tags }) : l) }) };
-              if (s.buildings.some(b => b.num === lab.num)) patch.buildings = s.buildings.map(b => b.num === lab.num ? Object.assign({}, b, { tags: tags }) : b);
-              this.persist(patch);
-            }
+            toggle: () => setLab({ tags: on ? (lab.tags || []).filter(x => x !== f.id) : (lab.tags || []).concat([f.id]) })
           };
         })
-      })),
+        };
+      }),
       editSharedNumOptions: (s.editId && String(s.editId).indexOf('custom:') !== 0)
         ? LISTED_DIRECTORY
             .filter(d => (form.labels || []).every(l => l.num !== d.num) && !s.buildings.some(b => b.num === d.num && b.poly && b.poly.length > 2))
