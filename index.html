@@ -2891,6 +2891,9 @@ const FACS = [
   { id: 'admin', en: 'Admin office', ko: '행정실' }
 ];
 
+// Map label bead size and the spacing between overlapping beads.
+const LBL_D = 26, LBL_STEP = 21;
+
 // Map-label icons for the facility filter (same drawings as the filter chips).
 const FAC_ICONS = {
   cafeteria: '<svg viewBox="0 0 24 24" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>',
@@ -4969,9 +4972,8 @@ class Component extends DCLogic {
       if (fac.length && !pin) mode = !match ? 'hide' : mode === 'hide' ? 'compact' : mode;
       const pt = mode === 'hide' ? null : this.map.latLngToContainerPoint(e.marker.getLatLng());
       if (mode === 'full') {
-        const n = this.names(b);
-        const w = 20 + this.textW(String(b.num)) + (n.labelled ? 5 + this.textW(n.primary) : 0) + icons.length * 17;
-        const box = { l: pt.x - w / 2 - pad, r: pt.x + w / 2 + pad, t: pt.y - 24 - pad, b: pt.y + pad };
+        const g = this.labelGeom(b, false, icons);
+        const box = { l: pt.x - LBL_D / 2 - pad, r: pt.x - LBL_D / 2 + g.w + pad, t: pt.y - LBL_D - pad, b: pt.y + pad };
         if (!pin && hits(box)) mode = 'compact';
         else placedFull.push(box);
       }
@@ -4981,7 +4983,7 @@ class Component extends DCLogic {
     // circle is hidden until zooming in frees up room for it.
     planned.forEach(x => {
       if (x.mode !== 'compact') return;
-      const box = { l: x.pt.x - 12, r: x.pt.x + 12 + x.icons.length * 19, t: x.pt.y - 23, b: x.pt.y + 1 };
+      const box = { l: x.pt.x - LBL_D / 2, r: x.pt.x - LBL_D / 2 + this.labelGeom(x.e.b, true, x.icons).w, t: x.pt.y - LBL_D, b: x.pt.y + 1 };
       if (hits(box) && !x.icons.length) x.mode = 'hide';
       else placedFull.push(box);
     });
@@ -4998,26 +5000,37 @@ class Component extends DCLogic {
     });
   }
 
+  // Bead labels: the number in a circle, then one overlapping circle per
+  // matched facility icon, then (zoomed in) a pill with the name, all reading
+  // as one outlined shape. Each piece is drawn twice -- full size in the
+  // outline colour, then inset by the border in the fill colour -- so the
+  // overlaps merge into a single outline pinched at every join.
+  labelGeom(b, compact, icons) {
+    const n = this.names(b), parts = [{ x: 0, w: LBL_D, kind: 'num' }];
+    (icons || []).forEach(t => parts.push({ x: parts.length * LBL_STEP, w: LBL_D, kind: 'icon', id: t }));
+    if (!compact && n.labelled) parts.push({ x: parts.length * LBL_STEP, w: Math.max(LBL_D, this.textW(n.primary) + 22), kind: 'name' });
+    const last = parts[parts.length - 1];
+    return { parts: parts, w: last.x + last.w, name: n.primary };
+  }
+
   labelHtml(b, compact, pin, icons) {
-    const n = this.names(b);
-    const ic = (icons || []).map(t => {
-      const f = FACS.find(x => x.id === t);
-      return FAC_ICONS[t] ? FAC_ICONS[t].replace('<svg ', '<svg width="12" height="12" style="flex:none" ')
-        : '<span style="font-size:9px;font-weight:700;color:oklch(0.4 0.02 250)">' + (f ? f.en : t) + '</span>';
-    });
-    const icBubbles = ic.map(x => '<span style="display:flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 3px;box-sizing:border-box;border-radius:9999px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250)">' + x + '</span>').join('');
-    const accent = pin ? 'oklch(0.44 0.14 258)' : 'oklch(1 0 0)';
+    const g = this.labelGeom(b, compact, icons), D = LBL_D, bw = 1.5;
+    const fill = pin ? 'oklch(0.44 0.14 258)' : 'oklch(1 0 0)';
+    const line = 'oklch(0.44 0.14 258)';
     const fg = pin ? 'oklch(1 0 0)' : 'oklch(0.32 0.02 250)';
-    const wrap = '<div class="erica-lbl" style="transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center">';
-    // icons hang off the right of the circle so the number stays centred on the building
-    const side = icBubbles ? '<span style="position:absolute;left:100%;top:2px;margin-left:3px;display:flex;gap:2px">' + icBubbles + '</span>' : '';
-    return compact
-      ? wrap + '<div style="position:relative;width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:' + accent +
-        ';border:1.5px solid oklch(0.5 0.11 258);border-radius:50%;box-shadow:0 1px 4px rgba(30,40,60,.25);font-family:\'Google Sans Flex\',sans-serif;font-weight:600;font-size:10px;color:' + fg + '">' + b.num + side + '</div></div>'
-      : wrap + '<div style="display:flex;align-items:center;gap:5px;padding:3px 7px;background:' + accent +
-        ';border:1.5px solid oklch(0.44 0.14 258);border-radius:9px;box-shadow:0 1px 5px rgba(30,40,60,.28);white-space:nowrap;font-family:\'Google Sans Flex\',sans-serif">' +
-        '<span style="font-weight:600;font-size:11px;color:' + fg + '">' + b.num + '</span>' + icBubbles +
-        (n.labelled ? '<span style="font-size:11px;font-weight:600;color:' + fg + '">' + n.primary + '</span>' : '') + '</div></div>';
+    const font = "font-family:'Google Sans Flex',sans-serif;font-weight:600;white-space:nowrap;color:" + fg;
+    const content = p => {
+      if (p.kind === 'num') return '<span style="' + font + ';font-size:' + (compact ? 10 : 11) + 'px">' + b.num + '</span>';
+      if (p.kind === 'name') return '<span style="' + font + ';font-size:11px">' + g.name + '</span>';
+      const f = FACS.find(x => x.id === p.id);
+      return FAC_ICONS[p.id] ? FAC_ICONS[p.id].replace('<svg ', '<svg width="12" height="12" style="flex:none" ')
+        : '<span style="' + font + ';font-size:8px">' + (f ? f.en : p.id).slice(0, 3) + '</span>';
+    };
+    const pos = 'position:absolute;display:flex;align-items:center;justify-content:center;border-radius:' + D + 'px;';
+    const outline = g.parts.map(p => '<div style="' + pos + 'left:' + p.x + 'px;top:0;width:' + p.w + 'px;height:' + D + 'px;background:' + line + ';box-shadow:0 1px 4px rgba(30,40,60,.25)"></div>').join('');
+    const body = g.parts.map(p => '<div style="' + pos + 'left:' + (p.x + bw) + 'px;top:' + bw + 'px;width:' + (p.w - 2 * bw) + 'px;height:' + (D - 2 * bw) + 'px;background:' + fill + '">' + content(p) + '</div>').join('');
+    // the number bead's centre sits on the building
+    return '<div class="erica-lbl" style="position:relative;width:' + g.w + 'px;height:' + D + 'px;transform:translate(-' + D / 2 + 'px,-100%)">' + outline + body + '</div>';
   }
 
   textW(t, font) {
