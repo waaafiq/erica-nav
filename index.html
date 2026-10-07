@@ -3304,6 +3304,8 @@ const CAMPUS_PAD = { t: 150, b: 16, l: 16, r: 16 };
 const MAP_BOX_BOUNDS = [[37.286539, 126.821644], [37.309061, 126.849956]];
 const SPINE_Y = 68;
 const M_PER_UNIT = 9;
+// Drawn road widths in metres (see scaleRoads).
+const ROAD_M = { major: 5, minor: 2.5 };
 
 const pad = n => String(n).padStart(2, '0');
 // Short fingerprint of a string (djb2), e.g. to tell which shipped shape list an edit was based on.
@@ -4342,6 +4344,7 @@ class Component extends DCLogic {
       this._relabelRaf = window.requestAnimationFrame(() => { this._relabelRaf = 0; this.declutterLabels(); });
     };
     this.map.on('zoom zoomend rotate resize', relabel);
+    this.map.on('zoomend', () => this.scaleRoads());
     // Keep building shapes and roads (SVG) glued to the labels mid-gesture:
     // re-sync the renderer's transform every frame through leaflet-rotate's
     // own _updateTransform, which accounts for the rotated pane.
@@ -4485,6 +4488,14 @@ class Component extends DCLogic {
     } else if (this.tiles) { this.map.removeLayer(this.tiles); this.tiles = null; }
   }
 
+  // Roads are drawn a fixed real width (like the buildings), not a fixed
+  // pixel width, so they thin out when zoomed out instead of burying blocks.
+  scaleRoads() {
+    if (!this.map || !this._roads) return;
+    const mPerPx = 156543.03 * Math.cos(this.map.getCenter().lat * Math.PI / 180) / Math.pow(2, this.map.getZoom());
+    this._roads.forEach(r => r.setStyle({ weight: Math.max(1, (r._major ? ROAD_M.major : ROAD_M.minor) / mPerPx) }));
+  }
+
   drawGeometry() {
     if (!this.map || !window.L || !this.geoLayer) return;
     const L = window.L;
@@ -4515,9 +4526,12 @@ class Component extends DCLogic {
     // sequence: under-roads shapes, roads, under-buildings shapes,
     // buildings, then everything else on top.
     customShapes.filter(c => layerOf(c) === 'underRoads').forEach(drawCustomShape);
-    (this.paths || []).forEach(p => {
-      L.polyline(p.pts, { color: p.major ? 'oklch(0.99 0.002 250)' : 'oklch(0.97 0.004 250)', weight: p.major ? 9 : 4.5, opacity: 1, lineCap: 'round' }).addTo(this.geoLayer);
+    this._roads = (this.paths || []).map(p => {
+      const line = L.polyline(p.pts, { color: p.major ? 'oklch(0.99 0.002 250)' : 'oklch(0.97 0.004 250)', weight: 1, opacity: 1, lineCap: 'round' }).addTo(this.geoLayer);
+      line._major = p.major;
+      return line;
     });
+    this.scaleRoads();
     customShapes.filter(c => layerOf(c) === 'underBuildings').forEach(drawCustomShape);
     const seenShapeIds = {};
     this.state.buildings.filter(b => b.poly && b.poly.length > 2).forEach(b => {
