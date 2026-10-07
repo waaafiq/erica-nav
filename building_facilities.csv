@@ -2,7 +2,7 @@ building,facility,name,subheading,korean_name,korean_subheading
 102,cafe,Starbucks,Level 2,스타벅스,2층
 102,convenience,7-Eleven,Level 2,세븐일레븐,2층
 207,printing,,Level 1,,1층
-303,convenience,7-Eleven,Lower Ground 1,세븐일레븐,지하 1층
+303,convenience,7-Eleven,Basement Level 1,세븐일레븐,지하 1층
 308,cafe,Hanyang Bakery,Level 1,,1층
 317,cafe,The Bake,Level 1,,1층
 317,printing,,Level 5,,5층
@@ -11,3 +11,8 @@ building,facility,name,subheading,korean_name,korean_subheading
 501,convenience,CU,Level 1 · Women's Wing,CU,1층 · 여학생동
 504,convenience,7-Eleven,Level 1,세븐일레븐,1층
 317,restrooms,,,,
+307,atm,Shinhan Bank,Level 1,신한은행,1층
+402,gym,,,,
+S28,atm,Shinhan Bank,,신한은행,
+S11,chapel,Dasom Chapel,,,
+305,prayer,Muslim Prayer Rooms,Basement Level 1,무슬림 기도실,지하 1층
