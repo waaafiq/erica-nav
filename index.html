@@ -21,7 +21,8 @@
 
 <x-dc>
 <helmet>
-<style>@font-face {
+<style>.nb:empty{display:none}
+@font-face {
   font-family: 'Google Sans Flex';
   font-style: normal;
   font-weight: 100 1000;
@@ -1892,7 +1893,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <button type="button" aria-label="{{ sheetHandleLabel }}" aria-expanded="{{ sheetFull }}" sc-camel-on-pointer-down="{{ sheetDragStart }}" sc-camel-on-pointer-up="{{ sheetDragEnd }}" sc-camel-on-click="{{ sheetHandleKey }}" style="display:flex;justify-content:center;width:calc(100% + 32px);margin:-16px -16px 4px;padding:10px 0 8px;border:none;background:none;cursor:grab;touch-action:none"><span style="width:36px;height:4px;border-radius:9999px;background:oklch(0.82 0.01 250)"></span></button>
               </sc-if>
               <div style="display:flex;align-items:center;gap:12px">
-                <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:15px;color:oklch(1 0 0);background:oklch(0.44 0.14 258);padding:5px 9px;border-radius:8px;flex:none">{{ selected.num }}</span>
+                <span class="nb" style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:15px;color:oklch(1 0 0);background:oklch(0.44 0.14 258);padding:5px 9px;border-radius:8px;flex:none">{{ selected.num }}</span>
                 <div style="flex:1;min-width:0">
                   <div style="font-weight:700;font-size:15px;letter-spacing:-0.01em">{{ selected.primary }}</div>
                 </div>
@@ -2025,7 +2026,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   <button type="button" sc-camel-on-click="{{ o.go }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;cursor:pointer;text-align:left;flex:none" style-hover="border-color:oklch(0.7 0.08 258)">
                     <sc-if value="{{ o.isMe }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:28px;height:28px;border-radius:9999px;background:oklch(0.95 0.04 258);color:oklch(0.44 0.14 258);display:flex;align-items:center;justify-content:center"><svg viewBox="0 -960 960 960" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M440-42v-80q-125-14-214.5-103.5T122-440H42v-80h80q14-125 103.5-214.5T440-838v-80h80v80q125 14 214.5 103.5T838-520h80v80h-80q-14 125-103.5 214.5T520-122v80h-80Zm238-240q82-82 82-198t-82-198q-82-82-198-82t-198 82q-82 82-82 198t82 198q82 82 198 82t198-82Zm-311-85q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm169.5-56.5Q560-447 560-480t-23.5-56.5Q513-560 480-560t-56.5 23.5Q400-513 400-480t23.5 56.5Q447-400 480-400t56.5-23.5ZM480-480Z"></path></svg></span></sc-if>
                     <sc-if value="{{ o.isGate }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:28px;height:28px;border-radius:9999px;background:oklch(0.95 0.012 250);color:oklch(0.4 0.02 250);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v18"></path><path d="M2 22h20"></path><path d="M12 3v19"></path></svg></span></sc-if>
-                    <sc-if value="{{ o.isBldg }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ o.num }}</span></sc-if>
+                    <sc-if value="{{ o.isBldg }}" hint-placeholder-val="{{ true }}"><span class="nb" style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ o.num }}</span></sc-if>
                     <span style="display:flex;flex-direction:column;min-width:0;flex:1">
                       <span style="font-weight:600;font-size:13px">{{ o.name }}</span>
                       <sc-if value="{{ o.sub }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:oklch(0.5 0.02 250)">{{ o.sub }}</span></sc-if>
@@ -2059,7 +2060,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div style="flex:1;min-height:0;overflow:auto;padding:0 16px 16px;display:flex;flex-direction:column;gap:8px">
             <sc-for list="{{ searchList }}" as="r" hint-placeholder-count="6">
               <button sc-camel-on-click="{{ r.go }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;cursor:pointer;text-align:left;flex:none" style-hover="border-color:oklch(0.7 0.08 258)">
-                <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ r.num }}</span>
+                <span class="nb" style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ r.num }}</span>
                 <span style="display:flex;flex-direction:column;min-width:0;flex:1">
                   <span style="font-weight:600;font-size:13px">{{ r.primary }}</span>
                 </span>
@@ -2458,7 +2459,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div style="display:flex;flex-direction:column;gap:8px;max-width:720px;margin:0 auto">
           <sc-for list="{{ savedList }}" as="r" hint-placeholder-count="2">
             <div sc-camel-on-click="{{ r.go }}" role="button" sc-camel-tab-index="0" aria-label="{{ r.num }} {{ r.primary }}, show on map" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:oklch(1 0 0);border:1px solid oklch(0.9 0.012 250);border-radius:14px;cursor:pointer" style-hover="background:oklch(0.985 0.004 250)">
-              <span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ r.num }}</span>
+              <span class="nb" style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:12px;color:oklch(0.44 0.14 258);background:oklch(0.95 0.04 258);padding:4px 7px;border-radius:6px;flex:none">{{ r.num }}</span>
               <span style="flex:1;min-width:0;display:flex;flex-direction:column">
                 <span style="font-weight:600;font-size:13px">{{ r.primary }}</span>
               </span>
@@ -2480,7 +2481,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <p class="dlg-body" style="margin-bottom:14px">{{ paBody }}</p>
           <sc-if value="{{ paHasBldg }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:oklch(0.975 0.006 250);border-radius:12px;margin-bottom:16px">
-              <span style="flex:none;min-width:40px;padding:5px 8px;border-radius:8px;background:oklch(0.44 0.14 258);color:#fff;font-weight:700;font-size:13px;text-align:center">{{ paNum }}</span>
+              <span class="nb" style="flex:none;min-width:40px;padding:5px 8px;border-radius:8px;background:oklch(0.44 0.14 258);color:#fff;font-weight:700;font-size:13px;text-align:center">{{ paNum }}</span>
               <span style="flex:1;min-width:0">
                 <span style="display:block;font-weight:600;font-size:13px;color:oklch(0.25 0.02 250);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ paName }}</span>
                 <sc-if value="{{ paRoom }}" hint-placeholder-val="{{ false }}"><span style="display:block;font-size:12px;color:oklch(0.5 0.02 250)">{{ paRoom }}</span></sc-if>
@@ -3265,6 +3266,8 @@ const NAME_FIXES = [['Shuttlecoke', 'Shuttlecock'], ['Student Union(Uni Center)'
 // and directions like any building.
 const placeNum = c => 'S' + c.id;
 const isPlaceNum = n => /^S\d+$/.test(String(n));
+// Places have no building number to show; their S<id> is internal only.
+const shownNum = b => isPlaceNum(b.num) ? '' : b.num;
 const HIDDEN_NUMS = new Set(['C01', 'C02', 'C03', 'C04', 'C05', 'C06']);
 const LISTED_DIRECTORY = BUILDING_DIRECTORY.filter(d => !HIDDEN_NUMS.has(d.num));
 const ZONES = [
@@ -4742,7 +4745,7 @@ class Component extends DCLogic {
     if (key === 'me') return s.gps ? { lat: s.gps.lat, lng: s.gps.lng, label: ko ? '내 위치' : 'Your location' } : { pending: true, label: ko ? '내 위치' : 'Your location' };
     if (key === 'gate') return { lat: 37.29655, lng: 126.83565, label: ko ? '정문' : 'Main Gate' };
     const b = this.byId(Number(key));
-    return b && b.lat ? { lat: b.lat, lng: b.lng, label: b.num + ' ' + this.names(b).primary, bldg: b } : null;
+    return b && b.lat ? { lat: b.lat, lng: b.lng, label: [shownNum(b), this.names(b).primary].filter(Boolean).join(' '), bldg: b } : null;
   }
 
   keyBldg(key) { return key && /^\d+$/.test(key) ? Number(key) : null; }
@@ -5092,13 +5095,16 @@ class Component extends DCLogic {
     const hideZoom = minZ + 0.75, compactZoom = minZ + 2.5, pad = 4;
     const pinned = e => s.selected === e.b.id || s.routeTarget === e.b.id;
     const fac = s.facFilter || [];
-    const iconsOf = b => fac.filter(t => (b.tags || []).indexOf(t) >= 0);
+    // a place with no number or name has only its facility icons to show
+    const bare = b => !shownNum(b) && !this.names(b).labelled;
+    const iconsOf = b => fac.length ? fac.filter(t => (b.tags || []).indexOf(t) >= 0) : bare(b) ? (b.tags || []).slice() : [];
     const rank = e => pinned(e) ? 0 : iconsOf(e.b).length ? 1 : 2;
     const placedFull = [], hits = box => placedFull.some(p => p.l < box.r && box.l < p.r && p.t < box.b && box.t < p.b);
     const planned = this.labelMarkers.slice().sort((x, y) => rank(x) - rank(y)).map(e => {
       const b = e.b, pin = pinned(e), icons = iconsOf(b), match = icons.length > 0;
       let mode = pin ? 'full' : zoom <= hideZoom ? 'hide' : zoom <= compactZoom ? 'compact' : 'full';
       if (fac.length && !pin) mode = !match ? 'hide' : mode === 'hide' ? 'compact' : mode;
+      if (mode !== 'hide' && !this.labelGeom(b, mode === 'compact', icons)) mode = 'hide';
       const pt = mode === 'hide' ? null : this.map.latLngToContainerPoint(e.marker.getLatLng());
       if (mode === 'full') {
         const g = this.labelGeom(b, false, icons);
@@ -5113,6 +5119,7 @@ class Component extends DCLogic {
     planned.forEach(x => {
       if (x.mode !== 'compact') return;
       const cg = this.labelGeom(x.e.b, true, x.icons);
+      if (!cg) { x.mode = 'hide'; return; }
       const box = { l: x.pt.x - cg.ax, r: x.pt.x - cg.ax + cg.w, t: x.pt.y - LBL_D, b: x.pt.y + 1 };
       if (hits(box) && !x.icons.length) x.mode = 'hide';
       else placedFull.push(box);
@@ -5139,8 +5146,10 @@ class Component extends DCLogic {
     const n = this.names(b), parts = [];
     const add = (kind, w, id) => parts.push({ x: parts.length * LBL_STEP, w: w, kind: kind, id: id });
     (icons || []).forEach(t => add('icon', LBL_D, t));
-    if (compact) add('num', LBL_D);
-    else add('name', Math.max(LBL_D, this.textW(String(b.num)) + (n.labelled ? 6 + this.textW(n.primary) : 0) + 18));
+    const num = shownNum(b);
+    if (compact) { if (num) add('num', LBL_D); }
+    else if (num || n.labelled) add('name', Math.max(LBL_D, (num ? this.textW(num) : 0) + (num && n.labelled ? 6 : 0) + (n.labelled ? this.textW(n.primary) : 0) + 18));
+    if (!parts.length) return null;
     const last = parts[parts.length - 1];
     return { parts: parts, w: last.x + last.w, name: n.primary, ax: last.x + LBL_D / 2 };
   }
@@ -5152,8 +5161,8 @@ class Component extends DCLogic {
     const fg = pin ? 'oklch(1 0 0)' : 'oklch(0.32 0.02 250)';
     const font = "font-family:'Google Sans Flex',sans-serif;font-weight:600;white-space:nowrap;color:" + fg;
     const content = p => {
-      if (p.kind === 'num') return '<span style="' + font + ';font-size:' + (compact ? 10 : 11) + 'px">' + b.num + '</span>';
-      if (p.kind === 'name') return '<span style="' + font + ';font-size:11px;display:flex;gap:6px"><span>' + b.num + '</span>' + (this.names(b).labelled ? '<span>' + g.name + '</span>' : '') + '</span>';
+      if (p.kind === 'num') return '<span style="' + font + ';font-size:' + (compact ? 10 : 11) + 'px">' + shownNum(b) + '</span>';
+      if (p.kind === 'name') return '<span style="' + font + ';font-size:11px;display:flex;gap:6px">' + (shownNum(b) ? '<span>' + shownNum(b) + '</span>' : '') + (this.names(b).labelled ? '<span>' + g.name + '</span>' : '') + '</span>';
       const f = FACS.find(x => x.id === p.id);
       // on the selected (blue) label the icons go white
       const svg = FAC_ICONS[p.id] && (pin ? FAC_ICONS[p.id].replace(/stroke="#[0-9a-fA-F]+"/, 'stroke="#fff"') : FAC_ICONS[p.id]);
@@ -5173,8 +5182,10 @@ class Component extends DCLogic {
   }
 
   names(b) {
-    const en = b.en || ('Building ' + b.num);
-    const ko = b.ko || ('건물 ' + b.num);
+    const facs = lang => (b.tags || []).map(t => (FACS.find(f => f.id === t) || { en: t, ko: t })[lang]).join(' · ');
+    const place = isPlaceNum(b.num);
+    const en = b.en || (place ? facs('en') || 'Place' : 'Building ' + b.num);
+    const ko = b.ko || (place ? facs('ko') || '장소' : '건물 ' + b.num);
     const koFirst = this.state.primary === 'ko';
     return { primary: koFirst ? ko : en, labelled: !!(b.en || b.ko) };
   }
@@ -5247,14 +5258,14 @@ class Component extends DCLogic {
       }
       if (i === g.pts.length - 1) {
         const lm = this.nearestLandmark(this.centerOf(g.target), g.target.id);
-        text = 'Continue to ' + n.primary + ' (Building ' + g.target.num + ')' + (lm ? ', just past ' + this.names(lm).primary : '') + '.';
+        text = 'Continue to ' + n.primary + (shownNum(g.target) ? ' (Building ' + g.target.num + ')' : '') + (lm ? ', just past ' + this.names(lm).primary : '') + '.';
       }
       steps.push({ n: steps.length + 1, text: text });
     }
     const bits = [];
     if (g.target.floors) bits.push('The building has ' + g.target.floors + ' floors');
     if (bits.length) steps.push({ n: steps.length + 1, text: 'You have arrived. ' + bits.join(' and ') + '.' });
-    else steps.push({ n: steps.length + 1, text: 'You have arrived at Building ' + g.target.num + '. Check the number on the sign to confirm.' });
+    else steps.push({ n: steps.length + 1, text: shownNum(g.target) ? 'You have arrived at Building ' + g.target.num + '. Check the number on the sign to confirm.' : 'You have arrived at ' + this.names(g.target).primary + '.' });
     return steps;
   }
 
@@ -6201,7 +6212,7 @@ class Component extends DCLogic {
     specials.forEach(o => list.push(Object.assign(o, { isItem: true, go: pick(o.key) })));
     const bldgs = s.buildings.filter(b => b.lat && !HIDDEN_NUMS.has(b.num)).slice().sort((x, y) => String(x.num).localeCompare(String(y.num), undefined, { numeric: true }));
     const hit = b => !q || String(b.num).toLowerCase().indexOf(q) === 0 || (b.en || '').toLowerCase().indexOf(q) >= 0 || (b.ko || '').indexOf(q) >= 0;
-    const row = b => ({ isItem: true, isBldg: true, key: String(b.id), num: b.num, name: this.names(b).primary, sub: '', go: pick(String(b.id)) });
+    const row = b => ({ isItem: true, isBldg: true, key: String(b.id), num: shownNum(b), name: this.names(b).primary, sub: '', go: pick(String(b.id)) });
     const saved = q ? [] : s.saved.map(id => this.byId(id)).filter(b => b && b.lat && !HIDDEN_NUMS.has(b.num));
     if (saved.length) { list.push({ isHeader: true, label: ko ? '저장한 장소' : 'Saved' }); saved.forEach(b => list.push(row(b))); }
     const all = bldgs.filter(hit);
@@ -6222,11 +6233,11 @@ class Component extends DCLogic {
       if (tb && ko) {
         const bits = [];
         if (tb.floors) bits.push(tb.floors + '층 건물이에요');
-        steps.push(tb.num + '번 건물에 도착했어요. ' + (bits.length ? bits.join('. ') + '.' : '표지판의 번호를 확인하세요.'));
+        steps.push(shownNum(tb) ? tb.num + '번 건물에 도착했어요. ' + (bits.length ? bits.join('. ') + '.' : '표지판의 번호를 확인하세요.') : this.names(tb).primary + '에 도착했어요.');
       } else if (tb) {
         const bits = [];
         if (tb.floors) bits.push('it has ' + tb.floors + ' floors');
-        steps.push('You have arrived at Building ' + tb.num + (bits.length ? '. ' + bits.join(' and ').replace(/^i/, 'I') : '. Check the number on the sign to confirm') + '.');
+        steps.push(!shownNum(tb) ? 'You have arrived at ' + this.names(tb).primary + '.' : 'You have arrived at Building ' + tb.num + (bits.length ? '. ' + bits.join(' and ').replace(/^i/, 'I') : '. Check the number on the sign to confirm') + '.');
       } else if (to) steps.push(ko ? to.label + '에 도착' : 'Arrive at ' + (s.routeTo === 'me' ? 'your location' : 'the ' + to.label) + '.');
     }
     const sheetBase = { position: 'absolute', zIndex: 1000, background: 'oklch(1 0 0)', border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px',
@@ -6338,7 +6349,7 @@ class Component extends DCLogic {
           const a = this.toMin(sess.start), b = this.toMin(sess.end);
           if (a == null || b == null || b <= a) return;
           const bObj = this.byId(Number(sess.bldg));
-          const where = bObj ? ('Bldg ' + bObj.num + (sess.room ? ' · ' + sess.room : '')) : (sess.room || '');
+          const where = bObj ? ((shownNum(bObj) ? 'Bldg ' + bObj.num : this.names(bObj).primary) + (sess.room ? ' · ' + sess.room : '')) : (sess.room || '');
           blocks.push({
             top: (a - gridStartHour * 60) / 60 * HOUR_PX,
             height: Math.max(22, (b - a) / 60 * HOUR_PX),
@@ -6478,7 +6489,7 @@ class Component extends DCLogic {
         if (!pa) return {};
         const pb = pa.bldgId != null ? this.byId(pa.bldgId) : null;
         if (pb) return {
-          paHasBldg: true, paNum: pb.num, paName: this.names(pb).primary,
+          paHasBldg: true, paNum: shownNum(pb), paName: this.names(pb).primary,
           paRoom: pa.room ? (isKo ? pa.room + '호' : 'Room ' + pa.room) : '',
           paTitle: isKo ? '지도에서 볼까요?' : 'Show on the map?',
           paBody: pa.from === 'saved' ? (isKo ? '저장한 장소를 지도에서 보여 드릴게요.' : 'Jump to this saved place on the map.')
@@ -6590,7 +6601,7 @@ class Component extends DCLogic {
 
     const listItem = b => {
       const n = this.names(b);
-      return { num: b.num, primary: n.primary, go: () => {
+      return { num: shownNum(b), primary: n.primary, go: () => {
         // directory ids (dir-123) aren't map ids; resolve the placed building by number
         const m = this.byNum(b.num);
         this.setState({ searchPanelOpen: false });
@@ -6654,7 +6665,7 @@ class Component extends DCLogic {
         const on = s.selected === b.id;
         const isTarget = s.routeTarget === b.id;
         return {
-          num: b.num, primary: b.en ? n.primary : '', secondary: b.ko || b.en ? n.secondary : '',
+          num: shownNum(b), primary: b.en ? n.primary : '', secondary: b.ko || b.en ? n.secondary : '',
           onSelect: () => this.setState({ selected: b.id }),
           style: {
             position: 'absolute', left: b.x + '%', top: b.y + '%', width: b.w + '%', height: b.h + '%',
@@ -6825,7 +6836,7 @@ class Component extends DCLogic {
       locateLabel: s.primary === 'ko' ? '내 위치로 이동' : 'Show my location',
       locateStyle: s.gps ? 'color:oklch(0.44 0.14 258)' : '',
 
-      selected: sel ? { num: sel.num, primary: selN.primary } : null,
+      selected: sel ? { num: shownNum(sel), primary: selN.primary } : null,
       closeSheet: () => this.setState({ selected: null }),
       photoStyle: {
         flex: 'none', width: '96px', height: '70px', border: '1px solid oklch(0.9 0.012 250)', borderRadius: '9px',
