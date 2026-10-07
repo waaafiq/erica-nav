@@ -2893,9 +2893,7 @@ const FACS = [
   { id: 'printing', en: 'Print & Copy', ko: '복사·출력' },
   { id: 'restrooms', en: 'Bidet', ko: '비데' },
   { id: 'atm', en: 'ATM', ko: 'ATM' },
-  { id: 'health', en: 'Health center', ko: '보건소' },
   { id: 'gym', en: 'Gym', ko: '체육관' },
-  { id: 'admin', en: 'Admin office', ko: '행정실' },
   { id: 'worship', en: 'Place of Worship', ko: '종교시설' },
   { id: 'chapel', en: 'Chapel', ko: '채플' },
   { id: 'prayer', en: 'Prayer Room', ko: '기도실' }
@@ -3304,6 +3302,8 @@ const CAMPUS_PAD = { t: 150, b: 16, l: 16, r: 16 };
 const MAP_BOX_BOUNDS = [[37.286539, 126.821644], [37.309061, 126.849956]];
 const SPINE_Y = 68;
 const M_PER_UNIT = 9;
+// Drawn road widths in metres (see scaleRoads).
+const ROAD_M = { major: 5, minor: 2.5 };
 
 const pad = n => String(n).padStart(2, '0');
 // Short fingerprint of a string (djb2), e.g. to tell which shipped shape list an edit was based on.
@@ -3360,7 +3360,7 @@ class Component extends DCLogic {
       { id: 16, name: "parking", color: "#5993c0", clickable: false, layer: "underRoads", poly: [[37.29655634166688,126.83074949769934],[37.29677678689993,126.83125680232645],[37.29645285469383,126.83147923358149],[37.29623240851144,126.83097192895437]], lat: 37.29650459794303, lng: 126.83111436564042 },
       { id: 17, name: "parking", color: "#5993c0", clickable: false, layer: "underRoads", poly: [[37.29651523921275,126.83205611800358],[37.29677156365307,126.83267829998928],[37.29643387090568,126.83289813856922],[37.29618143265883,126.83228794022273]], lat: 37.29647552660758, lng: 126.8324801241962 },
       { id: 18, name: "parking", color: "#5993c0", clickable: false, layer: "underRoads", poly: [[37.29611231484969,126.83233348982561],[37.29619164487588,126.83252735047],[37.29592631694555,126.83269891777529],[37.29584698663957,126.83250505713092]], lat: 37.29601931582767, lng: 126.83251620380045 },
-      { id: 19, name: "emart", place: true, color: "", clickable: true, layer: "top", poly: [[37.298533746034416,126.8383607789543],[37.29849983978963,126.83827301402513],[37.29854553962684,126.83824450463132],[37.29849810898421,126.83812173234276],[37.29864480102855,126.83803217586129],[37.29869223157867,126.83815494814982],[37.29873478225216,126.83812957998126],[37.29876868839104,126.83821734491038],[37.298647491173504,126.83829133676274],[37.29861300227123,126.838203318228],[37.29860534826509,126.83820860040605],[37.29863925446232,126.83829636533527]], lat: 37.298618569488134, lng: 126.83821114163236 },
+      { id: 19, name: "emart & cafe 오가.다", place: true, color: "", clickable: true, layer: "top", poly: [[37.298533746034416,126.8383607789543],[37.29849983978963,126.83827301402513],[37.29854553962684,126.83824450463132],[37.29849810898421,126.83812173234276],[37.29864480102855,126.83803217586129],[37.29869223157867,126.83815494814982],[37.29873478225216,126.83812957998126],[37.29876868839104,126.83821734491038],[37.298647491173504,126.83829133676274],[37.29861300227123,126.838203318228],[37.29860534826509,126.83820860040605],[37.29863925446232,126.83829636533527]], lat: 37.298618569488134, lng: 126.83821114163236 },
       { id: 22, name: "parking", color: "#5993c0", clickable: false, layer: "underRoads", poly: [[37.29596347110189,126.83439775641381],[37.29654325779735,126.83583010291285],[37.29641286333343,126.83591350673],[37.29644147972937,126.83599044196949],[37.29609844103679,126.83620985816538],[37.29548802807078,126.83470185956247]], lat: 37.29615792351161, lng: 126.83550725429234 },
       { id: 24, name: "parking", color: "#5993c0", clickable: false, layer: "underRoads", poly: [[37.299641237911956,126.83740896835313],[37.299854652148824,126.83793081526187],[37.29916890461615,126.83837400412652],[37.29895548843347,126.83785215721778]], lat: 37.2994050707776, lng: 126.83789148623984 },
       { id: 26, name: "parking", color: "#5993c0", clickable: false, layer: "underRoads", poly: [[37.29779389859198,126.83852109382023],[37.297943525457256,126.83888749443328],[37.2977425617743,126.83901718094069],[37.29759293450925,126.83865078032773]], lat: 37.2977682300832, lng: 126.83876913738048 },
@@ -4342,6 +4342,7 @@ class Component extends DCLogic {
       this._relabelRaf = window.requestAnimationFrame(() => { this._relabelRaf = 0; this.declutterLabels(); });
     };
     this.map.on('zoom zoomend rotate resize', relabel);
+    this.map.on('zoomend', () => this.scaleRoads());
     // Keep building shapes and roads (SVG) glued to the labels mid-gesture:
     // re-sync the renderer's transform every frame through leaflet-rotate's
     // own _updateTransform, which accounts for the rotated pane.
@@ -4485,6 +4486,14 @@ class Component extends DCLogic {
     } else if (this.tiles) { this.map.removeLayer(this.tiles); this.tiles = null; }
   }
 
+  // Roads are drawn a fixed real width (like the buildings), not a fixed
+  // pixel width, so they thin out when zoomed out instead of burying blocks.
+  scaleRoads() {
+    if (!this.map || !this._roads) return;
+    const mPerPx = 156543.03 * Math.cos(this.map.getCenter().lat * Math.PI / 180) / Math.pow(2, this.map.getZoom());
+    this._roads.forEach(r => r.setStyle({ weight: Math.max(1, (r._major ? ROAD_M.major : ROAD_M.minor) / mPerPx) }));
+  }
+
   drawGeometry() {
     if (!this.map || !window.L || !this.geoLayer) return;
     const L = window.L;
@@ -4515,9 +4524,12 @@ class Component extends DCLogic {
     // sequence: under-roads shapes, roads, under-buildings shapes,
     // buildings, then everything else on top.
     customShapes.filter(c => layerOf(c) === 'underRoads').forEach(drawCustomShape);
-    (this.paths || []).forEach(p => {
-      L.polyline(p.pts, { color: p.major ? 'oklch(0.99 0.002 250)' : 'oklch(0.97 0.004 250)', weight: p.major ? 9 : 4.5, opacity: 1, lineCap: 'round' }).addTo(this.geoLayer);
+    this._roads = (this.paths || []).map(p => {
+      const line = L.polyline(p.pts, { color: p.major ? 'oklch(0.99 0.002 250)' : 'oklch(0.97 0.004 250)', weight: 1, opacity: 1, lineCap: 'round' }).addTo(this.geoLayer);
+      line._major = p.major;
+      return line;
     });
+    this.scaleRoads();
     customShapes.filter(c => layerOf(c) === 'underBuildings').forEach(drawCustomShape);
     const seenShapeIds = {};
     this.state.buildings.filter(b => b.poly && b.poly.length > 2).forEach(b => {
@@ -5117,9 +5129,9 @@ class Component extends DCLogic {
     const hideZoom = minZ + 0.75, compactZoom = minZ + 2.5, pad = 4;
     const pinned = e => s.selected === e.b.id || s.routeTarget === e.b.id;
     const fac = expandFacs(s.facFilter || []);
-    // a place with no number or name has only its facility icons to show
-    const bare = b => !shownNum(b) && !this.names(b).labelled;
-    const iconsOf = b => fac.length ? fac.filter(t => (b.tags || []).indexOf(t) >= 0) : bare(b) ? (b.tags || []).slice() : [];
+    // places (standalone shapes, no number) always show their own facility
+    // icons once zoomed in enough, then their name too further in
+    const iconsOf = b => fac.length ? fac.filter(t => (b.tags || []).indexOf(t) >= 0) : isPlaceNum(b.num) ? (b.tags || []).slice() : [];
     const rank = e => pinned(e) ? 0 : iconsOf(e.b).length ? 1 : 2;
     const placedFull = [], hits = box => placedFull.some(p => p.l < box.r && box.l < p.r && p.t < box.b && box.t < p.b);
     const planned = this.labelMarkers.slice().sort((x, y) => rank(x) - rank(y)).map(e => {
