@@ -3318,6 +3318,14 @@ const SPINE_Y = 68;
 const M_PER_UNIT = 9;
 // Drawn road widths in metres (see scaleRoads).
 const ROAD_M = { major: 5, minor: 2.5 };
+// Walking time from route distance. The public OSRM server only routes cars
+// (whatever profile is asked for), so its duration is a driving time (678m
+// came back as 3 min); always time the walk ourselves. 75 m/min = 4.5 km/h,
+// a little under flat-ground pace for campus hills and crossings.
+const WALK_M_PER_MIN = 75;
+const walkMins = m => Math.max(1, Math.round(m / WALK_M_PER_MIN));
+// Main Gate (the entrance at the north-east junction by parking lot 24).
+const MAIN_GATE = { lat: 37.300135, lng: 126.837663 };
 // Degrees of two-finger twist before a pinch starts rotating the map.
 const TWIST_DEG = 12;
 
@@ -3480,7 +3488,7 @@ class Component extends DCLogic {
       gymModal: null, showGym: false, gymMounted: false,
       shPeriod: null, shDay: null, shOpen: null, shSeasonCard: null,
       trFrom: 'cock', trTo: 'hda', trDate: null, trTime: null, trFullOpen: false,
-      mapMode: 'real', baseLabels: !!(stored && stored.baseLabels), gymTipSeen: !!(stored && stored.gymTipSeen), gymTip: false,
+      mapMode: 'real', baseLabels: false /* OSM tiles start off every visit */, gymTipSeen: !!(stored && stored.gymTipSeen), gymTip: false,
       osmStatus: '', osmBusy: false, placing: false,
       exportOpen: false, exportCopied: false,
       realRoute: null, routeBusy: false
@@ -4398,6 +4406,7 @@ class Component extends DCLogic {
       this._relabelRaf = window.requestAnimationFrame(() => { this._relabelRaf = 0; this.declutterLabels(); });
     };
     this.map.on('zoom zoomend rotate resize', relabel);
+    this.map.on('movestart zoomstart', () => { if (!this._flyingHome) this._atCampus = false; });
     // After every redraw (the renderer's 'update'), set road widths for the
     // zoom it drew at; between redraws its CSS scale stretches them live.
     this._svgRenderer.on('update', () => this.scaleRoads());
@@ -4473,7 +4482,7 @@ class Component extends DCLogic {
     if (this.refreshPaths(), withCoords.some(b => b.poly)) {
       const cb = this.campusBounds();
       // instant: an animated fit still running would override a timetable focus set right after
-      if (cb) this.map.fitBounds(cb, { paddingTopLeft: [CAMPUS_PAD.l, CAMPUS_PAD.t], paddingBottomRight: [CAMPUS_PAD.r, CAMPUS_PAD.b], animate: false });
+      if (cb) { this.map.fitBounds(cb, { paddingTopLeft: [CAMPUS_PAD.l, CAMPUS_PAD.t], paddingBottomRight: [CAMPUS_PAD.r, CAMPUS_PAD.b], animate: false }); this._atCampus = true; }
     }
     if (this._focusId) this.applyFocus();
   }
@@ -4503,9 +4512,22 @@ class Component extends DCLogic {
 
   resetMapBearing() { this.animateBearing(0); }
 
+  // Already showing the whole campus? Do nothing: a fly animation arcs out
+  // and back in even to the current view, which read as a jitter. _atCampus
+  // is set after the initial fit and our own fly, cleared by any other move.
   showCampus() {
     const cb = this.map && this.campusBounds();
-    if (cb) this.map.flyToBounds(cb, { paddingTopLeft: [CAMPUS_PAD.l, CAMPUS_PAD.t], paddingBottomRight: [CAMPUS_PAD.r, CAMPUS_PAD.b], duration: 0.6 });
+    if (!cb || this._atCampus) return;
+    const L = window.L, opts = { paddingTopLeft: L.point(CAMPUS_PAD.l, CAMPUS_PAD.t), paddingBottomRight: L.point(CAMPUS_PAD.r, CAMPUS_PAD.b) };
+    const target = this.map._getBoundsCenterZoom(L.latLngBounds(cb), opts);
+    const zoom = Math.max(this.map.getMinZoom(), Math.min(target.zoom, this.map.getMaxZoom()));
+    // where the map would really end up: maxBounds can hold the centre short of the fit
+    const center = this.map.options.maxBounds ? this.map._limitCenter(target.center, zoom, this.map.options.maxBounds) : target.center;
+    const off = this.map.latLngToContainerPoint(center).distanceTo(this.map.getSize().divideBy(2));
+    if (Math.abs(this.map.getZoom() - zoom) < 0.05 && off < 8) return;
+    this._flyingHome = true;
+    this.map.once('moveend', () => { this._flyingHome = false; this._atCampus = true; });
+    this.map.flyTo(center, zoom, { duration: 0.6 });
   }
 
   // Needle angle follows the bearing with no CSS transition (rotate events
@@ -4778,14 +4800,14 @@ class Component extends DCLogic {
         // keep the raw manoeuvres; they're worded at render time so the language toggle applies
         const steps = (r.legs[0].steps || []).map(st => { const m = st.maneuver || {}; return { type: m.type, mod: m.modifier || '', bearing: m.bearing_after, name: st.name || '', dist: Math.round(st.distance) }; }).filter(st => st.type !== 'arrive');
         if (stale()) return;
-        this.setState({ realRoute: { coords: coords, dist: Math.round(r.distance), mins: Math.max(1, Math.round(r.duration / 60)), steps: steps, approx: false }, routeBusy: false }, () => this.fitRoute());
+        this.setState({ realRoute: { coords: coords, dist: Math.round(r.distance), mins: walkMins(r.distance), steps: steps, approx: false }, routeBusy: false }, () => this.fitRoute());
         return;
       } catch (e) { /* try next profile */ }
     }
     if (stale()) return;
     const d = this.haversine(from, to);
     this.setState({
-      realRoute: { coords: [[from.lat, from.lng], [to.lat, to.lng]], dist: Math.round(d), mins: Math.max(1, Math.round(d / 75)), steps: null, approx: true },
+      realRoute: { coords: [[from.lat, from.lng], [to.lat, to.lng]], dist: Math.round(d), mins: walkMins(d), steps: null, approx: true },
       routeBusy: false
     }, () => this.fitRoute());
   }
@@ -4837,7 +4859,7 @@ class Component extends DCLogic {
     const s = this.state, ko = s.primary === 'ko';
     if (!key) return null;
     if (key === 'me') return s.gps ? { lat: s.gps.lat, lng: s.gps.lng, label: ko ? '내 위치' : 'Your location' } : { pending: true, label: ko ? '내 위치' : 'Your location' };
-    if (key === 'gate') return { lat: 37.29655, lng: 126.83565, label: ko ? '정문' : 'Main Gate' };
+    if (key === 'gate') return { lat: MAIN_GATE.lat, lng: MAIN_GATE.lng, label: ko ? '정문' : 'Main Gate' };
     const b = this.byId(Number(key));
     return b && b.lat ? { lat: b.lat, lng: b.lng, label: [shownNum(b), this.names(b).primary].filter(Boolean).join(' '), bldg: b } : null;
   }
