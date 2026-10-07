@@ -21,7 +21,9 @@
 
 <x-dc>
 <helmet>
-<style>/* Condensed card facility beads: icon on top, floor (B1, L1, L2) below, as one grey SVG shape. */
+<style>.road-major { stroke-width: var(--road-major, 4px); }
+.road-minor { stroke-width: var(--road-minor, 2px); }
+/* Condensed card facility beads: icon on top, floor (B1, L1, L2) below, as one grey SVG shape. */
 .fbead{position:relative;flex:none;width:28px;height:28px}
 .fb-shape{position:absolute;left:0;top:0;display:block}
 .fb-i{position:absolute;left:0;top:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center}
@@ -3313,6 +3315,8 @@ const SPINE_Y = 68;
 const M_PER_UNIT = 9;
 // Drawn road widths in metres (see scaleRoads).
 const ROAD_M = { major: 5, minor: 2.5 };
+// Degrees of two-finger twist before a pinch starts rotating the map.
+const TWIST_DEG = 12;
 
 const pad = n => String(n).padStart(2, '0');
 // "Basement Level 1" / "지하 1층" -> "B1", "Level 2 · Women's Wing" / "2층" -> "L2" (B for basements, no G/LG).
@@ -4247,13 +4251,45 @@ class Component extends DCLogic {
       const baseEvents = L.Renderer.prototype.getEvents;
       L.Renderer.prototype.getEvents = function () {
         const ev = baseEvents.apply(this, arguments);
+        // rotate fires on every touchmove; redraw at most once per frame
         ev.rotate = function () {
-          if (this._map && this._zoom != null && Math.abs(this._map.getZoom() - this._zoom) > 1e-6) this._reset();
-          else this._update();
+          if (this._ericaRotRaf) return;
+          this._ericaRotRaf = L.Util.requestAnimFrame(() => {
+            this._ericaRotRaf = 0;
+            if (!this._map) return;
+            if (this._zoom != null && Math.abs(this._map.getZoom() - this._zoom) > 1e-6) this._reset();
+            else this._update();
+          });
         };
         return ev;
       };
     }
+    // A pinch always twists a little, so without a dead zone every zoom also
+    // nudged the bearing. Rotation only engages after TWIST_DEG of twist, and
+    // then starts from where the fingers are (no jump by the threshold).
+    if (L.Map.TouchGestures && !L.Map.TouchGestures.prototype._ericaTwistLock) {
+      const P = L.Map.TouchGestures.prototype, start = P._onTouchStart, move = P._onTouchMove;
+      P._ericaTwistLock = true;
+      const angle = e => Math.atan2(e.touches[1].clientY - e.touches[0].clientY, e.touches[1].clientX - e.touches[0].clientX) * 180 / Math.PI;
+      P._onTouchStart = function (e) {
+        start.call(this, e);
+        if (this._rotating && e.touches && e.touches.length === 2) { this._twistFrom = angle(e); this._twistOpen = false; }
+      };
+      P._onTouchMove = function (e) {
+        if (!this._rotating || this._twistOpen || !e.touches || e.touches.length !== 2) return move.call(this, e);
+        if (Math.abs(((angle(e) - this._twistFrom + 540) % 360) - 180) < TWIST_DEG) {
+          this._rotating = false;
+          try { move.call(this, e); } finally { this._rotating = true; }
+          return;
+        }
+        this._twistOpen = true;
+        const map = this._map, v = map.mouseEventToContainerPoint(e.touches[0]).subtract(map.mouseEventToContainerPoint(e.touches[1]));
+        this._startTheta = Math.atan(v.x / v.y);
+        this._startBearing = map.getBearing() + (v.y < 0 ? 180 : 0);
+        move.call(this, e);
+      };
+    }
+    this._svgRenderer = L.svg({ padding: 1 });
     this.map = L.map(this.mapNode, {
       zoomControl: false, maxZoom: 23,
       // Fractional zoom: pinch and trackpad zoom stop where the fingers stop
@@ -4262,7 +4298,7 @@ class Component extends DCLogic {
       zoomSnap: 0, scrollWheelZoom: false,
       // draw vectors a full screen past each edge, so buildings pinched into
       // view are already drawn instead of appearing clipped until release
-      renderer: L.svg({ padding: 1 }),
+      renderer: this._svgRenderer,
       rotate: true, rotateControl: false, touchRotate: true, bearing: 0,
       maxBounds: MAP_BOX_BOUNDS, maxBoundsViscosity: 1.0, bounceAtZoomLimits: false
     }).setView([37.2978, 126.8358], 16);
@@ -4359,7 +4395,9 @@ class Component extends DCLogic {
       this._relabelRaf = window.requestAnimationFrame(() => { this._relabelRaf = 0; this.declutterLabels(); });
     };
     this.map.on('zoom zoomend rotate resize', relabel);
-    this.map.on('zoomend', () => this.scaleRoads());
+    // After every redraw (the renderer's 'update'), set road widths for the
+    // zoom it drew at; between redraws its CSS scale stretches them live.
+    this._svgRenderer.on('update', () => this.scaleRoads());
     // Keep building shapes and roads (SVG) glued to the labels mid-gesture:
     // re-sync the renderer's transform every frame through leaflet-rotate's
     // own _updateTransform, which accounts for the rotated pane.
@@ -4503,12 +4541,16 @@ class Component extends DCLogic {
     } else if (this.tiles) { this.map.removeLayer(this.tiles); this.tiles = null; }
   }
 
-  // Roads are drawn a fixed real width (like the buildings), not a fixed
-  // pixel width, so they thin out when zoomed out instead of burying blocks.
+  // Roads are a fixed real width (like the buildings), not a fixed pixel
+  // width, so they thin out when zoomed out instead of burying blocks. Set
+  // as two CSS variables (.road-major/.road-minor), so it's O(1) per redraw.
   scaleRoads() {
-    if (!this.map || !this._roads) return;
-    const mPerPx = 156543.03 * Math.cos(this.map.getCenter().lat * Math.PI / 180) / Math.pow(2, this.map.getZoom());
-    this._roads.forEach(r => r.setStyle({ weight: Math.max(1, (r._major ? ROAD_M.major : ROAD_M.minor) / mPerPx) }));
+    if (!this.map || !this.mapNode) return;
+    const r = this._svgRenderer, z = r && r._zoom != null ? r._zoom : this.map.getZoom();
+    const mPerPx = 156543.03 * Math.cos(this.map.getCenter().lat * Math.PI / 180) / Math.pow(2, z);
+    const px = m => Math.max(1, m / mPerPx).toFixed(2) + 'px';
+    this.mapNode.style.setProperty('--road-major', px(ROAD_M.major));
+    this.mapNode.style.setProperty('--road-minor', px(ROAD_M.minor));
   }
 
   drawGeometry() {
@@ -4541,10 +4583,8 @@ class Component extends DCLogic {
     // sequence: under-roads shapes, roads, under-buildings shapes,
     // buildings, then everything else on top.
     customShapes.filter(c => layerOf(c) === 'underRoads').forEach(drawCustomShape);
-    this._roads = (this.paths || []).map(p => {
-      const line = L.polyline(p.pts, { color: p.major ? 'oklch(0.99 0.002 250)' : 'oklch(0.97 0.004 250)', weight: 1, opacity: 1, lineCap: 'round' }).addTo(this.geoLayer);
-      line._major = p.major;
-      return line;
+    (this.paths || []).forEach(p => {
+      L.polyline(p.pts, { color: p.major ? 'oklch(0.99 0.002 250)' : 'oklch(0.97 0.004 250)', className: p.major ? 'road-major' : 'road-minor', opacity: 1, lineCap: 'round', interactive: false }).addTo(this.geoLayer);
     });
     this.scaleRoads();
     customShapes.filter(c => layerOf(c) === 'underBuildings').forEach(drawCustomShape);
