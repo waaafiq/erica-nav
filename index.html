@@ -1921,10 +1921,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
                       </sc-if>
                     </div>
                   </div>
+                  <sc-if value="{{ selectedFloors }}" hint-placeholder-val="{{ true }}">
                   <div>
                     <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Floors</div>
                     <div style="font-weight:600;font-size:13px">{{ selectedFloors }}</div>
                   </div>
+                  </sc-if>
                 </div>
               </div>
               <div style="display:flex;align-items:center;gap:8px;margin-top:14px">
@@ -1968,10 +1970,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   </sc-if>
                 </div>
                 </div>
+                <sc-if value="{{ selectedFloors }}" hint-placeholder-val="{{ true }}">
                 <div>
                   <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250)">Floors</div>
                   <div style="font-weight:600;font-size:13px">{{ selectedFloors }}</div>
                 </div>
+                </sc-if>
               </div>
               </sc-if>
 
@@ -5130,7 +5134,7 @@ class Component extends DCLogic {
     const pinned = e => s.selected === e.b.id || s.routeTarget === e.b.id;
     const fac = expandFacs(s.facFilter || []);
     // places (standalone shapes, no number) always show their own facility
-    // icons once zoomed in enough, then their name too further in
+    // icons once zoomed in enough
     const iconsOf = b => fac.length ? fac.filter(t => (b.tags || []).indexOf(t) >= 0) : isPlaceNum(b.num) ? (b.tags || []).slice() : [];
     const rank = e => pinned(e) ? 0 : iconsOf(e.b).length ? 1 : 2;
     const placedFull = [], hits = box => placedFull.some(p => p.l < box.r && box.l < p.r && p.t < box.b && box.t < p.b);
@@ -5181,8 +5185,10 @@ class Component extends DCLogic {
     const add = (kind, w, id) => parts.push({ x: parts.length * LBL_STEP, w: w, kind: kind, id: id });
     (icons || []).forEach(t => add('icon', LBL_D, t));
     const num = shownNum(b);
+    // standalone places label with just their facility icons (name only if they have none)
+    const nameless = !num && parts.length > 0;
     if (compact) { if (num) add('num', LBL_D); }
-    else if (num || n.labelled) add('name', Math.max(LBL_D, (num ? this.textW(num) : 0) + (num && n.labelled ? 6 : 0) + (n.labelled ? this.textW(n.primary) : 0) + 18));
+    else if (num || (n.labelled && !nameless)) add('name', Math.max(LBL_D, (num ? this.textW(num) : 0) + (num && n.labelled ? 6 : 0) + (n.labelled ? this.textW(n.primary) : 0) + 18));
     if (!parts.length) return null;
     const last = parts[parts.length - 1];
     return { parts: parts, w: last.x + last.w, name: n.primary, ax: last.x + LBL_D / 2 };
@@ -6926,7 +6932,7 @@ class Component extends DCLogic {
         if (this._sheetDragged) { this._sheetDragged = false; return; }
         this.setSheetFull(s.sheetFullFor === s.selected ? null : s.selected);
       },
-      selectedFloors: sel ? (sel.floors ? sel.floors + ' floors' : 'Not set') : '',
+      selectedFloors: sel && !isPlaceNum(sel.num) ? (sel.floors ? sel.floors + ' floors' : 'Not set') : '',
       noTags: !!(sel && (!sel.tags || !sel.tags.length)),
       routeHere: () => this.openDirections(String(s.selected)),
       routeFrom: () => this.openDirections('', String(s.selected)),
