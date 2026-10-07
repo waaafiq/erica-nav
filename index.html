@@ -3368,7 +3368,7 @@ class Component extends DCLogic {
       } else {
         base.buildings = base.buildings.map(b => {
           const est = ESTIMATED_REAL_SHAPES[b.num];
-          return est ? Object.assign({}, b, { lat: est.lat, lng: est.lng, poly: est.poly, shapeId: est.shapeId || null,
+          return est ? Object.assign({}, b, { lat: est.lat, lng: est.lng, poly: est.poly, holes: null, shapeId: est.shapeId || null,
             labelLat: est.labelLat != null ? est.labelLat : null, labelLng: est.labelLng != null ? est.labelLng : null }) : b;
         });
       }
@@ -3627,7 +3627,8 @@ class Component extends DCLogic {
       // Pull the actual traced outline (not just its bounding box) out of the
       // uploaded file, in the SVG's own coordinate space, so the saved
       // building keeps its real shape instead of becoming a plain rectangle.
-      const shapePts = this.extractSvgOutline(text);
+      const traced = this.extractSvgOutline(text);
+      const shapePts = traced && traced.outer, shapeHoles = traced ? traced.holes : [];
       text = text.replace(/<svg\b([^>]*)>/i, (m, attrs) => {
         let a = attrs.replace(/\s(width|height)=["'][^"']*["']/gi, '');
         if (!hasVB) a += ' viewBox="0 0 ' + w + ' ' + h + '"';
@@ -3639,7 +3640,7 @@ class Component extends DCLogic {
       const dispH = ratio >= 1 ? BASE / ratio : BASE;
       this.setState(s => s.shapeEditor ? { shapeEditor: Object.assign({}, s.shapeEditor, {
         svg: text, naturalW: dispW, naturalH: dispH, scale: 1,
-        svgW: w, svgH: h, svgX: vbX, svgY: vbY, shapePts: shapePts
+        svgW: w, svgH: h, svgX: vbX, svgY: vbY, shapePts: shapePts, shapeHoles: shapeHoles
       }) } : null);
     };
     reader.onerror = () => { alert('Could not read that SVG file. Please try a different file.'); };
@@ -3691,7 +3692,13 @@ class Component extends DCLogic {
         ctx.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
         const tag = el.tagName.toLowerCase();
         if (tag === 'path') {
-          try { ctx.fill(new Path2D(el.getAttribute('d') || '')); } catch (e) { /* skip unparsable path */ }
+          // honour fill-rule (attribute or style, inherited) so an evenodd cut-out stays empty
+          let rule = 'nonzero';
+          for (let n = el; n && n.getAttribute; n = n.parentElement) {
+            const m = ((n.getAttribute('style') || '') + ';fill-rule:' + (n.getAttribute('fill-rule') || '')).match(/fill-rule\s*:\s*(evenodd|nonzero)/);
+            if (m) { rule = m[1]; break; }
+          }
+          try { ctx.fill(new Path2D(el.getAttribute('d') || ''), rule); } catch (e) { /* skip unparsable path */ }
         } else {
           ctx.beginPath();
           if (tag === 'rect') {
@@ -3731,7 +3738,39 @@ class Component extends DCLogic {
       if (!raster || raster.length < 3) return null;
       const simplified = this.simplifyOutline(raster.slice(0, -1), 1.5);
       if (simplified.length < 3) return null;
-      return simplified.map(([px, py]) => [px / scale + vbX, py / scale + vbY]);
+      const toSvg = pts => pts.map(([px, py]) => [px / scale + vbX, py / scale + vbY]);
+      // Holes (courtyards, cut-outs): empty pixels that can't reach the
+      // canvas edge. Flood the outside from the border, then trace each
+      // enclosed empty region left over; specks under 40px are noise.
+      const comp = new Int32Array(cw * ch);
+      const flood = (x0, y0, id) => {
+        const stack = [y0 * cw + x0];
+        comp[stack[0]] = id;
+        let area = 0;
+        while (stack.length) {
+          const i = stack.pop(), x = i % cw, y = (i - x) / cw;
+          area++;
+          for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+            const nx = x + dx, ny = y + dy, j = ny * cw + nx;
+            if (nx >= 0 && ny >= 0 && nx < cw && ny < ch && !comp[j] && !inside(nx, ny)) { comp[j] = id; stack.push(j); }
+          }
+        }
+        return area;
+      };
+      for (let x = 0; x < cw; x++) for (const y of [0, ch - 1]) if (!comp[y * cw + x] && !inside(x, y)) flood(x, y, -1);
+      for (let y = 0; y < ch; y++) for (const x of [0, cw - 1]) if (!comp[y * cw + x] && !inside(x, y)) flood(x, y, -1);
+      const holes = [];
+      for (let y = 0, id = 1; y < ch; y++) {
+        for (let x = 0; x < cw; x++) {
+          if (comp[y * cw + x] || inside(x, y)) continue;
+          const hid = ++id;
+          if (flood(x, y, hid) < 40) continue;
+          const ring = this.traceRasterOutline((px, py) => px >= 0 && py >= 0 && px < cw && py < ch && comp[py * cw + px] === hid, cw, ch, x, y);
+          const hs = ring && ring.length > 3 ? this.simplifyOutline(ring.slice(0, -1), 1.5) : [];
+          if (hs.length >= 3) holes.push(toSvg(hs));
+        }
+      }
+      return { outer: toSvg(simplified), holes: holes };
     } catch (e) { /* fall back to the bounding box below */ }
     return null;
   }
@@ -3953,19 +3992,22 @@ class Component extends DCLogic {
     };
     // Use the actual traced outline pulled from the upload when there is
     // one (polygon/polyline/path); otherwise fall back to its bounding box.
-    const corners = (se.shapePts && se.shapePts.length >= 3)
-      ? se.shapePts.map(([px, py]) => toLatLng(
-          ((px - (se.svgX || 0)) / (se.svgW || 1)) * se.naturalW,
-          ((py - (se.svgY || 0)) / (se.svgH || 1)) * se.naturalH
-        ))
+    const fromSvg = ([px, py]) => toLatLng(
+      ((px - (se.svgX || 0)) / (se.svgW || 1)) * se.naturalW,
+      ((py - (se.svgY || 0)) / (se.svgH || 1)) * se.naturalH
+    );
+    const traced = se.shapePts && se.shapePts.length >= 3;
+    const corners = traced
+      ? se.shapePts.map(fromSvg)
       : [[0, 0], [se.naturalW, 0], [se.naturalW, se.naturalH], [0, se.naturalH]].map(([ux, uy]) => toLatLng(ux, uy));
+    const holes = traced ? (se.shapeHoles || []).map(h => h.map(fromSvg)) : [];
     const lat = corners.reduce((a, p) => a + p[0], 0) / corners.length;
     const lng = corners.reduce((a, p) => a + p[1], 0) / corners.length;
     if (se.kind === 'custom') {
       const nextId = Math.max(0, ...this.state.customShapes.map(c => c.id)) + 1;
       const entry = {
         id: nextId, name: (se.customName || '').trim(), color: (se.customColor || '').trim(),
-        clickable: se.customClickable !== false, layer: se.customLayer || 'top', poly: corners, lat: lat, lng: lng
+        clickable: se.customClickable !== false, layer: se.customLayer || 'top', poly: corners, holes: holes, lat: lat, lng: lng
       };
       this.persist({ customShapes: this.state.customShapes.concat([entry]) }, () => this.syncMap());
       this.closeShapeEditor();
@@ -3974,7 +4016,7 @@ class Component extends DCLogic {
     const num = (se.num || '').trim();
     if (!num) { alert('Pick a building from the list first.'); return; }
     const allNums = [num].concat((se.sharedNums || []).filter(n => n !== num));
-    const geom = { poly: corners, lat: lat, lng: lng, color: (se.customColor || '').trim(), clickable: se.customClickable !== false };
+    const geom = { poly: corners, holes: holes, lat: lat, lng: lng, color: (se.customColor || '').trim(), clickable: se.customClickable !== false };
     let nextShapes = this.state.shapes;
     let shapeId = null;
     if (allNums.length > 1) {
@@ -4253,9 +4295,11 @@ class Component extends DCLogic {
       const pm = this._polyMove;
       if (!pm) return;
       const dLat = e.latlng.lat - pm.start[0], dLng = e.latlng.lng - pm.start[1];
-      const moved = pm.base.map(p => [p[0] + dLat, p[1] + dLng]);
+      const shift = p => [p[0] + dLat, p[1] + dLng];
+      const moved = pm.base.map(shift);
       pm.lastPts = moved;
-      if (pm.layer) pm.layer.setLatLngs(moved);
+      pm.lastHoles = pm.baseHoles.map(h => h.map(shift));
+      if (pm.layer) pm.layer.setLatLngs(pm.lastHoles.length ? [moved].concat(pm.lastHoles) : moved);
     });
     this.map.on('mouseup', () => {
       const pm = this._polyMove;
@@ -4270,10 +4314,10 @@ class Component extends DCLogic {
           // Every building sharing this shapeId resolves from the SAME
           // shapes entry (see persist()), so writing it once here is enough
           // -- no per-building propagation loop needed.
-          const nextShapes = this.state.shapes.map(sh => sh.id === pm.shapeId ? Object.assign({}, sh, { poly: pm.lastPts, lat: lat, lng: lng }) : sh);
+          const nextShapes = this.state.shapes.map(sh => sh.id === pm.shapeId ? Object.assign({}, sh, { poly: pm.lastPts, holes: pm.lastHoles, lat: lat, lng: lng }) : sh);
           this.persist(Object.assign({ shapes: nextShapes, repositioning: false, adminOpen: true }, formPatch), () => this.syncMap());
         } else {
-          const next = this.state.buildings.map(b => b.num === pm.num ? Object.assign({}, b, { poly: pm.lastPts, lat: lat, lng: lng }) : b);
+          const next = this.state.buildings.map(b => b.num === pm.num ? Object.assign({}, b, { poly: pm.lastPts, holes: pm.lastHoles, lat: lat, lng: lng }) : b);
           this.persist(Object.assign({ buildings: next, repositioning: false, adminOpen: true }, formPatch), () => this.syncMap());
         }
       }
@@ -4362,7 +4406,7 @@ class Component extends DCLogic {
       const hasColor = !!(c.color && c.color.trim());
       const clickable = c.clickable !== false;
       const adminMode = this.state.admin;
-      const poly = L.polygon(c.poly, {
+      const poly = L.polygon(c.holes && c.holes.length ? [c.poly].concat(c.holes) : c.poly, {
         color: hasColor ? c.color : 'oklch(0.72 0.02 250)',
         weight: 1, fillColor: hasColor ? c.color : 'oklch(0.87 0.014 250)', fillOpacity: 1,
         interactive: adminMode || clickable
@@ -4401,7 +4445,7 @@ class Component extends DCLogic {
       const repositioning = this.state.repositioning && groupBuildings.some(gb => gb.num === this.state.editId);
       const hasColor = !!(b.color && b.color.trim());
       const clickable = b.clickable !== false;
-      const poly = L.polygon(b.poly, {
+      const poly = L.polygon(b.holes && b.holes.length ? [b.poly].concat(b.holes) : b.poly, {
         color: repositioning ? 'oklch(0.6 0.16 60)' : (on ? 'oklch(0.44 0.14 258)' : (hasColor ? b.color : 'oklch(0.72 0.02 250)')),
         weight: repositioning ? 3 : (on ? 2 : 1), dashArray: repositioning ? '6 4' : null,
         fillColor: repositioning ? 'oklch(0.9 0.09 60)' : (on ? 'oklch(0.88 0.08 258)' : (hasColor ? b.color : 'oklch(0.87 0.014 250)')), fillOpacity: 1,
@@ -4412,7 +4456,7 @@ class Component extends DCLogic {
         poly.on('mousedown', e => {
           if (!this.map) return;
           this.map.dragging.disable();
-          this._polyMove = { num: this.state.editId, shapeId: b.shapeId || null, base: b.poly.map(p => p.slice()), start: [e.latlng.lat, e.latlng.lng], layer: poly };
+          this._polyMove = { num: this.state.editId, shapeId: b.shapeId || null, base: b.poly.map(p => p.slice()), baseHoles: (b.holes || []).map(h => h.map(p => p.slice())), start: [e.latlng.lat, e.latlng.lng], layer: poly };
         });
       } else if (clickable) {
         poly.on('click', e => { window.L.DomEvent.stopPropagation(e); this.setState({ selected: b.id }); });
@@ -4924,7 +4968,7 @@ class Component extends DCLogic {
       if (!b.shapeId) return b;
       const sh = byId[b.shapeId];
       if (!sh) return b;
-      return Object.assign({}, b, { lat: sh.lat, lng: sh.lng, poly: sh.poly, color: sh.color, clickable: sh.clickable });
+      return Object.assign({}, b, { lat: sh.lat, lng: sh.lng, poly: sh.poly, holes: sh.holes || null, color: sh.color, clickable: sh.clickable });
     });
   }
 
@@ -6932,7 +6976,7 @@ class Component extends DCLogic {
       toggleBaseLabels: () => this.persist({ baseLabels: !s.baseLabels }),
       clearAllShapes: () => {
         if (!window.confirm('Clear every building polygon and tag? This cannot be undone.')) return;
-        const next = s.buildings.map(b => Object.assign({}, b, { poly: null, localPoly: null, tags: [], shapeId: null }));
+        const next = s.buildings.map(b => Object.assign({}, b, { poly: null, holes: null, localPoly: null, tags: [], shapeId: null }));
         const nextForm = s.form ? Object.assign({}, s.form, { tags: [] }) : s.form;
         this.persist({ buildings: next, shapes: [], form: nextForm }, () => this.syncMap());
       },
