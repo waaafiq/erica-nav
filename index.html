@@ -1749,7 +1749,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* phones open the native picker on tap; Chrome's hidden clock slot would otherwise clip "AM" */
   @media (pointer: coarse) { input[type=time].sfld::-webkit-calendar-picker-indicator { display: none; } }
   @keyframes ericaLblIn { from { opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) { .erica-lbl { animation: none; } }
+  /* first-load pop: scales from the building point (transform-origin 0 0 is the marker anchor) */
+  .erica-lbl.pop { animation: ericaPop .45s cubic-bezier(.34,1.56,.64,1) both; transform-origin: 0 0; }
+  @keyframes ericaPop { from { opacity: 0; scale: .3; } 60% { opacity: 1; } to { opacity: 1; scale: 1; } }
+  @media (prefers-reduced-motion: reduce) { .erica-lbl, .erica-lbl.pop { animation: none; } }
   a { color: oklch(0.44 0.14 258); text-decoration: none; }
   a:hover { color: oklch(0.34 0.15 258); text-decoration: underline; }
   input, select, button, textarea { font-family: inherit; font-size: inherit; }
@@ -5194,6 +5197,7 @@ class Component extends DCLogic {
     const placeLow = b => !shownNum(b) && !fac.length;
     const rank = e => pinned(e) ? 0 : placeLow(e.b) ? 3 : iconsOf(e.b).length ? 1 : 2;
     const placedFull = [], hits = box => placedFull.some(p => p.l < box.r && box.l < p.r && p.t < box.b && box.t < p.b);
+    this.startLabelIntro();
     const planned = this.labelMarkers.slice().sort((x, y) => rank(x) - rank(y)).map(e => {
       const b = e.b, pin = pinned(e), icons = iconsOf(b), match = icons.length > 0;
       let mode = pin ? 'full' : zoom <= hideZoom ? 'hide' : zoom <= compactZoom ? 'compact' : 'full';
@@ -5229,6 +5233,34 @@ class Component extends DCLogic {
       // full tags draw over number circles, pinned over everything
       e.marker.setZIndexOffset(pin ? 2000 : mode === 'full' ? 1000 : 0);
     });
+  }
+
+  // First map load of the page: labels pop in, in random batches of growing
+  // size (1, 3, 5, 10, then the rest), all done in about 2.3s. Labels created
+  // later in that window (e.g. once facilities load) join the next batches.
+  startLabelIntro() {
+    if (this._introT0 != null || !this.labelMarkers || !this.labelMarkers.length) return;
+    this._introT0 = performance.now();
+    this._introDelay = {};
+    this._introNext = 0;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { this._introT0 = -1e9; return; }
+    const order = this.labelMarkers.map(e => e.b.id);
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    order.forEach(id => this.introDelayFor(id));
+  }
+
+  // Seconds (from now) until this label's pop, or null once the intro is over.
+  introDelayFor(id) {
+    if (this._introT0 == null) return null;
+    const elapsed = (performance.now() - this._introT0) / 1000;
+    if (elapsed > 2.5) return null;
+    if (this._introDelay[id] == null) {
+      const n = this._introNext++;
+      const batch = n < 1 ? 0 : n < 4 ? 1 : n < 9 ? 2 : n < 19 ? 3 : 4;
+      this._introDelay[id] = Math.max(elapsed, 0.15 + batch * 0.35 + Math.random() * 0.3);
+    }
+    const left = this._introDelay[id] - elapsed;
+    return left > 0 ? left : null;
   }
 
   // Bead labels: one overlapping circle per matched facility icon first, then
@@ -5268,7 +5300,8 @@ class Component extends DCLogic {
     const pos = 'position:absolute;display:flex;align-items:center;justify-content:center;border-radius:' + D + 'px;';
     const outline = g.parts.map(p => '<div style="' + pos + 'left:' + p.x + 'px;top:0;width:' + p.w + 'px;height:' + D + 'px;background:' + line + ';box-shadow:0 1px 4px rgba(30,40,60,.25)"></div>').join('');
     const body = g.parts.map(p => '<div style="' + pos + 'left:' + (p.x + bw) + 'px;top:' + bw + 'px;width:' + (p.w - 2 * bw) + 'px;height:' + (D - 2 * bw) + 'px;background:' + fill + '">' + content(p) + '</div>').join('');
-    return '<div class="erica-lbl" style="position:relative;width:' + g.w + 'px;height:' + D + 'px;transform:translate(-' + g.ax + 'px,-100%)">' + outline + body + '</div>';
+    const pop = this.introDelayFor(b.id);
+    return '<div class="erica-lbl' + (pop != null ? ' pop' : '') + '" style="position:relative;width:' + g.w + 'px;height:' + D + 'px;transform:translate(-' + g.ax + 'px,-100%)' + (pop != null ? ';animation-delay:' + pop.toFixed(2) + 's' : '') + '">' + outline + body + '</div>';
   }
 
   textW(t, font) {
