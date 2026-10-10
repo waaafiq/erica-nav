@@ -1770,6 +1770,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
   ::-webkit-scrollbar-thumb { background: oklch(0.8 0.02 250); border-radius: 999px; border: 2px solid oklch(0.97 0.005 250); }
   ::-webkit-scrollbar-thumb:hover { background: oklch(0.7 0.03 250); }
   .no-scrollbar { scrollbar-width: none; }
+  /* building photos: card thumbnail / strip, and the full-screen viewer */
+  .ph { flex: none; padding: 0; border: 1px solid oklch(0.9 0.012 250); border-radius: 10px; overflow: hidden; background: oklch(0.95 0.008 250); cursor: zoom-in; scroll-snap-align: start; display: block; }
+  .ph img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .25s ease; }
+  .ph:hover img { transform: scale(1.03); }
+  .ph:active img { transform: scale(0.98); }
+  .ph:focus-visible { outline: 2px solid oklch(0.44 0.14 258); outline-offset: 2px; }
+  .ph-empty { cursor: default; display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(135deg,oklch(0.95 0.008 250) 0 6px,oklch(0.92 0.01 250) 6px 12px); font-family: 'Google Sans Flex',sans-serif; font-size: 11px; color: oklch(0.5 0.02 250); text-align: center; }
+  .ph-strip { container-type: inline-size; display: flex; gap: 8px; margin-top: 14px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; }
+  .ph-strip > .ph:first-child { margin-left: auto; } .ph-strip > .ph:last-child { margin-right: auto; }
+  .lb { position: fixed; inset: 0; z-index: 3000; background: oklch(0.12 0.01 250 / 0.94); display: flex; align-items: center; justify-content: center; padding: max(56px, env(safe-area-inset-top)) 12px max(56px, env(safe-area-inset-bottom)); cursor: zoom-out; touch-action: none; user-select: none; -webkit-user-select: none; animation: lbIn .18s ease-out; }
+  .lb-img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; background: center / contain no-repeat; -webkit-user-drag: none; will-change: transform; }
+  .lb.lb-zoomed { cursor: grab; }
+  .lb.lb-zoomed .lb-cap { opacity: 0; }
+  .lb-btn { position: absolute; width: 44px; height: 44px; border: none; border-radius: 9999px; background: oklch(1 0 0 / 0.14); color: oklch(1 0 0); display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(6px); }
+  .lb-btn:hover { background: oklch(1 0 0 / 0.26); }
+  .lb-btn:focus-visible { outline: 2px solid oklch(1 0 0); outline-offset: 2px; }
+  .lb-x { top: max(10px, env(safe-area-inset-top)); right: 10px; }
+  .lb-prev, .lb-next { top: 50%; margin-top: -22px; }
+  .lb-prev { left: 10px; } .lb-next { right: 10px; }
+  .lb-cap { position: absolute; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%); padding: 6px 12px; border-radius: 9999px; background: oklch(0 0 0 / 0.45); color: oklch(1 0 0); font-size: 13px; white-space: nowrap; pointer-events: none; }
+  @keyframes lbIn { from { opacity: 0; } }
   /* timetable edit mode: classes wiggle like iOS home-screen icons */
   @keyframes ttJiggle { 0%, 100% { transform: rotate(-1.1deg); } 50% { transform: rotate(1.1deg); } }
   .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -1847,7 +1868,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
         <div class="no-scrollbar pillrow" style="display:flex;gap:6px;overflow-x:auto;width:fit-content;pointer-events:auto">
           <sc-for list="{{ facChips }}" as="f" hint-placeholder-count="10">
-            <button sc-camel-on-click="{{ f.toggle }}" aria-pressed="{{ f.pressed }}" style="{{ f.style }}"><sc-if value="{{ f.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ f.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ f.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ f.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ f.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ f.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ f.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ f.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if><sc-if value="{{ f.isWorship }}" hint-placeholder-val="{{ false }}"><svg viewBox="63 -899 835 835" style="width:14px;height:14px;flex:none" fill="#8e4ec6"><path d="M700-450v90q0 17-11.5 28.5T660-320q-17 0-28.5-11.5T620-360v-69l-45-81q-7 5-11 13t-4 17v229l67 111q12 20 0 40t-35 20q-11 0-20-5t-14-14l-78-129v-252q0-31 15-57t41-43l-56-99q-20-38-17.5-80.5T495-832l38-37q13-13 30-12.5t28 14.5l231 271q8 10 13 21.5t6 24.5l35 427q2 17-10 30t-29 13q-16 0-27-10.5T797-117l-36-427-203-238-6 6q-10 10-11.5 23t4.5 25l155 278Zm-440 0 155-278q6-12 4.5-25T408-776l-6-6-203 238-36 428q-2 16-13 26t-27 10q-17 0-29-13t-10-30l35-427q1-13 6-24.5t13-21.5l231-271q11-14 28.5-14.5T428-869l37 37q30 30 32.5 72.5T480-679l-56 99q26 17 41 43t15 57v252L402-99q-5 9-14.5 14T367-80q-23 0-34.5-20t.5-40l67-111v-229q0-9-4-17t-11-13l-45 81v69q0 17-11.5 28.5T300-320q-17 0-28.5-11.5T260-360v-90Z"></path></svg></sc-if>{{ f.label }}</button>
+            <button sc-camel-on-click="{{ f.toggle }}" aria-pressed="{{ f.pressed }}" style="{{ f.style }}"><sc-if value="{{ f.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ f.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ f.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ f.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ f.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ f.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ f.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ f.isBank }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#b7791f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg></sc-if><sc-if value="{{ f.isPost }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#d6336c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg></sc-if><sc-if value="{{ f.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if><sc-if value="{{ f.isWorship }}" hint-placeholder-val="{{ false }}"><svg viewBox="63 -899 835 835" style="width:14px;height:14px;flex:none" fill="#8e4ec6"><path d="M700-450v90q0 17-11.5 28.5T660-320q-17 0-28.5-11.5T620-360v-69l-45-81q-7 5-11 13t-4 17v229l67 111q12 20 0 40t-35 20q-11 0-20-5t-14-14l-78-129v-252q0-31 15-57t41-43l-56-99q-20-38-17.5-80.5T495-832l38-37q13-13 30-12.5t28 14.5l231 271q8 10 13 21.5t6 24.5l35 427q2 17-10 30t-29 13q-16 0-27-10.5T797-117l-36-427-203-238-6 6q-10 10-11.5 23t4.5 25l155 278Zm-440 0 155-278q6-12 4.5-25T408-776l-6-6-203 238-36 428q-2 16-13 26t-27 10q-17 0-29-13t-10-30l35-427q1-13 6-24.5t13-21.5l231-271q11-14 28.5-14.5T428-869l37 37q30 30 32.5 72.5T480-679l-56 99q26 17 41 43t15 57v252L402-99q-5 9-14.5 14T367-80q-23 0-34.5-20t.5-40l67-111v-229q0-9-4-17t-11-13l-45 81v69q0 17-11.5 28.5T300-320q-17 0-28.5-11.5T260-360v-90Z"></path></svg></sc-if>{{ f.label }}</button>
           </sc-for>
           </div>
           <sc-if value="{{ facEmptyMsg }}" hint-placeholder-val="{{ false }}">
@@ -1914,17 +1935,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
               <sc-if value="{{ sheetPeek }}" hint-placeholder-val="{{ true }}">
               <div style="display:flex;gap:16px;margin-top:12px">
-                <div role="{{ photoRole }}" aria-label="{{ photoAlt }}" style="{{ photoStyle }}">
-                  <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ true }}">
-                    <span style="font-family:'Google Sans Flex',sans-serif;font-size:11px;color:oklch(0.5 0.02 250);text-align:center;padding:0 4px">building<br>photo</span>
-                  </sc-if>
-                </div>
+                <sc-if value="{{ hasPhotos }}" hint-placeholder-val="{{ true }}">
+                  <button type="button" class="ph" sc-camel-on-click="{{ openThumb }}" aria-label="{{ thumbLabel }}" style="{{ thumbStyle }}"><img sc-camel-src="{{ thumbSrc }}" alt="" decoding="async"></button>
+                </sc-if>
+                <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ false }}">
+                  <div class="ph ph-empty" style="width:96px;height:70px"><span>building<br>photo</span></div>
+                </sc-if>
                 <div style="flex:1;min-width:0;display:flex;gap:8px 40px;align-items:flex-start">
                   <div style="min-width:0">
                     <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.02 250);margin-bottom:6px">Facilities</div>
                     <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:6px">
                       <sc-for list="{{ selectedFacs }}" as="fb" hint-placeholder-count="2">
-                        <span role="img" aria-label="{{ fb.beadLabel }}" title="{{ fb.beadLabel }}" class="fbead" style="{{ fb.beadStyle }}"><sc-if value="{{ fb.floor }}" hint-placeholder-val="{{ true }}"><svg class="fb-shape" width="28" height="49" viewBox="0 0 28 49" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="oklch(0.95 0.012 250)"></circle><circle cx="14" cy="35" r="14" fill="oklch(0.95 0.012 250)"></circle></svg></sc-if><sc-if value="{{ fb.noFloor }}" hint-placeholder-val="{{ false }}"><svg class="fb-shape" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="oklch(0.95 0.012 250)"></circle></svg></sc-if><span class="fb-i"><sc-if value="{{ fb.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ fb.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ fb.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ fb.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ fb.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ fb.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ fb.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ fb.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if><sc-if value="{{ fb.isChapel }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#8e4ec6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h4"></path><path d="M12 7v5"></path><path d="M14 21v-3a2 2 0 0 0-4 0v3"></path><path d="m18 9 3.52 2.147a1 1 0 0 1 .48.854V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6.999a1 1 0 0 1 .48-.854L6 9"></path><path d="M6 21V7a1 1 0 0 1 .376-.782l5-3.999a1 1 0 0 1 1.249.001l5 4A1 1 0 0 1 18 7v14"></path></svg></sc-if><sc-if value="{{ fb.isPrayer }}" hint-placeholder-val="{{ false }}"><svg viewBox="42 -918 876 876" style="width:14px;height:14px;flex:none" fill="#8e4ec6"><path d="M346-160H240q-33 0-56.5-23.5T160-240v-106l-77-78q-11-12-17-26.5T60-480q0-15 6-29.5T83-536l77-78v-106q0-33 23.5-56.5T240-800h106l78-77q12-11 26.5-17t29.5-6q15 0 29.5 6t26.5 17l78 77h106q33 0 56.5 23.5T800-720v106l77 78q11 12 17 26.5t6 29.5q0 15-6 29.5T877-424l-77 78v106q0 33-23.5 56.5T720-160H614l-78 77q-12 11-26.5 17T480-60q-15 0-29.5-6T424-83l-78-77Zm34-80 100 100 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140Zm100-240Zm41-20 59-43 58 43-23-68 59-43h-72l-22-69-22 69h-73l59 43-23 68Zm-41 220q83 0 141.5-58T680-480q0-8-.5-16t-2.5-16q-11 47-49 77.5T539-404q-60 0-101-41t-41-101q0-46 26-82.5t68-51.5h-11q-84 0-142 58.5T280-480q0 84 58 142t142 58Z"></path></svg></sc-if></span><sc-if value="{{ fb.floor }}" hint-placeholder-val="{{ true }}"><span class="fb-i fb-low fb-floor">{{ fb.floor }}</span></sc-if></span>
+                        <span role="img" aria-label="{{ fb.beadLabel }}" title="{{ fb.beadLabel }}" class="fbead" style="{{ fb.beadStyle }}"><sc-if value="{{ fb.floor }}" hint-placeholder-val="{{ true }}"><svg class="fb-shape" width="28" height="49" viewBox="0 0 28 49" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="oklch(0.95 0.012 250)"></circle><circle cx="14" cy="35" r="14" fill="oklch(0.95 0.012 250)"></circle></svg></sc-if><sc-if value="{{ fb.noFloor }}" hint-placeholder-val="{{ false }}"><svg class="fb-shape" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="oklch(0.95 0.012 250)"></circle></svg></sc-if><span class="fb-i"><sc-if value="{{ fb.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ fb.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ fb.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ fb.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ fb.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ fb.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ fb.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ fb.isBank }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#b7791f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg></sc-if><sc-if value="{{ fb.isPost }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#d6336c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg></sc-if><sc-if value="{{ fb.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if><sc-if value="{{ fb.isChapel }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;flex:none" fill="none" stroke="#8e4ec6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h4"></path><path d="M12 7v5"></path><path d="M14 21v-3a2 2 0 0 0-4 0v3"></path><path d="m18 9 3.52 2.147a1 1 0 0 1 .48.854V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6.999a1 1 0 0 1 .48-.854L6 9"></path><path d="M6 21V7a1 1 0 0 1 .376-.782l5-3.999a1 1 0 0 1 1.249.001l5 4A1 1 0 0 1 18 7v14"></path></svg></sc-if><sc-if value="{{ fb.isPrayer }}" hint-placeholder-val="{{ false }}"><svg viewBox="42 -918 876 876" style="width:14px;height:14px;flex:none" fill="#8e4ec6"><path d="M346-160H240q-33 0-56.5-23.5T160-240v-106l-77-78q-11-12-17-26.5T60-480q0-15 6-29.5T83-536l77-78v-106q0-33 23.5-56.5T240-800h106l78-77q12-11 26.5-17t29.5-6q15 0 29.5 6t26.5 17l78 77h106q33 0 56.5 23.5T800-720v106l77 78q11 12 17 26.5t6 29.5q0 15-6 29.5T877-424l-77 78v106q0 33-23.5 56.5T720-160H614l-78 77q-12 11-26.5 17T480-60q-15 0-29.5-6T424-83l-78-77Zm34-80 100 100 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140Zm100-240Zm41-20 59-43 58 43-23-68 59-43h-72l-22-69-22 69h-73l59 43-23 68Zm-41 220q83 0 141.5-58T680-480q0-8-.5-16t-2.5-16q-11 47-49 77.5T539-404q-60 0-101-41t-41-101q0-46 26-82.5t68-51.5h-11q-84 0-142 58.5T280-480q0 84 58 142t142 58Z"></path></svg></sc-if></span><sc-if value="{{ fb.floor }}" hint-placeholder-val="{{ true }}"><span class="fb-i fb-low fb-floor">{{ fb.floor }}</span></sc-if></span>
                       </sc-for>
                       <sc-if value="{{ noTags }}" hint-placeholder-val="{{ false }}">
                         <span style="font-size:11px;color:oklch(0.5 0.02 250)">None recorded yet</span>
@@ -1949,11 +1971,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
               </div>
               </sc-if>
               <sc-if value="{{ sheetFull }}" hint-placeholder-val="{{ false }}">
-              <div role="{{ photoRole }}" aria-label="{{ photoAlt }}" style="{{ photoBigStyle }}">
-                <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ true }}">
-                  <span style="font-family:'Google Sans Flex',sans-serif;font-size:12px;color:oklch(0.5 0.02 250)">building photo</span>
-                </sc-if>
-              </div>
+              <sc-if value="{{ hasPhotos }}" hint-placeholder-val="{{ true }}">
+                <div class="no-scrollbar ph-strip">
+                  <sc-for list="{{ photos }}" as="p" hint-placeholder-count="2">
+                    <button type="button" class="ph" sc-camel-on-click="{{ p.open }}" aria-label="{{ p.label }}" style="{{ p.style }}"><img sc-camel-src="{{ p.sm }}" alt="" loading="lazy" decoding="async"></button>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ false }}">
+                <div class="ph ph-empty" style="width:100%;aspect-ratio:16 / 9;margin-top:14px"><span>building photo</span></div>
+              </sc-if>
               <div style="display:flex;align-items:center;gap:8px;margin-top:14px">
                 <button type="button" sc-camel-on-click="{{ routeFrom }}" class="btn btn-secondary" style="flex:none">{{ routeFromLabel }}</button>
                 <button type="button" sc-camel-on-click="{{ routeHere }}" class="btn btn-primary" style="flex:none">{{ routeToLabel }}</button>
@@ -1968,7 +1995,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <div style="display:flex;flex-direction:column;gap:8px">
                   <sc-for list="{{ selectedFacs }}" as="fb" hint-placeholder-count="2">
                     <div style="display:flex;align-items:center;gap:12px">
-                      <span style="flex:none;width:36px;height:36px;border-radius:9999px;background:oklch(0.965 0.006 250);display:flex;align-items:center;justify-content:center" aria-hidden="true"><sc-if value="{{ fb.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ fb.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ fb.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ fb.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ fb.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ fb.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ fb.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ fb.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if><sc-if value="{{ fb.isChapel }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#8e4ec6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h4"></path><path d="M12 7v5"></path><path d="M14 21v-3a2 2 0 0 0-4 0v3"></path><path d="m18 9 3.52 2.147a1 1 0 0 1 .48.854V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6.999a1 1 0 0 1 .48-.854L6 9"></path><path d="M6 21V7a1 1 0 0 1 .376-.782l5-3.999a1 1 0 0 1 1.249.001l5 4A1 1 0 0 1 18 7v14"></path></svg></sc-if><sc-if value="{{ fb.isPrayer }}" hint-placeholder-val="{{ false }}"><svg viewBox="42 -918 876 876" style="width:18px;height:18px;flex:none" fill="#8e4ec6"><path d="M346-160H240q-33 0-56.5-23.5T160-240v-106l-77-78q-11-12-17-26.5T60-480q0-15 6-29.5T83-536l77-78v-106q0-33 23.5-56.5T240-800h106l78-77q12-11 26.5-17t29.5-6q15 0 29.5 6t26.5 17l78 77h106q33 0 56.5 23.5T800-720v106l77 78q11 12 17 26.5t6 29.5q0 15-6 29.5T877-424l-77 78v106q0 33-23.5 56.5T720-160H614l-78 77q-12 11-26.5 17T480-60q-15 0-29.5-6T424-83l-78-77Zm34-80 100 100 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140Zm100-240Zm41-20 59-43 58 43-23-68 59-43h-72l-22-69-22 69h-73l59 43-23 68Zm-41 220q83 0 141.5-58T680-480q0-8-.5-16t-2.5-16q-11 47-49 77.5T539-404q-60 0-101-41t-41-101q0-46 26-82.5t68-51.5h-11q-84 0-142 58.5T280-480q0 84 58 142t142 58Z"></path></svg></sc-if></span>
+                      <span style="flex:none;width:36px;height:36px;border-radius:9999px;background:oklch(0.965 0.006 250);display:flex;align-items:center;justify-content:center" aria-hidden="true"><sc-if value="{{ fb.isCafeteria }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#f2994a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></sc-if><sc-if value="{{ fb.isCafe }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#8b5e34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"></path><path d="M14 2v2"></path><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path><path d="M6 2v2"></path></svg></sc-if><sc-if value="{{ fb.isConvenience }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#1f9d55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg></sc-if><sc-if value="{{ fb.isLibrary }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#2f5fd1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"></path><path d="M16 13h2"></path><path d="M16 9h2"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path><path d="M6 13h2"></path><path d="M6 9h2"></path></svg></sc-if><sc-if value="{{ fb.isPrinting }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg></sc-if><sc-if value="{{ fb.isRestrooms }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg></sc-if><sc-if value="{{ fb.isAtm }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg></sc-if><sc-if value="{{ fb.isBank }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#b7791f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg></sc-if><sc-if value="{{ fb.isPost }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#d6336c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg></sc-if><sc-if value="{{ fb.isGym }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></sc-if><sc-if value="{{ fb.isChapel }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex:none" fill="none" stroke="#8e4ec6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h4"></path><path d="M12 7v5"></path><path d="M14 21v-3a2 2 0 0 0-4 0v3"></path><path d="m18 9 3.52 2.147a1 1 0 0 1 .48.854V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6.999a1 1 0 0 1 .48-.854L6 9"></path><path d="M6 21V7a1 1 0 0 1 .376-.782l5-3.999a1 1 0 0 1 1.249.001l5 4A1 1 0 0 1 18 7v14"></path></svg></sc-if><sc-if value="{{ fb.isPrayer }}" hint-placeholder-val="{{ false }}"><svg viewBox="42 -918 876 876" style="width:18px;height:18px;flex:none" fill="#8e4ec6"><path d="M346-160H240q-33 0-56.5-23.5T160-240v-106l-77-78q-11-12-17-26.5T60-480q0-15 6-29.5T83-536l77-78v-106q0-33 23.5-56.5T240-800h106l78-77q12-11 26.5-17t29.5-6q15 0 29.5 6t26.5 17l78 77h106q33 0 56.5 23.5T800-720v106l77 78q11 12 17 26.5t6 29.5q0 15-6 29.5T877-424l-77 78v106q0 33-23.5 56.5T720-160H614l-78 77q-12 11-26.5 17T480-60q-15 0-29.5-6T424-83l-78-77Zm34-80 100 100 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140Zm100-240Zm41-20 59-43 58 43-23-68 59-43h-72l-22-69-22 69h-73l59 43-23 68Zm-41 220q83 0 141.5-58T680-480q0-8-.5-16t-2.5-16q-11 47-49 77.5T539-404q-60 0-101-41t-41-101q0-46 26-82.5t68-51.5h-11q-84 0-142 58.5T280-480q0 84 58 142t142 58Z"></path></svg></sc-if></span>
                       <span style="display:flex;flex-direction:column;min-width:0">
                         <span style="font-weight:600;font-size:13px">{{ fb.label }}</span>
                         <span style="font-size:11px;color:oklch(0.5 0.02 250)">{{ fb.sub }}</span>
@@ -2595,6 +2622,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </sc-if>
 
+  <!-- full-screen photo viewer: tap anywhere / × / Esc closes; swipe, arrows or ←/→ step through -->
+  <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="lb" role="dialog" aria-modal="true" aria-label="{{ lbAlt }}" ref="{{ lbRef }}" sc-camel-on-click="{{ lbClose }}">
+      <img class="lb-img" sc-camel-src="{{ lbSrc }}" alt="{{ lbAlt }}" style="{{ lbBg }}">
+      <button type="button" class="lb-btn lb-x" aria-label="{{ lbCloseLabel }}" sc-camel-on-click="{{ lbCloseX }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+      <sc-if value="{{ lbMulti }}" hint-placeholder-val="{{ false }}">
+        <button type="button" class="lb-btn lb-prev" aria-label="{{ lbPrevLabel }}" sc-camel-on-click="{{ lbPrev }}"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+        <button type="button" class="lb-btn lb-next" aria-label="{{ lbNextLabel }}" sc-camel-on-click="{{ lbNext }}"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+      </sc-if>
+      <sc-if value="{{ lbCaption }}" hint-placeholder-val="{{ false }}">
+        <div class="lb-cap" aria-live="polite">{{ lbCaption }}</div>
+      </sc-if>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ fbOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;background:oklch(0.25 0.02 250 / 0.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:2000">
       <div role="dialog" aria-modal="true" aria-labelledby="fb-title" class="dlg" style="width:100%;max-width:440px;max-height:92vh;overflow:auto">
@@ -2907,11 +2949,32 @@ const FACS = [
   { id: 'printing', en: 'Print & Copy', ko: '복사·출력' },
   { id: 'restrooms', en: 'Bidet', ko: '비데' },
   { id: 'atm', en: 'ATM', ko: 'ATM' },
+  { id: 'bank', en: 'Bank', ko: '은행' },
+  { id: 'post', en: 'Post Office', ko: '우체국' },
   { id: 'gym', en: 'Gym', ko: '체육관' },
   { id: 'worship', en: 'Place of Worship', ko: '종교시설' },
   { id: 'chapel', en: 'Chapel', ko: '채플' },
   { id: 'prayer', en: 'Prayer Room', ko: '기도실' }
 ];
+// Building photos in ./photos (full size) and ./photos/sm (card size), named <num>-<kind>.jpg.
+// ':p' marks a portrait shot (framed 3:4 instead of 16:9). Order: front, sign, then the rest;
+// the first one is the card thumbnail.
+const PHOTOS = {
+  '102': 'front tag:p side atm:p bank-and-post-office ripple-coffee:p', '103': 'front tag:p',
+  '201': 'front tag:p', '202': 'front tag:p', '203': 'front tag:p', '204': 'front tag:p', '205': 'front tag:p',
+  '304': 'front back:p', '305': 'front tag:p side back', '308': 'front back', '309': 'tag:p',
+  '317': 'front tag:p', '401': 'front tag:p'
+};
+const PHOTO_CAPS = {
+  front: ['Front', '정면'], side: ['Side', '측면'], back: ['Back', '후면'], tag: ['Building sign', '건물 번호판'],
+  atm: ['ATM', 'ATM'], 'bank-and-post-office': ['Bank & Post Office', '은행 · 우체국'], 'ripple-coffee': ['Ripple Coffee', '리플커피']
+};
+// [{ full, sm, portrait, kind }] for a building; an admin-set photo URL is the fallback.
+const buildingPhotos = b => !b ? [] : PHOTOS[b.num]
+  ? PHOTOS[b.num].split(' ').map(k => { const [kind, o] = k.split(':'), f = b.num + '-' + kind + '.jpg';
+      return { full: './photos/' + f, sm: './photos/sm/' + f, portrait: o === 'p', kind: kind }; })
+  : b.photo ? [{ full: b.photo, sm: b.photo, portrait: false, kind: '' }] : [];
+
 // A chip that stands for several facility types (each keeps its own icon).
 const FAC_GROUPS = { worship: ['chapel', 'prayer'] };
 const inFacGroup = id => Object.keys(FAC_GROUPS).some(g => FAC_GROUPS[g].indexOf(id) >= 0);
@@ -2931,6 +2994,8 @@ const FAC_ICONS = {
   printing: '<svg viewBox="0 0 24 24" fill="none" stroke="#5b5fc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>',
   restrooms: '<svg viewBox="0 0 24 24" fill="none" stroke="#0e9aa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"></path><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"></path></svg>',
   atm: '<svg viewBox="0 0 24 24" fill="none" stroke="#0f9d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16v1"></path><path d="M16.963 7.734A1 1 0 0015.999 7H8.003a1 1 0 00-.964.734L4.073 18.467A2 2 0 006 21h12a2 2 0 001.927-2.532z"></path><path d="M2.678 8.5A2 2 0 012 7V5a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 01-.676 1.499"></path><path d="m9 21 2-14"></path></svg>',
+  bank: '<svg viewBox="0 0 24 24" fill="none" stroke="#b7791f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg>',
+  post: '<svg viewBox="0 0 24 24" fill="none" stroke="#d6336c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg>',
   gym: '<svg viewBox="0 0 24 24" fill="none" stroke="#e5484d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg>'
 };
 // Default/fallback shuttle timetable, used until bus_timetable.csv finishes loading (or if it fails to load).
@@ -3478,7 +3543,7 @@ class Component extends DCLogic {
       }
     }
     return Object.assign(base, {
-      tab: 'map', selected: null, query: '', facFilter: [], routeTarget: null, routeStart: 'gate',
+      tab: 'map', selected: null, lightbox: null, query: '', facFilter: [], routeTarget: null, routeStart: 'gate',
       navOpen: false, routeTo: '', navPick: null, navQuery: '', navStepsOpen: false,
       admin: false, adminOpen: false, pcOpen: false, pcInput: '', pcError: false, savedFlash: false,
       gps: null, gpsErr: null, gpsAsked: false, isDesktop: false, locAsk: false,
@@ -4977,8 +5042,10 @@ class Component extends DCLogic {
     document.documentElement.lang = this.state.primary;
     this.onKey = e => {
       const st = this.state;
+      if (st.lightbox != null && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) { this.lbStep(e.key === 'ArrowLeft' ? -1 : 1); return; }
       if (e.key === 'Escape') {
-        if (st.fbOpen) this.closeFeedback();
+        if (st.lightbox != null) this.closeLightbox();
+        else if (st.fbOpen) this.closeFeedback();
         else if (st.locAsk) this.setState({ locAsk: false });
         else if (st.pcOpen) this.setState({ pcOpen: false, pcInput: '', pcError: false });
         else if (st.courseModal) this.setState({ courseModal: null });
@@ -5059,6 +5126,85 @@ class Component extends DCLogic {
       console.warn('[ERICA Nav] Could not load bus_timetable.csv, using built-in fallback timetable:', err && err.message ? err.message : err);
     }
   }
+
+  // Full-screen photo viewer for the selected building.
+  openLightbox(i) {
+    this._lbReturn = document.activeElement;
+    this.setState({ lightbox: i }, () => { const x = document.querySelector('.lb-x'); if (x) x.focus(); });
+  }
+  closeLightbox() {
+    this.setState({ lightbox: null }, () => { if (this._lbReturn && this._lbReturn.focus) this._lbReturn.focus(); this._lbReturn = null; });
+  }
+  lbStep(d) {
+    const n = buildingPhotos(this.byId(this.state.selected)).length;
+    if (n > 1) this.setState(s => s.lightbox == null ? null : { lightbox: (s.lightbox + d + n) % n }, () => this.lbZoom(1));
+  }
+
+  // Viewer zoom/pan: pinch or ctrl/trackpad-wheel zooms (1–5×) around the fingers/cursor, one finger
+  // or the mouse pans while zoomed, and at 1× a sideways swipe steps photos. Written straight to the
+  // <img> transform so gestures don't re-render the app.
+  _z = { s: 1, x: 0, y: 0 };
+  lbZoom(s, x, y) {
+    const img = this._lbImg;
+    s = Math.min(5, Math.max(1, s));
+    if (s < 1.02) { s = 1; x = 0; y = 0; }
+    if (img) { // keep the zoomed photo covering its own box
+      const mx = img.offsetWidth * (s - 1) / 2, my = img.offsetHeight * (s - 1) / 2;
+      x = Math.min(mx, Math.max(-mx, x || 0)); y = Math.min(my, Math.max(-my, y || 0));
+      img.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + s + ')';
+    }
+    this._z = { s: s, x: x || 0, y: y || 0 };
+    if (this._lbNode) this._lbNode.classList.toggle('lb-zoomed', s > 1);
+  }
+  // keeps the image point under screen point p (at zoom z0) under screen point p2 at scale s
+  lbZoomAt(s, p, z0, p2) {
+    const r = this._lbImg.getBoundingClientRect(), cx = r.left + r.width / 2 - this._z.x, cy = r.top + r.height / 2 - this._z.y;
+    const qx = (p.x - cx - z0.x) / z0.s, qy = (p.y - cy - z0.y) / z0.s;
+    this.lbZoom(s, p2.x - cx - qx * s, p2.y - cy - qy * s);
+  }
+  lbRef = node => {
+    this._lbNode = node;
+    this._lbImg = node ? node.querySelector('.lb-img') : null;
+    this._z = { s: 1, x: 0, y: 0 };
+    if (!node) return;
+    const pts = new Map();
+    let g = null; // gesture start: { z, p (single pointer or pinch midpoint), d (pinch distance) }
+    const mid = () => { const [a, b] = [...pts.values()]; return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, d: Math.hypot(a.x - b.x, a.y - b.y) }; };
+    const start = () => {
+      const z = Object.assign({}, this._z);
+      if (pts.size >= 2) { const m = mid(); g = { z: z, p: m, d: m.d || 1 }; }
+      else if (pts.size === 1) g = { z: z, p: Object.assign({}, [...pts.values()][0]) };
+      else g = null;
+    };
+    node.addEventListener('pointerdown', e => {
+      if (e.target.closest('.lb-btn')) return;
+      if (!pts.size) this._lbGest = false;
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      start();
+    });
+    node.addEventListener('pointermove', e => {
+      if (!pts.has(e.pointerId) || !g) return;
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size >= 2 && g.d) { const m = mid(); this._lbGest = true; this.lbZoomAt(g.z.s * m.d / g.d, g.p, g.z, m); return; }
+      const p = pts.get(e.pointerId), dx = p.x - g.p.x, dy = p.y - g.p.y;
+      if (Math.hypot(dx, dy) > 8) this._lbGest = true;
+      if (this._z.s > 1) this.lbZoom(this._z.s, g.z.x + dx, g.z.y + dy);
+    });
+    const end = e => {
+      if (!pts.has(e.pointerId)) return;
+      const p = pts.get(e.pointerId);
+      pts.delete(e.pointerId);
+      if (!pts.size && g && !g.d && this._z.s === 1 && Math.abs(p.x - g.p.x) > 40) this.lbStep(p.x < g.p.x ? 1 : -1);
+      if (pts.size) start(); else g = null;
+    };
+    node.addEventListener('pointerup', end);
+    node.addEventListener('pointercancel', end);
+    node.addEventListener('wheel', e => {
+      e.preventDefault();
+      const p = { x: e.clientX, y: e.clientY };
+      this.lbZoomAt(this._z.s * Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.002)), p, this._z, p);
+    }, { passive: false });
+  };
 
   // Reads a simple CSV (no quoted fields) sitting next to this file into row objects keyed by header.
   async fetchCsv(path) {
@@ -6977,8 +7123,6 @@ class Component extends DCLogic {
         try { Object.keys(window.localStorage).filter(k => k.indexOf('ericanav.') === 0).forEach(k => window.localStorage.removeItem(k)); } catch (e) { /* storage unavailable */ }
         window.location.reload();
       },
-      photoRole: sel && sel.photo ? 'img' : 'presentation',
-      photoAlt: sel && sel.photo ? 'Photo of ' + selN.primary : undefined,
 
       resetMapBearing: () => this.resetMapBearing(),
       showCampus: () => this.showCampus(),
@@ -6990,20 +7134,39 @@ class Component extends DCLogic {
       locateStyle: s.gps ? 'color:oklch(0.44 0.14 258)' : '',
 
       selected: sel ? { num: shownNum(sel), primary: selN.primary } : null,
-      closeSheet: () => this.setState({ selected: null }),
-      photoStyle: {
-        flex: 'none', width: '96px', height: '70px', border: '1px solid oklch(0.9 0.012 250)', borderRadius: '9px',
-        overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backgroundImage: sel && sel.photo ? 'url("' + sel.photo + '")' : 'repeating-linear-gradient(135deg,oklch(0.95 0.008 250) 0 6px,oklch(0.92 0.01 250) 6px 12px)',
-        backgroundSize: 'cover', backgroundPosition: 'center'
-      },
-      photoBigStyle: {
-        width: '100%', aspectRatio: '16 / 9', marginTop: '14px', border: '1px solid oklch(0.9 0.012 250)', borderRadius: '12px',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backgroundImage: sel && sel.photo ? 'url("' + sel.photo + '")' : 'repeating-linear-gradient(135deg,oklch(0.95 0.008 250) 0 6px,oklch(0.92 0.01 250) 6px 12px)',
-        backgroundSize: 'cover', backgroundPosition: 'center'
-      },
-      noPhoto: !!(sel && !sel.photo),
+      closeSheet: () => this.setState({ selected: null, lightbox: null }),
+      ...(() => {
+        const ko = s.primary === 'ko', ph = buildingPhotos(sel), many = ph.length > 1;
+        const cap = p => (PHOTO_CAPS[p.kind] || ['', ''])[ko ? 1 : 0];
+        const name = selN ? selN.primary : '', cur = s.lightbox != null ? ph[s.lightbox] : null;
+        // strip slides: landscape 16:9, portrait 3:4, same height; with several, slides
+        // are narrower than the card so the next one peeks in
+        const lw = many ? 86 : 100, h = lw * 9 / 16;
+        const label = (p, i) => (ko ? name + ' 사진 ' : 'Photo of ' + name) + (cap(p) ? ' – ' + cap(p) : '') + (many ? ' (' + (i + 1) + '/' + ph.length + ')' : '');
+        return {
+          hasPhotos: ph.length > 0, noPhoto: !!sel && !ph.length,
+          thumbSrc: ph.length ? ph[0].sm : '',
+          thumbLabel: ph.length ? label(ph[0], 0) : '',
+          thumbStyle: ph.length && ph[0].portrait ? 'width:72px;height:96px' : 'width:96px;height:70px',
+          openThumb: () => this.openLightbox(0),
+          photos: ph.map((p, i) => ({
+            sm: p.sm, label: label(p, i), open: () => this.openLightbox(i),
+            style: 'height:' + h + 'cqw;width:' + (p.portrait ? h * 3 / 4 : lw) + 'cqw'
+          })),
+          lbOpen: !!cur, lbMulti: many,
+          lbSrc: cur ? cur.full : '', lbAlt: cur ? label(cur, s.lightbox) : '',
+          lbBg: cur ? 'background-image:url("' + cur.sm + '")' : '',
+          lbCaption: cur ? [cap(cur), many ? (s.lightbox + 1) + ' / ' + ph.length : ''].filter(Boolean).join(' · ') : '',
+          lbCloseLabel: ko ? '사진 닫기' : 'Close photo',
+          lbPrevLabel: ko ? '이전 사진' : 'Previous photo', lbNextLabel: ko ? '다음 사진' : 'Next photo',
+          // a tap closes; when zoomed in it zooms back out instead; the tap that ends a drag/pinch does nothing
+          lbClose: () => { if (this._lbGest) { this._lbGest = false; return; } if (this._z.s > 1) this.lbZoom(1); else this.closeLightbox(); },
+          lbCloseX: e => { e.stopPropagation(); this.closeLightbox(); },
+          lbRef: this.lbRef,
+          lbPrev: e => { e.stopPropagation(); this.lbStep(-1); },
+          lbNext: e => { e.stopPropagation(); this.lbStep(1); }
+        };
+      })(),
       sheetStyle: Object.assign({
         position: 'absolute', zIndex: 1000, background: 'oklch(1 0 0)', border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px',
         boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)', padding: '16px', overflow: 'auto', animation: 'sheetUp 0.18s ease-out'
@@ -7026,7 +7189,7 @@ class Component extends DCLogic {
         floor: floor, noFloor: !floor, beadLabel: floor ? label + ' · ' + (i.sub || i.subKo) : label, beadStyle: { height: floor ? '49px' : '28px' },
         isCafeteria: f.id === 'cafeteria', isCafe: f.id === 'cafe', isConvenience: f.id === 'convenience',
         isLibrary: f.id === 'library', isPrinting: f.id === 'printing', isRestrooms: f.id === 'restrooms',
-        isAtm: f.id === 'atm', isGym: f.id === 'gym', isChapel: f.id === 'chapel', isPrayer: f.id === 'prayer'
+        isAtm: f.id === 'atm', isBank: f.id === 'bank', isPost: f.id === 'post', isGym: f.id === 'gym', isChapel: f.id === 'chapel', isPrayer: f.id === 'prayer'
         };
       }) : [],
       sheetFull: s.isDesktop || (s.sheetFullFor != null && s.sheetFullFor === s.selected),
@@ -7091,7 +7254,7 @@ class Component extends DCLogic {
         label: s.primary === 'ko' ? f.ko : f.en, style: chipStyle(facActive.indexOf(f.id) >= 0),
         isCafeteria: f.id === 'cafeteria', isCafe: f.id === 'cafe', isConvenience: f.id === 'convenience',
         isLibrary: f.id === 'library', isPrinting: f.id === 'printing', isRestrooms: f.id === 'restrooms',
-        isAtm: f.id === 'atm', isGym: f.id === 'gym', isWorship: f.id === 'worship',
+        isAtm: f.id === 'atm', isBank: f.id === 'bank', isPost: f.id === 'post', isGym: f.id === 'gym', isWorship: f.id === 'worship',
         pressed: facActive.indexOf(f.id) >= 0,
         toggle: () => this.setState({ facFilter: facActive.indexOf(f.id) >= 0 ? facActive.filter(x => x !== f.id) : facActive.concat([f.id]) })
       })),
