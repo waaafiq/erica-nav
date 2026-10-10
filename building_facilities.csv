@@ -10,7 +10,10 @@ building,facility,name,subheading,korean_name,korean_subheading
 401,printing,,Level 2,,2층
 501,convenience,CU,Level 1 · Women's Wing,CU,1층 · 여학생동
 504,convenience,7-Eleven,Level 1,세븐일레븐,1층
-317,restrooms,,,,
+317,restrooms,,Level 2 (Beside Room 201),,2층 (201호 옆)
+317,restrooms,,Level 3 (Beside Room 301),,3층 (301호 옆)
+317,restrooms,,Level 4 (Beside Room 401),,4층 (401호 옆)
+317,restrooms,,Level 5 (Beside Room 501),,5층 (501호 옆)
 307,atm,Shinhan Bank,Level 1,신한은행,1층
 402,gym,,,,
 S28,atm,Shinhan Bank,,신한은행,
@@ -18,6 +21,5 @@ S11,chapel,Dasom Chapel,,,
 305,prayer,Muslim Prayer Rooms,Basement Level 1,무슬림 기도실,지하 1층
 S19,convenience,emart,,이마트,
 S19,cafe,오가.다,,오가.다,
-102,atm,Shinhan Bank,Outside,신한은행,건물 앞
-102,bank,Shinhan Bank – Hanyang Univ. Branch,Level 1,신한은행 한양대학교출장소,1층
-102,post,Hanyang Univ. Post Office,Level 1,안산한양대학교 우편취급국,1층
+102,bank,Shinhan Bank Office,Level 1 (Outside),신한은행 출장소,1층 (외부)
+102,post,Hanyang Univ. Post Office,Level 1 (Outside),한양대 우체국,1층 (외부)
