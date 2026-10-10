@@ -10,7 +10,10 @@ building,facility,name,subheading,korean_name,korean_subheading
 401,printing,,Level 2,,2층
 501,convenience,CU,Level 1 · Women's Wing,CU,1층 · 여학생동
 504,convenience,7-Eleven,Level 1,세븐일레븐,1층
-317,restrooms,,,,
+317,restrooms,,Level 2 (Beside Room 201),,2층 (201호 옆)
+317,restrooms,,Level 3 (Beside Room 301),,3층 (301호 옆)
+317,restrooms,,Level 4 (Beside Room 401),,4층 (401호 옆)
+317,restrooms,,Level 5 (Beside Room 501),,5층 (501호 옆)
 307,atm,Shinhan Bank,Level 1,신한은행,1층
 402,gym,,,,
 S28,atm,Shinhan Bank,,신한은행,
