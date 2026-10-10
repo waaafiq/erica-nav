@@ -4241,9 +4241,14 @@ class Component extends DCLogic {
     const gone = this.state.deletedNums || [];
     const extra = Object.keys(ESTIMATED_REAL_SHAPES).filter(num => !this.state.buildings.some(b => b.num === num) && gone.indexOf(num) === -1);
     const stubs = NEEDS_MANUAL_PLACEMENT.filter(n => !this.state.buildings.some(b => b.num === n.num) && gone.indexOf(n.num) === -1);
+    // Visitors' facility tags are exactly building_facilities.csv (a stored copy would keep
+    // rows removed since); an admin's browser keeps its own tags and gains the CSV's.
+    const exact = !this.state.buildingsEdited && Object.keys(CSV_TAGS).length > 0;
     const withTags = b => {
-      const want = (CSV_TAGS[b.num] || []).filter(t => (b.tags || []).indexOf(t) < 0);
-      return want.length ? Object.assign({}, b, { tags: (b.tags || []).concat(want) }) : b;
+      const csv = CSV_TAGS[b.num] || [], have = b.tags || [];
+      if (exact) return csv.length === have.length && csv.every(t => have.indexOf(t) >= 0) ? b : Object.assign({}, b, { tags: csv.slice() });
+      const want = csv.filter(t => have.indexOf(t) < 0);
+      return want.length ? Object.assign({}, b, { tags: have.concat(want) }) : b;
     };
     const needTags = this.state.buildings.some(b => withTags(b) !== b);
     const needPlaces = this.syncPlaces(this.state.buildings, this.state.customShapes) !== this.state.buildings;
