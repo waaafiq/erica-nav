@@ -3507,6 +3507,12 @@ class Component extends DCLogic {
       if (stored.buildingsEdited) {
         if (Array.isArray(stored.shapes)) base.shapes = stored.shapes;
         base.buildingsEdited = true;
+        // Floor counts are shipped facts, not layout: take the shipped count over
+        // an admin browser's stored one too, or it stays stale (317 kept 5 after 6 shipped).
+        base.buildings = base.buildings.map(b => {
+          const est = ESTIMATED_REAL_SHAPES[b.num];
+          return est && est.floors && est.floors !== b.floors ? Object.assign({}, b, { floors: est.floors }) : b;
+        });
       } else {
         base.buildings = base.buildings.map(b => {
           const est = ESTIMATED_REAL_SHAPES[b.num];
