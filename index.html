@@ -4381,7 +4381,9 @@ class Component extends DCLogic {
       // draw vectors a full screen past each edge, so buildings pinched into
       // view are already drawn instead of appearing clipped until release
       renderer: this._svgRenderer,
-      rotate: true, rotateControl: false, touchRotate: true, bearing: 0,
+      // shiftKeyRotate off: its wheel listener re-enables Leaflet's own
+      // scrollWheelZoom on every plain scroll; Shift+scroll rotate is ours below.
+      rotate: true, rotateControl: false, touchRotate: true, shiftKeyRotate: false, bearing: 0,
       maxBounds: MAP_BOX_BOUNDS, maxBoundsViscosity: 1.0, bounceAtZoomLimits: false
     }).setView([37.2978, 126.8358], 16);
     // Road geometry is OpenStreetMap data even when the tile layer is off, so always credit it.
@@ -4459,7 +4461,18 @@ class Component extends DCLogic {
     this.mapNode.addEventListener('wheel', e => {
       if (!this.map) return;
       e.preventDefault();
-      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+      const px = d => e.deltaMode === 1 ? d * 16 : e.deltaMode === 2 ? d * 400 : d;
+      // Shift + scroll rotates: the PC stand-in for a trackpad twist, which
+      // only Safari reports (gesture events above). Windows and macOS turn
+      // Shift+scroll into a horizontal scroll, so take whichever axis moved.
+      // ponytail: fixed 0.15 deg/px (~15 deg per mouse notch); tune if it feels off.
+      if (e.shiftKey && this.map.setBearing) {
+        const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        window.cancelAnimationFrame(this._bearingRaf); this._bearingRaf = 0;
+        this.map.setBearing(this.map.getBearing() + px(d) * 0.15);
+        return;
+      }
+      const dy = px(e.deltaY);
       const step = Math.max(-1, Math.min(1, -dy / (e.ctrlKey ? 100 : 200)));
       const base = wheelTarget != null ? wheelTarget : this.map.getZoom();
       wheelTarget = Math.max(this.map.getMinZoom(), Math.min(this.map.getMaxZoom(), base + step));
