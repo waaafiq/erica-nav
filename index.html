@@ -4905,7 +4905,7 @@ class Component extends DCLogic {
     if (!this.map || !L || !rr || !rr.coords || rr.coords.length < 2) return;
     const sheetH = this.navSheetNode ? this.navSheetNode.offsetHeight : 0;
     this.map.fitBounds(L.latLngBounds(rr.coords), this.state.isDesktop
-      ? { paddingTopLeft: [40, 130], paddingBottomRight: [380, 40], maxZoom: 18.5 }
+      ? { paddingTopLeft: [40, 130], paddingBottomRight: [400, 40], maxZoom: 18.5 }
       : { paddingTopLeft: [32, 130], paddingBottomRight: [32, sheetH + 32], maxZoom: 18.5 });
   }
 
@@ -6566,8 +6566,8 @@ class Component extends DCLogic {
     return {
       navOpen: !!s.navOpen, navClosed: !s.navOpen,
       showCard: !!s.selected && !s.navOpen,
-      // desktop: keep the search bar and chips clear of the building or search panel (340px + 8px inset)
-      mapOverlayRight: s.isDesktop && ((s.selected && !s.navOpen) || s.searchPanelOpen) ? '348px' : '0',
+      // desktop: keep the search bar and chips clear of the building or search panel (360px + 8px inset)
+      mapOverlayRight: s.isDesktop && ((s.selected && !s.navOpen) || s.searchPanelOpen) ? '368px' : '0',
       closeNav: () => this.closeNav(),
       navCloseLabel: ko ? '길찾기 닫기' : 'Close directions',
       swapNav: () => this.swapNav(),
@@ -6590,7 +6590,7 @@ class Component extends DCLogic {
       navSheet: !!(s.navOpen && !s.navPick),
       navRegionLabel: ko ? '도보 경로' : 'Walking route',
       navSheetStyle: Object.assign(sheetBase, s.isDesktop
-        ? { right: '8px', top: '8px', width: '340px', maxWidth: 'calc(100% - 16px)', maxHeight: 'calc(100% - 16px)' }
+        ? { right: '8px', top: '8px', width: '360px', maxWidth: 'calc(100% - 16px)', maxHeight: 'calc(100% - 16px)' }
         : { left: '8px', right: '8px', bottom: '8px', padding: '12px 14px', maxHeight: '50%' }),
       navHasRoute: !!rr && !msg,
       navSheetRef: node => { this.navSheetNode = node; },
@@ -6968,7 +6968,7 @@ class Component extends DCLogic {
         opacity: s.searchPanelOpen ? 1 : 0, pointerEvents: s.searchPanelOpen ? 'auto' : 'none',
         transition: 'opacity 0.28s ease', zIndex: 999, display: s.isDesktop ? 'none' : '' },
       // phones: a full-screen sheet from the bottom. Desktop: a card in the
-      // building card's spot (right column, 340px, 8px inset), sliding in from the right.
+      // building card's spot (right column, 360px, 8px inset), sliding in from the right.
       // desktop types into the map's own search bar (same query), so the card skips its copy
       searchFieldRowStyle: { flex: 'none', padding: '0 16px 10px', display: s.isDesktop ? 'none' : '' },
       searchPanelStyle: Object.assign({
@@ -6976,7 +6976,7 @@ class Component extends DCLogic {
         visibility: s.searchPanelOpen ? 'visible' : 'hidden',
         transition: 'transform 0.28s ease, visibility 0s linear ' + (s.searchPanelOpen ? '0s' : '0.28s')
       }, s.isDesktop
-        ? { position: 'absolute', right: '8px', top: '8px', bottom: '8px', width: '340px', maxWidth: 'calc(100% - 16px)',
+        ? { position: 'absolute', right: '8px', top: '8px', bottom: '8px', width: '360px', maxWidth: 'calc(100% - 16px)',
             border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px', boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)',
             transform: s.searchPanelOpen ? 'translateX(0)' : 'translateX(calc(100% + 16px))' }
         : { position: 'fixed', left: '0', right: '0', bottom: '0', top: '0', borderRadius: '0', boxShadow: '0 -6px 24px oklch(0.2 0.02 250 / 0.2)',
@@ -7205,7 +7205,7 @@ class Component extends DCLogic {
         position: 'absolute', zIndex: 1000, background: 'oklch(1 0 0)', border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px',
         boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)', padding: '16px', overflow: 'auto', animation: 'sheetUp 0.18s ease-out'
       }, s.isDesktop
-        ? { right: '8px', top: '8px', bottom: '8px', width: '340px', maxWidth: 'calc(100% - 16px)' }
+        ? { right: '8px', top: '8px', bottom: '8px', width: '360px', maxWidth: 'calc(100% - 16px)' }
         : { left: '0', right: '0', bottom: '0', borderRadius: '16px 16px 0 0', borderBottom: 'none', maxHeight: g ? '44%' : '85%' }),
       // phones: a pull-up sheet that peeks with name + actions; drag or tap the handle for details.
       // Keyed to the building so a new pick always starts collapsed.
