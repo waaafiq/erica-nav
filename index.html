@@ -1897,8 +1897,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <sc-if value="{{ realMode }}" hint-placeholder-val="{{ true }}">
             <div ref="{{ mapRef }}" style="position:absolute;inset:0;background:oklch(0.955 0.012 145)"></div>
             <div style="position:absolute;right:12px;bottom:{{ rotCtlBottom }};z-index:640;display:flex;flex-direction:column;gap:8px;transition:bottom .2s ease">
-              <!-- needle always points north (turns with the map); tap to face north again -->
-              <button type="button" sc-camel-on-click="{{ resetMapBearing }}" aria-label="{{ compassLabel }}" title="{{ compassLabel }}" class="mapfab"><svg ref="{{ compassRef }}" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M16.24 7.76 14.44 13.17 9.56 10.83Z" fill="oklch(0.55 0.2 25)" stroke="none"></path><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg></button>
+              <!-- needle always points north (turns with the map); tap to face north again.
+                   Touch screens only: without touch the map can't rotate. -->
+              <sc-if value="{{ canRotate }}" hint-placeholder-val="{{ true }}"><button type="button" sc-camel-on-click="{{ resetMapBearing }}" aria-label="{{ compassLabel }}" title="{{ compassLabel }}" class="mapfab"><svg ref="{{ compassRef }}" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M16.24 7.76 14.44 13.17 9.56 10.83Z" fill="oklch(0.55 0.2 25)" stroke="none"></path><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg></button></sc-if>
               <!-- zoom out to the whole campus -->
               <button type="button" sc-camel-on-click="{{ showCampus }}" aria-label="{{ overviewLabel }}" title="{{ overviewLabel }}" class="mapfab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><rect width="10" height="8" x="7" y="8" rx="1"></rect></svg></button>
               <button type="button" sc-camel-on-click="{{ centreOnMe }}" aria-label="{{ locateLabel }}" title="{{ locateLabel }}" class="mapfab" style="{{ locateStyle }}"><svg viewBox="0 -960 960 960" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M440-42v-80q-125-14-214.5-103.5T122-440H42v-80h80q14-125 103.5-214.5T440-838v-80h80v80q125 14 214.5 103.5T838-520h80v80h-80q-14 125-103.5 214.5T520-122v80h-80Zm238-240q82-82 82-198t-82-198q-82-82-198-82t-198 82q-82 82-82 198t82 198q82 82 198 82t198-82Zm-311-85q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm169.5-56.5Q560-447 560-480t-23.5-56.5Q513-560 480-560t-56.5 23.5Q400-513 400-480t23.5 56.5Q447-400 480-400t56.5-23.5ZM480-480Z"></path></svg></button>
@@ -4381,8 +4382,9 @@ class Component extends DCLogic {
       // draw vectors a full screen past each edge, so buildings pinched into
       // view are already drawn instead of appearing clipped until release
       renderer: this._svgRenderer,
-      // shiftKeyRotate off: its wheel listener re-enables Leaflet's own
-      // scrollWheelZoom on every plain scroll; Shift+scroll rotate is ours below.
+      // Rotation is touch-only (two-finger twist on phones/tablets), like Naver Map.
+      // shiftKeyRotate off: no Shift+scroll rotate on PC, and its wheel listener
+      // re-enabled Leaflet's own scrollWheelZoom on every plain scroll.
       rotate: true, rotateControl: false, touchRotate: true, shiftKeyRotate: false, bearing: 0,
       maxBounds: MAP_BOX_BOUNDS, maxBoundsViscosity: 1.0, bounceAtZoomLimits: false
     }).setView([37.2978, 126.8358], 16);
@@ -4421,26 +4423,12 @@ class Component extends DCLogic {
     // leaflet-rotate turns the map clockwise by the bearing, so north sits at
     // +bearing on screen; the lucide compass needle is drawn 45 deg off north.
     this.map.on('rotate', () => this.syncCompass());
-    // Two-finger trackpad *twist* has no cross-browser event at all — only
-    // Safari exposes it, via its own non-standard Gesture Events (rotation in
-    // degrees). Chrome/Firefox never fire anything distinguishable for a
-    // trackpad twist, so this is the only way to get a clean, continuous
-    // rotate from a laptop trackpad, and only in Safari. Gate out touch
-    // devices: iOS Safari fires these same gesture events *in addition to*
-    // the touch events TouchGestures already handles above, so without this
-    // guard a two-finger touch rotate on iPhone/iPad would double-apply.
+    // Safari on a Mac trackpad also fires its own Gesture Events for pinch and
+    // twist. Swallow them so a pinch zooms the map (via ctrl+wheel below)
+    // instead of the whole page; the twist is ignored, since the map doesn't
+    // rotate on PC. Touch devices are left to TouchGestures.
     if ('ongesturestart' in this.mapNode && !(navigator.maxTouchPoints > 0)) {
-      let gestureStartBearing = 0;
-      this.mapNode.addEventListener('gesturestart', e => {
-        e.preventDefault();
-        window.cancelAnimationFrame(this._bearingRaf); this._bearingRaf = 0;
-        gestureStartBearing = this.map.getBearing ? this.map.getBearing() : 0;
-      });
-      this.mapNode.addEventListener('gesturechange', e => {
-        e.preventDefault();
-        if (this.map && this.map.setBearing) this.map.setBearing(gestureStartBearing + e.rotation);
-      });
-      this.mapNode.addEventListener('gestureend', e => { e.preventDefault(); });
+      ['gesturestart', 'gesturechange', 'gestureend'].forEach(t => this.mapNode.addEventListener(t, e => e.preventDefault()));
     }
     // Smooth wheel / trackpad zoom: every wheel event nudges a target zoom
     // and each frame eases toward it around the cursor, so a mouse notch is a
@@ -4462,16 +4450,6 @@ class Component extends DCLogic {
       if (!this.map) return;
       e.preventDefault();
       const px = d => e.deltaMode === 1 ? d * 16 : e.deltaMode === 2 ? d * 400 : d;
-      // Shift + scroll rotates: the PC stand-in for a trackpad twist, which
-      // only Safari reports (gesture events above). Windows and macOS turn
-      // Shift+scroll into a horizontal scroll, so take whichever axis moved.
-      // ponytail: fixed 0.15 deg/px (~15 deg per mouse notch); tune if it feels off.
-      if (e.shiftKey && this.map.setBearing) {
-        const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        window.cancelAnimationFrame(this._bearingRaf); this._bearingRaf = 0;
-        this.map.setBearing(this.map.getBearing() + px(d) * 0.15);
-        return;
-      }
       const dy = px(e.deltaY);
       const step = Math.max(-1, Math.min(1, -dy / (e.ctrlKey ? 100 : 200)));
       const base = wheelTarget != null ? wheelTarget : this.map.getZoom();
@@ -7159,6 +7137,7 @@ class Component extends DCLogic {
       },
 
       resetMapBearing: () => this.resetMapBearing(),
+      canRotate: navigator.maxTouchPoints > 0,
       showCampus: () => this.showCampus(),
       overviewLabel: s.primary === 'ko' ? '캠퍼스 전체 보기' : 'Show whole campus',
       compassRef: node => { this.compassNode = node; this._compassDeg = null; if (node) node.style.transform = 'rotate(' + ((this.map && this.map.getBearing ? this.map.getBearing() : 0) - 45) + 'deg)'; },
