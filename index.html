@@ -2090,7 +2090,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <h2 style="margin:0;font-size:15px;font-weight:700">{{ searchHeading }}</h2>
             <button sc-camel-on-click="{{ closeSearchPanel }}" aria-label="Close search" style="border:none;background:oklch(0.93 0.01 250);width:32px;height:32px;border-radius:9999px;cursor:pointer;font-size:13px;line-height:1;color:oklch(0.4 0.02 250)">✕</button>
           </div>
-          <div style="flex:none;padding:0 16px 10px">
+          <div style="{{ searchFieldRowStyle }}">
             <div class="fieldbox" style="display:flex;align-items:center;gap:8px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:9999px;padding:9px 16px">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
               <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0;font-size:13px">
@@ -4492,7 +4492,9 @@ class Component extends DCLogic {
     });
     this.map.on('click', e => {
       // tapping empty map closes whatever building was open (building taps stop here first)
+      // and, on desktop where the map stays usable beside it, the search card
       if (!this.state.placing) {
+        if (this.state.searchPanelOpen) this.setState({ searchPanelOpen: false });
         if (this.state.selected != null && !this.state.repositioning && !this.state.shapeEditor) this.setState({ selected: null });
         return;
       }
@@ -6551,8 +6553,8 @@ class Component extends DCLogic {
     return {
       navOpen: !!s.navOpen, navClosed: !s.navOpen,
       showCard: !!s.selected && !s.navOpen,
-      // desktop: keep the search bar and chips clear of the building panel (340px + 8px inset)
-      mapOverlayRight: s.isDesktop && s.selected && !s.navOpen ? '348px' : '0',
+      // desktop: keep the search bar and chips clear of the building or search panel (340px + 8px inset)
+      mapOverlayRight: s.isDesktop && ((s.selected && !s.navOpen) || s.searchPanelOpen) ? '348px' : '0',
       closeNav: () => this.closeNav(),
       navCloseLabel: ko ? '길찾기 닫기' : 'Close directions',
       swapNav: () => this.swapNav(),
@@ -6948,14 +6950,24 @@ class Component extends DCLogic {
       searchPanelOpen: s.searchPanelOpen,
       openSearchPanel: () => this.setState({ searchPanelOpen: true }),
       closeSearchPanel: () => this.setState({ searchPanelOpen: false }),
+      // desktop: no dimming, the map stays usable beside the search card
       searchBackdropStyle: { position: 'fixed', inset: '0', background: 'oklch(0.2 0.02 250 / 0.35)',
         opacity: s.searchPanelOpen ? 1 : 0, pointerEvents: s.searchPanelOpen ? 'auto' : 'none',
-        transition: 'opacity 0.28s ease', zIndex: 999 },
-      searchPanelStyle: { position: 'fixed', left: '0', right: '0', bottom: '0', top: '0',
-        background: 'oklch(1 0 0)', borderRadius: '0', boxShadow: '0 -6px 24px oklch(0.2 0.02 250 / 0.2)',
-        display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 1000,
-        transform: s.searchPanelOpen ? 'translateY(0)' : 'translateY(105%)', visibility: s.searchPanelOpen ? 'visible' : 'hidden',
-        transition: 'transform 0.28s ease, visibility 0s linear ' + (s.searchPanelOpen ? '0s' : '0.28s') },
+        transition: 'opacity 0.28s ease', zIndex: 999, display: s.isDesktop ? 'none' : '' },
+      // phones: a full-screen sheet from the bottom. Desktop: a card in the
+      // building card's spot (right column, 340px, 8px inset), sliding in from the right.
+      // desktop types into the map's own search bar (same query), so the card skips its copy
+      searchFieldRowStyle: { flex: 'none', padding: '0 16px 10px', display: s.isDesktop ? 'none' : '' },
+      searchPanelStyle: Object.assign({
+        background: 'oklch(1 0 0)', display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 1000,
+        visibility: s.searchPanelOpen ? 'visible' : 'hidden',
+        transition: 'transform 0.28s ease, visibility 0s linear ' + (s.searchPanelOpen ? '0s' : '0.28s')
+      }, s.isDesktop
+        ? { position: 'absolute', right: '8px', top: '8px', bottom: '8px', width: '340px', maxWidth: 'calc(100% - 16px)',
+            border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px', boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)',
+            transform: s.searchPanelOpen ? 'translateX(0)' : 'translateX(calc(100% + 16px))' }
+        : { position: 'fixed', left: '0', right: '0', bottom: '0', top: '0', borderRadius: '0', boxShadow: '0 -6px 24px oklch(0.2 0.02 250 / 0.2)',
+            transform: s.searchPanelOpen ? 'translateY(0)' : 'translateY(105%)' }),
       searchList: LISTED_DIRECTORY.concat(s.buildings.filter(b => isPlaceNum(b.num)).map(b => ({ id: 'place-' + b.num, num: b.num, en: b.en, ko: b.ko, zone: '' })))
         .filter(matches).filter(b => s.zoneFilter === 'all' || b.zone === s.zoneFilter).map(listItem),
       zoneTabs: ZONES.map(z => ({
