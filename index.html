@@ -2618,6 +2618,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </sc-if>
 
+  <sc-if value="{{ navEndAsk }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:oklch(0.25 0.02 250 / 0.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:2000" sc-camel-on-click="{{ keepNav }}">
+      <div role="alertdialog" aria-modal="true" aria-labelledby="navend-title" aria-describedby="navend-body" class="dlg" style="width:100%;max-width:400px" sc-camel-on-click="{{ stopProp }}">
+        <h2 id="navend-title" class="dlg-title">{{ lg.navEndTitle }}</h2>
+        <p id="navend-body" class="dlg-body">{{ navEndBody }}</p>
+        <div class="dlg-actions">
+          <button type="button" sc-camel-auto-focus="true" sc-camel-on-click="{{ keepNav }}" class="btn btn-secondary">{{ lg.navEndKeep }}</button>
+          <button type="button" sc-camel-on-click="{{ endNav }}" class="btn btn-primary">{{ lg.navEndGo }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
   <sc-if value="{{ locAsk }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;background:oklch(0.25 0.02 250 / 0.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:2000">
       <div role="dialog" aria-modal="true" aria-labelledby="loc-title" aria-describedby="loc-body" class="dlg" style="width:100%;max-width:400px">
@@ -2887,6 +2899,7 @@ const LG_EN = { aboutTitle: 'About ERICA Nav', hello: 'Hello!', close: 'Close', 
   dataNote: 'Your saved places and timetable stay in this browser on your device; nothing is sent to us. Directions are calculated by a public routing server (OSRM), which receives the start and end points.',
   credits: 'Map data \u00a9', erase: 'Delete my data on this device',
   eraseConfirm: 'Delete your saved places, timetable and settings from this device? This cannot be undone.',
+  navEndTitle: 'End navigation?', navEndKeep: 'Keep navigating', navEndGo: 'End navigation',
   locTitle: 'Use your location?', locAllow: 'Allow location', locDeny: 'Not now', locStop: 'Stop sharing location',
   locBody: 'ERICA Nav uses your device location only to show where you are on the map. It is not stored or sent to us. If you choose "My current position" as a route start, those coordinates are sent to the public OSRM routing server to draw the route. You can stop at any time.',
   unofficialTimes: 'Unofficial: confirm with the university\'s shuttle notice.' };
@@ -2896,6 +2909,7 @@ const LG_KO = { aboutTitle: 'ERICA Nav 정보', hello: '안녕하세요!', close
   dataNote: '저장한 장소와 시간표는 이 기기의 브라우저에만 저장되며 운영자에게 전송되지 않습니다. 길찾기는 공개 경로 서버(OSRM)가 계산하며, 출발지와 도착지 좌표가 전달됩니다.',
   credits: '지도 데이터 \u00a9', erase: '이 기기의 내 데이터 삭제',
   eraseConfirm: '저장한 장소, 시간표, 설정을 이 기기에서 삭제할까요? 되돌릴 수 없습니다.',
+  navEndTitle: '길 안내를 끝낼까요?', navEndKeep: '계속 안내받기', navEndGo: '안내 끝내기',
   locTitle: '위치 정보를 사용할까요?', locAllow: '위치 사용 허용', locDeny: '나중에', locStop: '위치 공유 중지',
   locBody: 'ERICA Nav는 지도에 내 위치를 표시하기 위해서만 기기 위치를 사용하며, 저장하거나 운영자에게 전송하지 않습니다. 경로 출발지로 "내 현재 위치"를 선택하면 경로를 그리기 위해 해당 좌표가 공개 OSRM 경로 서버로 전송됩니다. 언제든 중지할 수 있습니다.',
   unofficialTimes: '비공식 정보이니 학교 셔틀 공지를 함께 확인하세요.' };
@@ -3590,7 +3604,7 @@ class Component extends DCLogic {
     }
     return Object.assign(base, {
       tab: 'map', selected: null, lightbox: null, query: '', facFilter: [], routeTarget: null, routeStart: 'gate',
-      navOpen: false, routeTo: '', navPick: null, navQuery: '', navStepsOpen: false,
+      navOpen: false, routeTo: '', navPick: null, navQuery: '', navStepsOpen: false, navEndAsk: null,
       admin: false, adminOpen: false, pcOpen: false, pcInput: '', pcError: false, savedFlash: false,
       gps: null, gpsErr: null, gpsAsked: false, isDesktop: false, locAsk: false, headingUp: false,
       fbOpen: false, fbMsg: '', fbHp: '', fbStatus: 'idle', fbError: '', fbShowMail: false,
@@ -4825,7 +4839,7 @@ class Component extends DCLogic {
           this._polyMove = { num: this.state.editId, shapeId: b.shapeId || null, base: b.poly.map(p => p.slice()), baseHoles: (b.holes || []).map(h => h.map(p => p.slice())), start: [e.latlng.lat, e.latlng.lng], layer: poly };
         });
       } else if (clickable) {
-        poly.on('click', e => { window.L.DomEvent.stopPropagation(e); this.setState({ selected: b.id }); });
+        poly.on('click', e => { window.L.DomEvent.stopPropagation(e); this.select(b.id); });
       }
     });
     customShapes.filter(c => layerOf(c) === 'top').forEach(drawCustomShape);
@@ -4862,7 +4876,7 @@ class Component extends DCLogic {
         icon: L.divIcon({ html: '', className: '', iconSize: null, iconAnchor: [0, 0] }),
         draggable: canDragMarker
       })
-        .on('click', e => { window.L.DomEvent.stopPropagation(e); this.setState({ selected: b.id }); })
+        .on('click', e => { window.L.DomEvent.stopPropagation(e); this.select(b.id); })
         .addTo(this.markerLayer);
       this.labelMarkers.push({ b: b, marker: marker, mode: null });
       if (canDragMarker) {
@@ -5166,6 +5180,7 @@ class Component extends DCLogic {
         if (st.lightbox != null) this.closeLightbox();
         else if (st.fbOpen) this.closeFeedback();
         else if (st.locAsk) this.setState({ locAsk: false });
+        else if (st.navEndAsk) this.setState({ navEndAsk: null });
         else if (st.pcOpen) this.setState({ pcOpen: false, pcInput: '', pcError: false });
         else if (st.courseModal) this.setState({ courseModal: null });
         else if (st.delAsk) this.setState({ delAsk: null });
@@ -5617,7 +5632,24 @@ class Component extends DCLogic {
   byNum(num) { return this.state.buildings.filter(b => b.num === num)[0] || null; }
   centerOf(b) { return { x: b.x + b.w / 2, y: b.y + b.h / 2 }; }
 
-  select(id) { this.setState({ selected: id }); }
+  // Picking a building. While directions are up it asks first (the card would cover them);
+  // the current destination itself is ignored, you're already headed there. then() runs
+  // once the building really is selected.
+  select(id, then) {
+    const s = this.state;
+    if (s.navOpen && !s.navPick) {
+      if (id !== s.routeTarget) this.setState({ navEndAsk: { id: id, then: then || null } });
+      return;
+    }
+    this.setState({ selected: id }, then);
+  }
+
+  endNavAndSelect() {
+    const a = this.state.navEndAsk;
+    if (!a) return;
+    this.closeNav();
+    this.setState({ navEndAsk: null, selected: a.id }, a.then || undefined);
+  }
 
   // Expand/collapse the phone building card, easing its height from the old
   // size to the new one instead of letting the content swap make it jump.
@@ -6223,8 +6255,7 @@ class Component extends DCLogic {
   // card) and frame it. The map unmounts off the Map tab, so a fresh map
   // picks the pending focus up at the end of initMap instead.
   focusBuilding(id) {
-    this._focusId = id;
-    this.setState({ tab: 'map', mapMode: 'real', selected: id, placeAsk: null, ttEdit: false }, () => this.applyFocus());
+    this.setState({ tab: 'map', mapMode: 'real', placeAsk: null, ttEdit: false }, () => this.select(id, () => { this._focusId = id; this.applyFocus(); }));
   }
 
   // Opens 1.5 zoom levels out (the neighbouring buildings, not the whole
@@ -7245,6 +7276,16 @@ class Component extends DCLogic {
       openFb: () => this.setState({ fbOpen: true, fbStatus: 'idle', fbError: '', fbShowMail: false }),
       closeFb: () => this.closeFeedback(), sendFb: () => this.sendFeedback(),
       enOn: s.primary === 'en', koOn: s.primary === 'ko',
+      navEndAsk: !!s.navEndAsk,
+      navEndBody: (() => {
+        if (!s.navEndAsk) return '';
+        const to = this.placeOf(s.routeTo), b = this.byId(s.navEndAsk.id), name = b ? [shownNum(b), this.names(b).primary].filter(Boolean).join(' ') : '';
+        return s.primary === 'ko' ? (to ? to.label + ' 길 안내를 끝내고 ' : '길 안내를 끝내고 ') + name + ' 정보를 볼까요?'
+          : 'Stop directions' + (to ? ' to ' + to.label : '') + ' and open ' + name + '?';
+      })(),
+      keepNav: () => this.setState({ navEndAsk: null }),
+      stopProp: e => e.stopPropagation(),
+      endNav: () => this.endNavAndSelect(),
       locAsk: s.locAsk,
       acceptLoc: () => { try { window.localStorage.setItem(LOC_KEY, '1'); } catch (e) { /* storage unavailable */ } this.startCompass(); this.setState({ locOk: true, locAsk: false }, () => this.watchGps()); },
       declineLoc: () => this.setState({ locAsk: false }),
