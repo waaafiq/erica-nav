@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js": "vendor/react.production.min.js", "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "vendor/react-dom.production.min.js"};</script>
 <link rel="preload" href="fonts/google-sans-flex-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>ERICA Nav — unofficial ERICA campus map</title>
 <meta name="description" content="Unofficial campus map, shuttle timetable and class schedule for Hanyang University ERICA. Not affiliated with the university.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1739,7 +1740,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
      by an inset shadow) instead of a separate ring around it. Fields built as
      a box around a bare input (building number, search boxes) do it on the box. */
   :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]), select, textarea):focus { outline: none !important; border-color: oklch(0.44 0.14 258) !important; box-shadow: inset 0 0 0 1px oklch(0.44 0.14 258); }
-  .fieldbox input:focus { border-color: transparent !important; box-shadow: none; }
+  .fieldbox input:focus { border-color: transparent !important; box-shadow: none !important; }
   .fieldbox:has(input:focus) { border-color: oklch(0.44 0.14 258) !important; box-shadow: inset 0 0 0 1px oklch(0.44 0.14 258); }
   .mapfab { width: 40px; height: 40px; padding: 0; border-radius: 9999px; border: 1px solid oklch(0.88 0.012 250); background: oklch(1 0 0); color: oklch(0.4 0.02 250); box-shadow: 0 1px 6px oklch(0.2 0.02 250 / 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .mapfab:hover { background: oklch(0.97 0.005 250); }
@@ -1896,8 +1897,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <sc-if value="{{ realMode }}" hint-placeholder-val="{{ true }}">
             <div ref="{{ mapRef }}" style="position:absolute;inset:0;background:oklch(0.955 0.012 145)"></div>
             <div style="position:absolute;right:12px;bottom:{{ rotCtlBottom }};z-index:640;display:flex;flex-direction:column;gap:8px;transition:bottom .2s ease">
-              <!-- needle always points north (turns with the map); tap to face north again -->
-              <button type="button" sc-camel-on-click="{{ resetMapBearing }}" aria-label="{{ compassLabel }}" title="{{ compassLabel }}" class="mapfab"><svg ref="{{ compassRef }}" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M16.24 7.76 14.44 13.17 9.56 10.83Z" fill="oklch(0.55 0.2 25)" stroke="none"></path><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg></button>
+              <!-- needle always points north (turns with the map); tap to face north again.
+                   Touch screens only: without touch the map can't rotate. -->
+              <sc-if value="{{ canRotate }}" hint-placeholder-val="{{ true }}"><button type="button" sc-camel-on-click="{{ resetMapBearing }}" aria-label="{{ compassLabel }}" title="{{ compassLabel }}" class="mapfab"><svg ref="{{ compassRef }}" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M16.24 7.76 14.44 13.17 9.56 10.83Z" fill="oklch(0.55 0.2 25)" stroke="none"></path><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg></button></sc-if>
               <!-- zoom out to the whole campus -->
               <button type="button" sc-camel-on-click="{{ showCampus }}" aria-label="{{ overviewLabel }}" title="{{ overviewLabel }}" class="mapfab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><rect width="10" height="8" x="7" y="8" rx="1"></rect></svg></button>
               <button type="button" sc-camel-on-click="{{ centreOnMe }}" aria-label="{{ locateLabel }}" title="{{ locateLabel }}" class="mapfab" style="{{ locateStyle }}"><svg viewBox="0 -960 960 960" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M440-42v-80q-125-14-214.5-103.5T122-440H42v-80h80q14-125 103.5-214.5T440-838v-80h80v80q125 14 214.5 103.5T838-520h80v80h-80q-14 125-103.5 214.5T520-122v80h-80Zm238-240q82-82 82-198t-82-198q-82-82-198-82t-198 82q-82 82-82 198t82 198q82 82 198 82t198-82Zm-311-85q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm169.5-56.5Q560-447 560-480t-23.5-56.5Q513-560 480-560t-56.5 23.5Q400-513 400-480t23.5 56.5Q447-400 480-400t56.5-23.5ZM480-480Z"></path></svg></button>
@@ -2089,7 +2091,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <h2 style="margin:0;font-size:15px;font-weight:700">{{ searchHeading }}</h2>
             <button sc-camel-on-click="{{ closeSearchPanel }}" aria-label="Close search" style="border:none;background:oklch(0.93 0.01 250);width:32px;height:32px;border-radius:9999px;cursor:pointer;font-size:13px;line-height:1;color:oklch(0.4 0.02 250)">✕</button>
           </div>
-          <div style="flex:none;padding:0 16px 10px">
+          <div style="{{ searchFieldRowStyle }}">
             <div class="fieldbox" style="display:flex;align-items:center;gap:8px;background:oklch(1 0 0);border:1px solid oklch(0.88 0.012 250);border-radius:9999px;padding:9px 16px">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="oklch(0.5 0.02 250)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
               <input aria-label="Search buildings by number or name" value="{{ query }}" sc-camel-on-change="{{ onQuery }}" placeholder="{{ searchPlaceholder }}" style="flex:1;border:none;outline:none;background:transparent;min-width:0;font-size:13px">
@@ -3531,6 +3533,12 @@ class Component extends DCLogic {
       if (stored.buildingsEdited) {
         if (Array.isArray(stored.shapes)) base.shapes = stored.shapes;
         base.buildingsEdited = true;
+        // Floor counts are shipped facts, not layout: take the shipped count over
+        // an admin browser's stored one too, or it stays stale (317 kept 5 after 6 shipped).
+        base.buildings = base.buildings.map(b => {
+          const est = ESTIMATED_REAL_SHAPES[b.num];
+          return est && est.floors && est.floors !== b.floors ? Object.assign({}, b, { floors: est.floors }) : b;
+        });
       } else {
         base.buildings = base.buildings.map(b => {
           // names follow buildings.csv too, so a rename reaches every visitor
@@ -4408,7 +4416,10 @@ class Component extends DCLogic {
       // draw vectors a full screen past each edge, so buildings pinched into
       // view are already drawn instead of appearing clipped until release
       renderer: this._svgRenderer,
-      rotate: true, rotateControl: false, touchRotate: true, bearing: 0,
+      // Rotation is touch-only (two-finger twist on phones/tablets), like Naver Map.
+      // shiftKeyRotate off: no Shift+scroll rotate on PC, and its wheel listener
+      // re-enabled Leaflet's own scrollWheelZoom on every plain scroll.
+      rotate: true, rotateControl: false, touchRotate: true, shiftKeyRotate: false, bearing: 0,
       maxBounds: MAP_BOX_BOUNDS, maxBoundsViscosity: 1.0, bounceAtZoomLimits: false
     }).setView([37.2978, 126.8358], 16);
     // Road geometry is OpenStreetMap data even when the tile layer is off, so always credit it.
@@ -4446,26 +4457,12 @@ class Component extends DCLogic {
     // leaflet-rotate turns the map clockwise by the bearing, so north sits at
     // +bearing on screen; the lucide compass needle is drawn 45 deg off north.
     this.map.on('rotate', () => this.syncCompass());
-    // Two-finger trackpad *twist* has no cross-browser event at all — only
-    // Safari exposes it, via its own non-standard Gesture Events (rotation in
-    // degrees). Chrome/Firefox never fire anything distinguishable for a
-    // trackpad twist, so this is the only way to get a clean, continuous
-    // rotate from a laptop trackpad, and only in Safari. Gate out touch
-    // devices: iOS Safari fires these same gesture events *in addition to*
-    // the touch events TouchGestures already handles above, so without this
-    // guard a two-finger touch rotate on iPhone/iPad would double-apply.
+    // Safari on a Mac trackpad also fires its own Gesture Events for pinch and
+    // twist. Swallow them so a pinch zooms the map (via ctrl+wheel below)
+    // instead of the whole page; the twist is ignored, since the map doesn't
+    // rotate on PC. Touch devices are left to TouchGestures.
     if ('ongesturestart' in this.mapNode && !(navigator.maxTouchPoints > 0)) {
-      let gestureStartBearing = 0;
-      this.mapNode.addEventListener('gesturestart', e => {
-        e.preventDefault();
-        window.cancelAnimationFrame(this._bearingRaf); this._bearingRaf = 0;
-        gestureStartBearing = this.map.getBearing ? this.map.getBearing() : 0;
-      });
-      this.mapNode.addEventListener('gesturechange', e => {
-        e.preventDefault();
-        if (this.map && this.map.setBearing) this.map.setBearing(gestureStartBearing + e.rotation);
-      });
-      this.mapNode.addEventListener('gestureend', e => { e.preventDefault(); });
+      ['gesturestart', 'gesturechange', 'gestureend'].forEach(t => this.mapNode.addEventListener(t, e => e.preventDefault()));
     }
     // Smooth wheel / trackpad zoom: every wheel event nudges a target zoom
     // and each frame eases toward it around the cursor, so a mouse notch is a
@@ -4486,7 +4483,8 @@ class Component extends DCLogic {
     this.mapNode.addEventListener('wheel', e => {
       if (!this.map) return;
       e.preventDefault();
-      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+      const px = d => e.deltaMode === 1 ? d * 16 : e.deltaMode === 2 ? d * 400 : d;
+      const dy = px(e.deltaY);
       const step = Math.max(-1, Math.min(1, -dy / (e.ctrlKey ? 100 : 200)));
       const base = wheelTarget != null ? wheelTarget : this.map.getZoom();
       wheelTarget = Math.max(this.map.getMinZoom(), Math.min(this.map.getMaxZoom(), base + step));
@@ -4519,7 +4517,9 @@ class Component extends DCLogic {
     });
     this.map.on('click', e => {
       // tapping empty map closes whatever building was open (building taps stop here first)
+      // and, on desktop where the map stays usable beside it, the search card
       if (!this.state.placing) {
+        if (this.state.searchPanelOpen) this.setState({ searchPanelOpen: false });
         if (this.state.selected != null && !this.state.repositioning && !this.state.shapeEditor) this.setState({ selected: null });
         return;
       }
@@ -4916,7 +4916,7 @@ class Component extends DCLogic {
     if (!this.map || !L || !rr || !rr.coords || rr.coords.length < 2) return;
     const sheetH = this.navSheetNode ? this.navSheetNode.offsetHeight : 0;
     this.map.fitBounds(L.latLngBounds(rr.coords), this.state.isDesktop
-      ? { paddingTopLeft: [40, 130], paddingBottomRight: [380, 40], maxZoom: 18.5 }
+      ? { paddingTopLeft: [40, 130], paddingBottomRight: [400, 40], maxZoom: 18.5 }
       : { paddingTopLeft: [32, 130], paddingBottomRight: [32, sheetH + 32], maxZoom: 18.5 });
   }
 
@@ -6577,8 +6577,8 @@ class Component extends DCLogic {
     return {
       navOpen: !!s.navOpen, navClosed: !s.navOpen,
       showCard: !!s.selected && !s.navOpen,
-      // desktop: keep the search bar and chips clear of the building panel (340px + 8px inset)
-      mapOverlayRight: s.isDesktop && s.selected && !s.navOpen ? '348px' : '0',
+      // desktop: keep the search bar and chips clear of the building or search panel (360px + 8px inset)
+      mapOverlayRight: s.isDesktop && ((s.selected && !s.navOpen) || s.searchPanelOpen) ? '368px' : '0',
       closeNav: () => this.closeNav(),
       navCloseLabel: ko ? '길찾기 닫기' : 'Close directions',
       swapNav: () => this.swapNav(),
@@ -6601,7 +6601,7 @@ class Component extends DCLogic {
       navSheet: !!(s.navOpen && !s.navPick),
       navRegionLabel: ko ? '도보 경로' : 'Walking route',
       navSheetStyle: Object.assign(sheetBase, s.isDesktop
-        ? { right: '8px', top: '8px', width: '340px', maxWidth: 'calc(100% - 16px)', maxHeight: 'calc(100% - 16px)' }
+        ? { right: '8px', top: '8px', width: '360px', maxWidth: 'calc(100% - 16px)', maxHeight: 'calc(100% - 16px)' }
         : { left: '8px', right: '8px', bottom: '8px', padding: '12px 14px', maxHeight: '50%' }),
       navHasRoute: !!rr && !msg,
       navSheetRef: node => { this.navSheetNode = node; },
@@ -6974,14 +6974,24 @@ class Component extends DCLogic {
       searchPanelOpen: s.searchPanelOpen,
       openSearchPanel: () => this.setState({ searchPanelOpen: true }),
       closeSearchPanel: () => this.setState({ searchPanelOpen: false }),
+      // desktop: no dimming, the map stays usable beside the search card
       searchBackdropStyle: { position: 'fixed', inset: '0', background: 'oklch(0.2 0.02 250 / 0.35)',
         opacity: s.searchPanelOpen ? 1 : 0, pointerEvents: s.searchPanelOpen ? 'auto' : 'none',
-        transition: 'opacity 0.28s ease', zIndex: 999 },
-      searchPanelStyle: { position: 'fixed', left: '0', right: '0', bottom: '0', top: '0',
-        background: 'oklch(1 0 0)', borderRadius: '0', boxShadow: '0 -6px 24px oklch(0.2 0.02 250 / 0.2)',
-        display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 1000,
-        transform: s.searchPanelOpen ? 'translateY(0)' : 'translateY(105%)', visibility: s.searchPanelOpen ? 'visible' : 'hidden',
-        transition: 'transform 0.28s ease, visibility 0s linear ' + (s.searchPanelOpen ? '0s' : '0.28s') },
+        transition: 'opacity 0.28s ease', zIndex: 999, display: s.isDesktop ? 'none' : '' },
+      // phones: a full-screen sheet from the bottom. Desktop: a card in the
+      // building card's spot (right column, 360px, 8px inset), sliding in from the right.
+      // desktop types into the map's own search bar (same query), so the card skips its copy
+      searchFieldRowStyle: { flex: 'none', padding: '0 16px 10px', display: s.isDesktop ? 'none' : '' },
+      searchPanelStyle: Object.assign({
+        background: 'oklch(1 0 0)', display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 1000,
+        visibility: s.searchPanelOpen ? 'visible' : 'hidden',
+        transition: 'transform 0.28s ease, visibility 0s linear ' + (s.searchPanelOpen ? '0s' : '0.28s')
+      }, s.isDesktop
+        ? { position: 'absolute', right: '8px', top: '8px', bottom: '8px', width: '360px', maxWidth: 'calc(100% - 16px)',
+            border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px', boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)',
+            transform: s.searchPanelOpen ? 'translateX(0)' : 'translateX(calc(100% + 16px))' }
+        : { position: 'fixed', left: '0', right: '0', bottom: '0', top: '0', borderRadius: '0', boxShadow: '0 -6px 24px oklch(0.2 0.02 250 / 0.2)',
+            transform: s.searchPanelOpen ? 'translateY(0)' : 'translateY(105%)' }),
       searchList: LISTED_DIRECTORY.concat(s.buildings.filter(b => isPlaceNum(b.num)).map(b => ({ id: 'place-' + b.num, num: b.num, en: b.en, ko: b.ko, zone: '' })))
         .filter(matches).filter(b => s.zoneFilter === 'all' || b.zone === s.zoneFilter).map(listItem),
       zoneTabs: ZONES.map(z => ({
@@ -7160,6 +7170,7 @@ class Component extends DCLogic {
       },
 
       resetMapBearing: () => this.resetMapBearing(),
+      canRotate: navigator.maxTouchPoints > 0,
       showCampus: () => this.showCampus(),
       overviewLabel: s.primary === 'ko' ? '캠퍼스 전체 보기' : 'Show whole campus',
       compassRef: node => { this.compassNode = node; this._compassDeg = null; if (node) node.style.transform = 'rotate(' + ((this.map && this.map.getBearing ? this.map.getBearing() : 0) - 45) + 'deg)'; },
@@ -7206,7 +7217,7 @@ class Component extends DCLogic {
         position: 'absolute', zIndex: 1000, background: 'oklch(1 0 0)', border: '1px solid oklch(0.86 0.014 250)', borderRadius: '14px',
         boxShadow: '0 6px 24px oklch(0.4 0.05 250 / 0.14)', padding: '16px', overflow: 'auto', animation: 'sheetUp 0.18s ease-out'
       }, s.isDesktop
-        ? { right: '8px', top: '8px', bottom: '8px', width: '340px', maxWidth: 'calc(100% - 16px)' }
+        ? { right: '8px', top: '8px', bottom: '8px', width: '360px', maxWidth: 'calc(100% - 16px)' }
         : { left: '0', right: '0', bottom: '0', borderRadius: '16px 16px 0 0', borderBottom: 'none', maxHeight: g ? '44%' : '85%' }),
       // phones: a pull-up sheet that peeks with name + actions; drag or tap the handle for details.
       // Keyed to the building so a new pick always starts collapsed.
