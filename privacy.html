@@ -27,7 +27,7 @@
 
   <div class="summary">
     <strong>In short</strong>
-    <p>ERICA Nav has no accounts, no ads, no analytics and no tracking cookies. Your saved places and timetable stay in your browser. It never asks for your location. The only thing that ever reaches the operator is an anonymous suggestion or complaint, and only if you write and send one.</p>
+    <p>ERICA Nav has no accounts, no ads, no analytics and no tracking cookies. Your saved places and timetable stay in your browser. It uses your location only if you allow it, to show where you are on the map. The only thing that ever reaches the operator is an anonymous suggestion or complaint, and only if you write and send one.</p>
   </div>
 
   <h2>1. Who is responsible</h2>
@@ -45,7 +45,7 @@
     <thead><tr><th>Data</th><th>Why</th><th>Where it goes</th><th>How long</th></tr></thead>
     <tbody>
       <tr><td>Saved buildings, timetable entries (subject names, notes, times, rooms), language and map settings</td><td>To provide the features you use</td><td>Your browser's local storage on your own device only</td><td>Until you delete it (see section 6)</td></tr>
-      <tr><td>Start and end point of a walking route (building or gate coordinates)</td><td>To draw the route and directions</td><td>OSRM public routing server</td><td>Not kept by the operator; see OSRM's own practices</td></tr>
+      <tr><td>Start and end point of a walking route (building or gate coordinates, or your current position if you choose it)</td><td>To draw the route and directions</td><td>OSRM public routing server</td><td>Not kept by the operator; see OSRM's own practices</td></tr>
       <tr><td>A suggestion or complaint you write and send (the message text and the time it arrived)</td><td>To read it and improve the service</td><td>A private database (Upstash, connected through Vercel) that only the operator can access. No name, contact details, account or IP address is stored with it</td><td>Up to 12 months, or until deleted sooner</td></tr>
       <tr><td>IP address, browser type, time of request</td><td>To deliver the website and keep it secure</td><td>The web host (<span data-op="host">YOUR HOSTING PROVIDER</span>), and OSRM when you ask for directions</td><td>According to those providers' own retention</td></tr>
     </tbody>
@@ -54,7 +54,8 @@
   <p id="feedback"><strong>Suggestions and complaints.</strong> The form asks for nothing but your message; please do not write personal details in it. To stop automated spam, your IP address is turned into a scrambled code that is kept for one hour, only to count how many messages one visitor sends. It is never stored with your message. Because messages are anonymous, to have one deleted email the privacy contact and quote or describe what you wrote so it can be found.</p>
 
   <h2>3. Location</h2>
-  <p>ERICA Nav does not ask for or use your device location. If that ever changes, it will ask for your permission first and this page will be updated before it does.</p>
+  <p>ERICA Nav asks for your device location only when you tap the show-my-location button, and uses it only to show where you are on the map. Your position is never stored or sent to the operator. The app remembers only whether you allowed location, so it doesn't ask again.</p>
+  <p>If you choose <strong>My current position</strong> as the start or end of a route, those coordinates are sent to the public OSRM routing server to draw the route (see section 4). You can stop sharing your location at any time with the stop-sharing button in the app or in your browser settings.</p>
 
   <h2>4. Third parties and transfers abroad</h2>
   <ul>
@@ -96,7 +97,7 @@
 
   <div class="summary">
     <strong>요약</strong>
-    <p>ERICA Nav에는 회원가입, 광고, 분석 도구, 추적용 쿠키가 없습니다. 저장한 장소와 시간표는 이용자의 브라우저에만 보관됩니다. 위치 정보를 요구하지 않습니다. 운영자에게 전달되는 것은 이용자가 직접 작성해 보낸 익명의 건의·불만 메시지뿐입니다.</p>
+    <p>ERICA Nav에는 회원가입, 광고, 분석 도구, 추적용 쿠키가 없습니다. 저장한 장소와 시간표는 이용자의 브라우저에만 보관됩니다. 위치 정보는 이용자가 허용한 경우에만 지도에 내 위치를 표시하는 데 사용합니다. 운영자에게 전달되는 것은 이용자가 직접 작성해 보낸 익명의 건의·불만 메시지뿐입니다.</p>
   </div>
 
   <h2>1. 운영자</h2>
@@ -114,7 +115,7 @@
     <thead><tr><th>정보</th><th>이용 목적</th><th>전달 경로</th><th>보관 기간</th></tr></thead>
     <tbody>
       <tr><td>저장한 건물, 시간표(과목명, 메모, 시간, 강의실), 언어 및 지도 설정</td><td>이용자가 사용하는 기능 제공</td><td>이용자 기기의 브라우저 로컬 저장소에만 저장</td><td>이용자가 삭제할 때까지(6항 참조)</td></tr>
-      <tr><td>도보 경로의 출발지·도착지 좌표(건물 또는 정문 좌표)</td><td>경로 및 길 안내 표시</td><td>OSRM 공개 경로 서버</td><td>운영자는 보관하지 않음(OSRM의 정책은 별도)</td></tr>
+      <tr><td>도보 경로의 출발지·도착지 좌표(건물 또는 정문 좌표, 선택한 경우 내 현재 위치)</td><td>경로 및 길 안내 표시</td><td>OSRM 공개 경로 서버</td><td>운영자는 보관하지 않음(OSRM의 정책은 별도)</td></tr>
       <tr><td>이용자가 작성해 보낸 건의·불만(메시지 내용과 접수 시각)</td><td>내용 확인 및 서비스 개선</td><td>운영자만 접근할 수 있는 비공개 데이터베이스(Vercel을 통해 연결된 Upstash). 이름, 연락처, 계정, IP 주소는 함께 저장되지 않습니다</td><td>최대 12개월 또는 그 이전에 삭제할 때까지</td></tr>
       <tr><td>IP 주소, 브라우저 종류, 접속 시각</td><td>웹사이트 제공 및 보안</td><td>웹 호스팅(<span data-op="host">YOUR HOSTING PROVIDER</span>), 길찾기 이용 시 OSRM</td><td>각 업체의 보관 정책에 따름</td></tr>
     </tbody>
@@ -123,7 +124,8 @@
   <p id="feedback-ko"><strong>건의 및 불만.</strong> 입력란에는 메시지 내용만 있으며, 개인정보는 적지 말아 주세요. 자동 스팸을 막기 위해 IP 주소를 암호화된 코드로 바꿔 한 시간 동안만 보관하며, 한 사람이 보낸 메시지 수를 세는 데에만 씁니다. 이 코드는 메시지와 함께 저장되지 않습니다. 메시지는 익명이므로, 삭제를 원하시면 개인정보 문의처로 이메일을 보내 작성한 내용을 인용하거나 설명해 주세요. 그래야 찾을 수 있습니다.</p>
 
   <h2>3. 위치 정보</h2>
-  <p>ERICA Nav는 이용자의 기기 위치를 요구하거나 사용하지 않습니다. 앞으로 이 방침이 바뀌는 경우, 먼저 이용자의 허락을 구하고 이 페이지를 먼저 갱신하겠습니다.</p>
+  <p>ERICA Nav는 이용자가 내 위치 보기 버튼을 누를 때에만 기기 위치를 요청하며, 지도에 내 위치를 표시하는 데에만 사용합니다. 위치는 저장되거나 운영자에게 전송되지 않습니다. 다시 묻지 않도록 위치 사용 허용 여부만 기억합니다.</p>
+  <p>경로의 출발지나 도착지로 <strong>내 현재 위치</strong>를 선택하면, 경로를 그리기 위해 해당 좌표가 공개 OSRM 경로 서버로 전송됩니다(4항 참고). 앱의 위치 공유 중지 버튼이나 브라우저 설정에서 언제든 위치 공유를 중지할 수 있습니다.</p>
 
   <h2>4. 제3자 제공 및 국외 이전</h2>
   <ul>

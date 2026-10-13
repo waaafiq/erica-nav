@@ -22,10 +22,14 @@
 
 <x-dc>
 <helmet>
-<style>.road-major { stroke-width: var(--road-major, 4px); }
+<style>/* Korean wraps at spaces, not mid-word (no effect on English) */
+body { word-break: keep-all; overflow-wrap: break-word; }
+.road-major { stroke-width: var(--road-major, 4px); }
 .road-minor { stroke-width: var(--road-minor, 2px); }
 /* Condensed card facility beads: icon on top, floor (B1, 1F, 2F) below, as one grey SVG shape. */
 .fbead{position:relative;flex:none;width:28px;height:28px}
+/* tappable beads get a bigger hit area than they look (the 6px gap leaves 3px a side) */
+.fbead[role=button]::after{content:'';position:absolute;inset:-6px -3px}
 .fb-shape{position:absolute;left:0;top:0;display:block}
 .fb-i{position:absolute;left:0;top:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center}
 .fb-low{top:21px}
@@ -1925,7 +1929,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <sc-if value="{{ showCard }}" hint-placeholder-val="{{ false }}">
             <div ref="{{ sheetRef }}" style="{{ sheetStyle }}">
               <sc-if value="{{ sheetHandle }}" hint-placeholder-val="{{ true }}">
-                <button type="button" aria-label="{{ sheetHandleLabel }}" aria-expanded="{{ sheetFull }}" sc-camel-on-pointer-down="{{ sheetDragStart }}" sc-camel-on-pointer-up="{{ sheetDragEnd }}" sc-camel-on-click="{{ sheetHandleKey }}" style="display:flex;justify-content:center;width:calc(100% + 32px);margin:-16px -16px 4px;padding:10px 0 8px;border:none;background:none;cursor:grab;touch-action:none"><span style="width:36px;height:4px;border-radius:9999px;background:oklch(0.82 0.01 250)"></span></button>
+                <button type="button" aria-label="{{ sheetHandleLabel }}" aria-expanded="{{ sheetFull }}" sc-camel-on-pointer-down="{{ sheetDragStart }}" sc-camel-on-pointer-up="{{ sheetDragEnd }}" sc-camel-on-click="{{ sheetHandleKey }}" style="display:flex;justify-content:center;width:calc(100% + 32px);margin:-16px -16px -6px;padding:14px 0;border:none;background:none;cursor:grab;touch-action:none"><span style="width:36px;height:4px;border-radius:9999px;background:oklch(0.82 0.01 250)"></span></button>
               </sc-if>
               <div style="display:flex;align-items:center;gap:12px">
                 <sc-if value="{{ selected.num }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Google Sans Flex',sans-serif;font-weight:600;font-size:15px;color:oklch(1 0 0);background:oklch(0.44 0.14 258);padding:5px 9px;border-radius:8px;flex:none">{{ selected.num }}</span></sc-if>
@@ -2129,7 +2133,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
                 </button>
               </div>
-              <p style="margin:2px 0 0;font-family:'Noto Sans KR',sans-serif;font-size:12px;color:oklch(0.5 0.02 250)">{{ ttSubtitle }}</p>
+              <p style="margin:2px 0 0;font-size:12px;color:oklch(0.5 0.02 250)">{{ ttSubtitle }}</p>
             </div>
             <div style="flex:none;display:flex;align-items:center;gap:8px;position:relative">
               <button type="button" sc-camel-on-click="{{ gymClick }}" sc-camel-on-pointer-down="{{ gymPress }}" sc-camel-on-pointer-up="{{ gymRelease }}" sc-camel-on-pointer-leave="{{ gymRelease }}" sc-camel-on-pointer-cancel="{{ gymRelease }}" sc-camel-on-context-menu="{{ gymNoMenu }}" aria-pressed="{{ gymOn }}" aria-label="{{ gymPillLabel }}" title="{{ gymTipText }}" style="{{ gymBtnStyle }}"><svg viewBox="0 0 24 24" style="width:16px;height:16px;flex:none" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg></button>
@@ -3341,7 +3345,7 @@ const ESTIMATED_REAL_SHAPES = {
   '501': { lat: 37.291490212588705, lng: 126.83622577705464, poly: [[37.29177135060438, 126.83701541197695], [37.29164728330391, 126.83695971436482], [37.291710667506, 126.83671175683763], [37.29144526686112, 126.83660170583713], [37.29123227724476, 126.83673660683793], [37.29101660946083, 126.83619861476467], [37.29122959968775, 126.83606371376386], [37.29131715249659, 126.83573011253344], [37.29111987006594, 126.83564405602463], [37.29115910218056, 126.83548812642309], [37.29140925089164, 126.8355918526535], [37.29140322854359, 126.83562124385725], [37.291452037955096, 126.83564148312172], [37.29143593632565, 126.83570283507215], [37.29145831255546, 126.8357142394758], [37.29136774085236, 126.83605934419701], [37.29137181356179, 126.83606315887651], [37.2914428100359, 126.83601819187622], [37.29160123813949, 126.83641339932338], [37.29152720699676, 126.83646348559199], [37.291804809645264, 126.83657859640863], [37.291798787328865, 126.83660798761242], [37.29184759648376, 126.83662822687691], [37.29183149493895, 126.83668957882733], [37.291853871051124, 126.836700983231]], floors: '18+B1' },
   '502': { lat: 37.29240700122364, lng: 126.83539987755478, poly: [[37.29272049870979, 126.83495470585493], [37.29277765658242, 126.83509693655803], [37.2927375339874, 126.83512448873155], [37.292749483728095, 126.83515011482778], [37.29278895522653, 126.83512505192958], [37.292903270824304, 126.8354095133358], [37.292780909297655, 126.83548720832026], [37.29266659351395, 126.83520274691402], [37.292694223595475, 126.83518520288527], [37.29268292493715, 126.83515708751372], [37.29242899091067, 126.83531832549221], [37.292427688724054, 126.83532330404286], [37.2924416459373, 126.83535803479595], [37.292356123936365, 126.83541233774207], [37.29233952172306, 126.83537513472817], [37.29208427080888, 126.83553720813659], [37.29209556955713, 126.83556532350809], [37.29212319984837, 126.83554777947938], [37.29225280296797, 126.83587027932946], [37.29213044038336, 126.8359479743139], [37.29200083705295, 126.83562547446382], [37.29204096004086, 126.83559792229029], [37.29202901018765, 126.83557229619404], [37.29198953829051, 126.83559735909228], [37.291932379819094, 126.83545512838914]], floors: '5+B1' },
   '503': { lat: 37.29235864126901, lng: 126.83686918586137, poly: [[37.29277474297826, 126.83648571889964], [37.29281144965058, 126.83657448288048], [37.29248684249576, 126.83678657809527], [37.292526554650706, 126.83688610800967], [37.292340901605996, 126.83700741158859], [37.292293537858235, 126.83689287741973], [37.29229007580836, 126.83689150245299], [37.29223882178499, 126.83692499117112], [37.29223772792255, 126.83692934291278], [37.29234074411225, 126.83717845473008], [37.292256459756544, 126.8372335250666], [37.29224288778307, 126.83720420404097], [37.292213274333015, 126.8372235530781], [37.29207236685675, 126.8368828139257], [37.29215095651887, 126.83683146455793], [37.29216630465305, 126.83686508061484], [37.292201613018044, 126.83684201060905], [37.29222761799859, 126.83690139685397], [37.29228169691664, 126.83686424387751], [37.292243213843534, 126.8367711848653], [37.29273638996896, 126.83644894897759], [37.29275592740351, 126.83649619432228]] },
-  '504': { lat: 37.292643888112266, lng: 126.83705286831919, poly: [[37.292822706119175, 126.83677980067837], [37.29296542656868, 126.83712400526667], [37.29263671862365, 126.83733935569957], [37.292532323476514, 126.83708758280432], [37.29255179293264, 126.83707395041861], [37.29253634816285, 126.83703670182588], [37.29256404906197, 126.83701767669142], [37.292541739952654, 126.83696387316861]], floors: '3+B1' }
+  '504': { lat: 37.292643888112266, lng: 126.83705286831919, labelLat: 37.292806, labelLng: 126.837301, poly: [[37.292822706119175, 126.83677980067837], [37.29296542656868, 126.83712400526667], [37.29263671862365, 126.83733935569957], [37.292532323476514, 126.83708758280432], [37.29255179293264, 126.83707395041861], [37.29253634816285, 126.83703670182588], [37.29256404906197, 126.83701767669142], [37.292541739952654, 126.83696387316861]], floors: '3+B1' }
 };
 
 // Buildings with no reliable coordinate estimate at all (too few nearby calibration
@@ -4501,7 +4505,8 @@ class Component extends DCLogic {
       if (this._relabelRaf) return;
       this._relabelRaf = window.requestAnimationFrame(() => { this._relabelRaf = 0; this.declutterLabels(); });
     };
-    this.map.on('zoom zoomend rotate resize', relabel);
+    // moveend too: a full tag near the right edge flips to the building's left (see declutterLabels)
+    this.map.on('zoom zoomend rotate resize moveend', relabel);
     this.map.on('movestart zoomstart', () => { if (!this._flyingHome) this._atCampus = false; });
     // After every redraw (the renderer's 'update'), set road widths for the
     // zoom it drew at; between redraws its CSS scale stretches them live.
@@ -5407,13 +5412,17 @@ class Component extends DCLogic {
       if (fac.length && !pin) mode = !match ? 'hide' : mode === 'hide' ? 'compact' : mode;
       if (mode !== 'hide' && !this.labelGeom(b, mode === 'compact', icons)) mode = 'hide';
       const pt = mode === 'hide' ? null : this.map.latLngToContainerPoint(e.marker.getLatLng());
+      let flip = false;
       if (mode === 'full') {
-        const g = this.labelGeom(b, false, icons);
-        const box = { l: pt.x - g.ax - pad, r: pt.x - g.ax + g.w + pad, t: pt.y - LBL_D - pad, b: pt.y + pad };
-        if (!pin && hits(box)) mode = 'compact';
+        const g = this.labelGeom(b, false, icons), W = this.map.getSize().x;
+        // a tag that would run off the right edge hangs left of its building instead, if it fits there
+        flip = pt.x - g.ax + g.w > W - 8 && pt.x - (g.w - LBL_D / 2) >= 8;
+        const ax = flip ? g.w - LBL_D / 2 : g.ax;
+        const box = { l: pt.x - ax - pad, r: pt.x - ax + g.w + pad, t: pt.y - LBL_D - pad, b: pt.y + pad };
+        if (!pin && hits(box)) { mode = 'compact'; flip = false; }
         else placedFull.push(box);
       }
-      return { e: e, pin: pin, mode: mode, pt: pt, icons: icons };
+      return { e: e, pin: pin, mode: mode, pt: pt, icons: icons, flip: flip };
     });
     // Number circles collide too: one tucked under a full tag or another
     // circle is hidden until zooming in frees up room for it.
@@ -5425,14 +5434,14 @@ class Component extends DCLogic {
       if (hits(box) && (!x.icons.length || placeLow(x.e.b))) x.mode = 'hide';
       else placedFull.push(box);
     });
-    planned.forEach(({ e, pin, mode, icons }) => {
+    planned.forEach(({ e, pin, mode, icons, flip }) => {
       const b = e.b;
       const el = e.marker.getElement();
-      const key = mode + '|' + icons.join(',');
+      const key = mode + '|' + icons.join(',') + (flip ? '|flip' : '');
       if (key === e.mode || !el) return;
       e.mode = key;
       el.style.display = mode === 'hide' ? 'none' : '';
-      if (mode !== 'hide') el.innerHTML = this.labelHtml(b, mode === 'compact', pin, icons);
+      if (mode !== 'hide') el.innerHTML = this.labelHtml(b, mode === 'compact', pin, icons, flip);
       // full tags draw over number circles, pinned over everything
       e.marker.setZIndexOffset(pin ? 2000 : mode === 'full' ? 1000 : 0);
     });
@@ -5485,8 +5494,8 @@ class Component extends DCLogic {
     return { parts: parts, w: last.x + last.w, name: n.primary, ax: last.x + LBL_D / 2 };
   }
 
-  labelHtml(b, compact, pin, icons) {
-    const g = this.labelGeom(b, compact, icons), D = LBL_D, bw = 1.5;
+  labelHtml(b, compact, pin, icons, flip) {
+    const g = this.labelGeom(b, compact, icons), D = LBL_D, bw = 1.5, ax = flip ? g.w - D / 2 : g.ax;
     const fill = pin ? 'oklch(0.44 0.14 258)' : 'oklch(1 0 0)';
     const line = 'oklch(0.44 0.14 258)';
     const fg = pin ? 'oklch(1 0 0)' : 'oklch(0.32 0.02 250)';
@@ -5504,7 +5513,7 @@ class Component extends DCLogic {
     const outline = g.parts.map(p => '<div style="' + pos + 'left:' + p.x + 'px;top:0;width:' + p.w + 'px;height:' + D + 'px;background:' + line + ';box-shadow:0 1px 4px rgba(30,40,60,.25)"></div>').join('');
     const body = g.parts.map(p => '<div style="' + pos + 'left:' + (p.x + bw) + 'px;top:' + bw + 'px;width:' + (p.w - 2 * bw) + 'px;height:' + (D - 2 * bw) + 'px;background:' + fill + '">' + content(p) + '</div>').join('');
     const pop = this.introDelayFor(b.id);
-    return '<div class="erica-lbl' + (pop != null ? ' pop' : '') + '" style="position:relative;width:' + g.w + 'px;height:' + D + 'px;transform:translate(-' + g.ax + 'px,-100%)' + (pop != null ? ';animation-delay:' + pop.toFixed(2) + 's' : '') + '">' + outline + body + '</div>';
+    return '<div class="erica-lbl' + (pop != null ? ' pop' : '') + '" style="position:relative;width:' + g.w + 'px;height:' + D + 'px;transform:translate(-' + ax + 'px,-100%)' + (pop != null ? ';animation-delay:' + pop.toFixed(2) + 's' : '') + '">' + outline + body + '</div>';
   }
 
   textW(t, font) {
@@ -5822,8 +5831,9 @@ class Component extends DCLogic {
         appearance: 'none', WebkitAppearance: 'none', paddingRight: '34px', textOverflow: 'ellipsis', overflow: 'hidden'
       }),
       trFrom: from, trTo: to, trDate: ctx.trDate, trTime: ctx.trTime,
-      trFromOpts: SHUTTLE_STOPS.map(st => ({ key: st.key, value: st.key, label: isKo ? st.ko : st.en })),
-      trToOpts: dests.map(o => ({ key: o.key, value: o.key, label: isKo ? o.ko : o.en })),
+      // the pickers are half a phone wide, so they drop the bracketed part ("Handaeap Stn (Line 4)" -> "Handaeap Stn")
+      trFromOpts: SHUTTLE_STOPS.map(st => ({ key: st.key, value: st.key, label: isKo ? st.ko : st.en.replace(/ \(.*\)$/, '') })),
+      trToOpts: dests.map(o => ({ key: o.key, value: o.key, label: isKo ? o.ko : o.en.replace(/ \(.*\)$/, '') })),
       trNowLabel: isKo ? '지금 출발' : 'Leave Now',
       onTrFrom: e => {
         const v = e.target.value;
