@@ -24,7 +24,7 @@ function setLang(l) {
   document.querySelectorAll('.langs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
 }
 let saved = null;
-try { saved = JSON.parse(localStorage.getItem('ericanav.v2') || 'null'); } catch (e) { /* ignore */ }
+try { saved = JSON.parse(localStorage.getItem('ericanav_localstorage') || 'null'); } catch (e) { /* ignore */ }
 const pref = (saved && saved.primary) || ((navigator.language || '').toLowerCase().startsWith('ko') ? 'ko' : 'en');
 setLang(pref === 'ko' ? 'ko' : 'en');
 document.querySelectorAll('.langs button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.l)));
