@@ -8,7 +8,7 @@ An unofficial campus map, shuttle timetable and class schedule for **Hanyang Uni
 
 ## Why
 
-ERICA timetables list classes only by building and room number, and popular map apps are built for streets, not campuses. We ran a survey on wayfinding on campus: 64% of students had trouble finding the room inside a building, and Naver Map worked far worse for students who don't read Korean. ERICA Nav is built around building numbers and works in English and Korean.
+ERICA timetables list classes only by building and room number, and popular map apps are built for streets, not campuses. We ran a survey on wayfinding on campus: 64% of students had trouble finding the room inside a building, and Naver Map worked far worse for students who don't read Korean. We also found a trend: the less familiar students were with Korean, the more trouble they had finding buildings (33% of native Korean speakers, 53% of students with some Korean and 67% of students with none). ERICA Nav is built around building numbers and works in English and Korean.
 
 ## Features
 
