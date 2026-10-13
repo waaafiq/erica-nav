@@ -7,6 +7,8 @@
 <title>ERICA Nav — unofficial ERICA campus map</title>
 <meta name="description" content="Unofficial campus map, shuttle timetable and class schedule for Hanyang University ERICA. Not affiliated with the university.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- iOS Safari otherwise turns "102 Student Welfare Building" and the like into address/phone links (underlined) -->
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <script>
 // iOS zooms the page when a field under 16px gets focus. maximum-scale=1 stops that focus zoom,
 // and iOS still lets people pinch-zoom the page regardless, so every field can use the 13px body
@@ -1724,6 +1726,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   * { box-sizing: border-box; }
   /* map tags fade in when they appear or swap between full tag and number circle */
   .erica-lbl { animation: ericaLblIn .16s ease-out; }
+  /* map labels never get an underline, whatever the browser or an extension adds */
+  .erica-lbl, .erica-lbl * { text-decoration: none !important; }
+  a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font: inherit !important; }
   /* the class building field is sized to its number; Chrome's datalist arrow would eat that width */
   .bnum::-webkit-calendar-picker-indicator { display: none !important; }
   /* Shared UI pieces so the same kind of thing looks the same everywhere.
