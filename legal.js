@@ -6,7 +6,7 @@ const OP = {
   place: 'Ansan, South Korea',      // where the operator is based
   host: 'Vercel',                    // confirmed: erica-nav.vercel.app
   law: 'the Republic of Korea',      // governing law for the Terms; confirm it fits where you live
-  updated: '2026-09-25'
+  updated: '2026-10-13'
 };
 
 document.querySelectorAll('[data-op]').forEach(el => {
