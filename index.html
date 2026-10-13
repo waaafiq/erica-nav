@@ -7,6 +7,8 @@
 <title>ERICA Nav — unofficial ERICA campus map</title>
 <meta name="description" content="Unofficial campus map, shuttle timetable and class schedule for Hanyang University ERICA. Not affiliated with the university.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- iOS Safari otherwise turns "102 Student Welfare Building" and the like into address/phone links (underlined) -->
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <script>
 // iOS zooms the page when a field under 16px gets focus. maximum-scale=1 stops that focus zoom,
 // and iOS still lets people pinch-zoom the page regardless, so every field can use the 13px body
@@ -1724,6 +1726,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   * { box-sizing: border-box; }
   /* map tags fade in when they appear or swap between full tag and number circle */
   .erica-lbl { animation: ericaLblIn .16s ease-out; }
+  /* map labels never get an underline, whatever the browser or an extension adds */
+  .erica-lbl, .erica-lbl * { text-decoration: none !important; }
+  a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font: inherit !important; }
   /* the class building field is sized to its number; Chrome's datalist arrow would eat that width */
   .bnum::-webkit-calendar-picker-indicator { display: none !important; }
   /* Shared UI pieces so the same kind of thing looks the same everywhere.
@@ -3432,6 +3437,11 @@ const ROAD_M = { major: 5, minor: 2.5 };
 // a little under flat-ground pace for campus hills and crossings.
 const WALK_M_PER_MIN = 75;
 const walkMins = m => Math.max(1, Math.round(m / WALK_M_PER_MIN));
+// Where directions to a building should end, when that isn't its middle (the route would
+// otherwise stop on whichever road happens to be nearest the centre).
+const ENTRANCES = {
+  '404': [37.29561, 126.8328]   // Sports Stadium: north entrance, off the road by 402
+};
 // Main Gate (the entrance at the north-east junction by parking lot 24).
 const MAIN_GATE = { lat: 37.300135, lng: 126.837663 };
 // Degrees of two-finger twist before a pinch starts rotating the map.
@@ -4994,6 +5004,11 @@ class Component extends DCLogic {
         if (json.code !== 'Ok' || !json.routes || !json.routes.length) continue;
         const r = json.routes[0];
         const coords = r.geometry.coordinates.map(c => [c[1], c[0]]);
+        // OSRM's public server only knows car roads, so the route stops on the nearest one:
+        // draw the last (and first) stretch on foot to the real point, e.g. a stadium entrance
+        const far = (p, q) => this.haversine({ lat: p[0], lng: p[1] }, q) > 3;
+        if (far(coords[0], from)) coords.unshift([from.lat, from.lng]);
+        if (far(coords[coords.length - 1], to)) coords.push([to.lat, to.lng]);
         // keep the raw manoeuvres; they're worded at render time so the language toggle applies
         const steps = (r.legs[0].steps || []).map(st => { const m = st.maneuver || {}; return { type: m.type, mod: m.modifier || '', bearing: m.bearing_after, name: st.name || '', dist: Math.round(st.distance) }; }).filter(st => st.type !== 'arrive');
         if (stale()) return;
@@ -5061,7 +5076,8 @@ class Component extends DCLogic {
     if (key === 'me') return s.gps ? { lat: s.gps.lat, lng: s.gps.lng, label: ko ? '내 위치' : 'Your location' } : { pending: true, label: ko ? '내 위치' : 'Your location' };
     if (key === 'gate') return { lat: MAIN_GATE.lat, lng: MAIN_GATE.lng, label: ko ? '정문' : 'Main Gate' };
     const b = this.byId(Number(key));
-    return b && b.lat ? { lat: b.lat, lng: b.lng, label: [shownNum(b), this.names(b).primary].filter(Boolean).join(' '), bldg: b } : null;
+    const ent = b && ENTRANCES[b.num];
+    return b && b.lat ? { lat: ent ? ent[0] : b.lat, lng: ent ? ent[1] : b.lng, label: [shownNum(b), this.names(b).primary].filter(Boolean).join(' '), bldg: b } : null;
   }
 
   keyBldg(key) { return key && /^\d+$/.test(key) ? Number(key) : null; }
