@@ -1,25 +1,31 @@
 building,facility,name,subheading,korean_name,korean_subheading
-102,cafe,Starbucks,Level 2,스타벅스,2층
-102,convenience,7-Eleven,Level 2,세븐일레븐,2층
-207,printing,,Level 1,,1층
-303,convenience,7-Eleven,Basement Level 1,세븐일레븐,지하 1층
-308,cafe,Hanyang Bakery,Level 1,,1층
-317,cafe,The Bake,Level 1,,1층
-317,printing,,Level 5,,5층
+102,cafe,Starbucks,Floor 2,스타벅스,2층
+102,convenience,7-Eleven,Floor 2,세븐일레븐,2층
+207,printing,,Floor 1,,1층
+303,convenience,7-Eleven,Floor B1,세븐일레븐,지하 1층
+308,cafe,Hanyang Bakery,Floor 1,,1층
+317,cafe,The Bake,Floor 1,,1층
+317,printing,,Floor 5,,5층
 401,library,,,,
-401,printing,,Level 2,,2층
-501,convenience,CU,Level 1 · Women's Wing,CU,1층 · 여학생동
-504,convenience,7-Eleven,Level 1,세븐일레븐,1층
-317,restrooms,,Level 2 (Beside Room 201),,2층 (201호 옆)
-317,restrooms,,Level 3 (Beside Room 301),,3층 (301호 옆)
-317,restrooms,,Level 4 (Beside Room 401),,4층 (401호 옆)
-317,restrooms,,Level 5 (Beside Room 501),,5층 (501호 옆)
-307,atm,Shinhan Bank,Level 1,신한은행,1층
+401,printing,,Floor 2,,2층
+501,convenience,CU,Floor 1 · Women's Wing,CU,1층 · 여학생동
+504,convenience,7-Eleven,Floor 1,세븐일레븐,1층
+317,restrooms,,Floor 2 (Beside Room 201),,2층 (201호 옆)
+317,restrooms,,Floor 3 (Beside Room 301),,3층 (301호 옆)
+317,restrooms,,Floor 4 (Beside Room 401),,4층 (401호 옆)
+317,restrooms,,Floor 5 (Beside Room 501),,5층 (501호 옆)
+307,atm,Shinhan Bank,Floor 1,신한은행,1층
 402,gym,,,,
 S28,atm,Shinhan Bank,,신한은행,
 S11,chapel,Dasom Chapel,,,
-305,prayer,Muslim Prayer Rooms,Basement Level 1,무슬림 기도실,지하 1층
+305,prayer,Muslim Prayer Rooms,Floor B1,무슬림 기도실,지하 1층
 S19,convenience,emart,,이마트,
 S19,cafe,오가.다,,오가.다,
-102,bank,Shinhan Bank Office,Level 1 (Outside),신한은행 출장소,1층 (외부)
-102,post,Hanyang Univ. Post Office,Level 1 (Outside),한양대 우체국,1층 (외부)
+102,bank,Shinhan Bank Office,Floor 1 (Outside),신한은행 출장소,1층 (외부)
+102,post,Hanyang Univ. Post Office,Floor 1 (Outside),한양대 우체국,1층 (외부)
+104,bridge,,Floor 2 (to Bldg. 105),,2층 (105동 연결)
+105,bridge,,Floor 2 (to Bldg. 104),,2층 (104동 연결)
+110,bridge,,Floor 2 (to Bldg. 111),,2층 (111동 연결)
+111,bridge,,Floor 2 (to Bldg. 110),,2층 (110동 연결)
+402,bridge,,Floor 2 (to Bldg. 403),,2층 (403동 연결)
+403,bridge,,Floor 2 (to Bldg. 402),,2층 (402동 연결)
